@@ -50,7 +50,7 @@ public abstract class BaseUI extends JPanel {
     if ("home".equals(buttonType)) {
       button.addActionListener(e -> MainFrame.getInstance().switchPanel("Home"));
     } else if ("profile".equals(buttonType)) {
-      button.addActionListener(e -> MainFrame.getInstance().switchPanel("InstagramProfile"));
+      button.addActionListener(e -> MainFrame.getInstance().switchPanel("Profile"));
     } else if ("notification".equals(buttonType)) {
       button.addActionListener(e -> MainFrame.getInstance().switchPanel("Notifications"));
     } else if ("explore".equals(buttonType)) {

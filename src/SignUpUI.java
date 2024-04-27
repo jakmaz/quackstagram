@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
@@ -12,15 +11,13 @@ public class SignUpUI extends BaseUI {
   private static final int WIDTH = 300;
   private static final int HEIGHT = 500;
 
-  private JTextField txtUsername;
-  private JTextField txtPassword;
-  private JTextField txtBio;
-  private JButton btnRegister;
-  private JLabel lblPhoto;
-  private JButton btnUploadPhoto;
+  private JTextField usernameInput;
+  private JTextField passwordInput;
+  private JTextField bioInput;
+  private boolean isProfilePictureUploaded = false;
+
   private final String credentialsFilePath = "data/credentials.txt";
   private final String profilePhotoStoragePath = "img/storage/profile/";
-  private JButton btnSignIn;
 
   public SignUpUI() {
     setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -30,97 +27,107 @@ public class SignUpUI extends BaseUI {
 
   @Override
   public void initializeUI() {
-    // Header with the Register label
+    add(createHeaderPanel(), BorderLayout.NORTH);
+    add(createFieldsPanel(), BorderLayout.CENTER);
+    add(createRegisterPanel(), BorderLayout.SOUTH);
+  }
+
+  private JPanel createHeaderPanel() {
     JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    headerPanel.setBackground(new Color(51, 51, 51)); // Set a darker background for the header
+    headerPanel.setBackground(new Color(51, 51, 51));
     JLabel lblRegister = new JLabel("Quackstagram 🐥");
     lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
-    lblRegister.setForeground(Color.WHITE); // Set the text color to white
+    lblRegister.setForeground(Color.WHITE);
     headerPanel.add(lblRegister);
-    headerPanel.setPreferredSize(new Dimension(WIDTH, 40)); // Give the header a fixed height
+    headerPanel.setPreferredSize(new Dimension(WIDTH, 40));
+    return headerPanel;
+  }
 
-    // Profile picture placeholder without border
-    lblPhoto = new JLabel();
+  private JPanel createFieldsPanel() {
+    JPanel fieldsPanel = new JPanel();
+    fieldsPanel.setLayout(new BoxLayout(fieldsPanel, BoxLayout.Y_AXIS));
+    fieldsPanel.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
+
+    JLabel lblPhoto = new JLabel();
     lblPhoto.setPreferredSize(new Dimension(80, 80));
     lblPhoto.setHorizontalAlignment(JLabel.CENTER);
     lblPhoto.setVerticalAlignment(JLabel.CENTER);
     lblPhoto.setIcon(
         new ImageIcon(new ImageIcon("img/logos/DACS.png").getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH)));
-    JPanel photoPanel = new JPanel(); // Use a panel to center the photo label
-    photoPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+    JPanel photoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     photoPanel.add(lblPhoto);
 
-    // Text fields panel
-    JPanel fieldsPanel = new JPanel();
-    fieldsPanel.setLayout(new BoxLayout(fieldsPanel, BoxLayout.Y_AXIS));
-    fieldsPanel.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
+    usernameInput = new JTextField("Username");
+    passwordInput = new JTextField("Password");
+    bioInput = new JTextField("Bio");
 
-    txtUsername = new JTextField("Username");
-    txtPassword = new JTextField("Password");
-    txtBio = new JTextField("Bio");
-    txtBio.setForeground(Color.GRAY);
-    txtUsername.setForeground(Color.GRAY);
-    txtPassword.setForeground(Color.GRAY);
+    bioInput.setForeground(Color.GRAY);
+    usernameInput.setForeground(Color.GRAY);
+    passwordInput.setForeground(Color.GRAY);
 
     fieldsPanel.add(Box.createVerticalStrut(10));
     fieldsPanel.add(photoPanel);
     fieldsPanel.add(Box.createVerticalStrut(10));
-    fieldsPanel.add(txtUsername);
+    fieldsPanel.add(usernameInput);
     fieldsPanel.add(Box.createVerticalStrut(10));
-    fieldsPanel.add(txtPassword);
+    fieldsPanel.add(passwordInput);
     fieldsPanel.add(Box.createVerticalStrut(10));
-    fieldsPanel.add(txtBio);
-    btnUploadPhoto = new JButton("Upload Photo");
+    fieldsPanel.add(bioInput);
 
-    btnUploadPhoto.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        handleProfilePictureUpload();
-      }
-    });
+    JButton btnUploadPhoto = new JButton("Upload Photo");
+    btnUploadPhoto.addActionListener(this::handleProfilePictureUpload);
+
     JPanel photoUploadPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     photoUploadPanel.add(btnUploadPhoto);
     fieldsPanel.add(photoUploadPanel);
 
-    // Register button with black text
-    btnRegister = new JButton("Register");
+    return fieldsPanel;
+  }
+
+  private JPanel createRegisterPanel() {
+    JButton btnRegister = new JButton("Register");
     btnRegister.addActionListener(this::onRegisterClicked);
-    btnRegister.setBackground(new Color(255, 90, 95)); // Use a red color that matches the mockup
-    btnRegister.setForeground(Color.BLACK); // Set the text color to black
+    btnRegister.setBackground(new Color(255, 90, 95));
+    btnRegister.setForeground(Color.BLACK);
     btnRegister.setFocusPainted(false);
     btnRegister.setBorderPainted(false);
     btnRegister.setFont(new Font("Arial", Font.BOLD, 14));
-    JPanel registerPanel = new JPanel(new BorderLayout()); // Panel to contain the register button
-    registerPanel.setBackground(Color.WHITE); // Background for the panel
+
+    JPanel registerPanel = new JPanel(new BorderLayout());
+    registerPanel.setBackground(Color.WHITE);
     registerPanel.add(btnRegister, BorderLayout.CENTER);
 
-    // Adding components to the frame
-    add(headerPanel, BorderLayout.NORTH);
-    add(fieldsPanel, BorderLayout.CENTER);
-    add(registerPanel, BorderLayout.SOUTH);
-    // Adding the sign in button to the register panel or another suitable panel
-    btnSignIn = new JButton("Already have an account? Sign In");
-    btnSignIn.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        openSignInUI();
-      }
-    });
+    JButton btnSignIn = new JButton("Already have an account? Sign In");
+    btnSignIn.addActionListener(this::onSignInClicked);
     registerPanel.add(btnSignIn, BorderLayout.SOUTH);
+
+    return registerPanel;
   }
 
   private void onRegisterClicked(ActionEvent event) {
-    String username = txtUsername.getText();
-    String password = txtPassword.getText();
-    String bio = txtBio.getText();
-    if (!doesUsernameExist(username)) {
-      saveCredentials(username, password, bio);
-      handleProfilePictureUpload();
-      MainFrame.getInstance().switchPanel("SignIn");
-    } else {
+    String username = usernameInput.getText().trim();
+    String password = passwordInput.getText().trim();
+    String bio = bioInput.getText().trim();
+
+    // Check if any field is empty or no photo is selected
+    if (username.isEmpty() || password.isEmpty() || !isProfilePictureUploaded) {
+      String message = "Please ensure all fields are filled and a photo is selected.";
+      JOptionPane.showMessageDialog(this, message, "Registration Incomplete", JOptionPane.ERROR_MESSAGE);
+      return; // Stop further processing
+    }
+
+    // Check if the username exists
+    if (doesUsernameExist(username)) {
       JOptionPane.showMessageDialog(this, "Username already exists. Please choose a different username.", "Error",
           JOptionPane.ERROR_MESSAGE);
+      return; // Stop further processing
     }
+
+    // Save the credentials if all checks are passed
+    saveCredentials(username, password, bio);
+    JOptionPane.showMessageDialog(this, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    MainFrame.getInstance().switchPanel("Profile");
   }
 
   private boolean doesUsernameExist(String username) {
@@ -138,13 +145,14 @@ public class SignUpUI extends BaseUI {
   }
 
   // Method to handle profile picture upload
-  private void handleProfilePictureUpload() {
+  private void handleProfilePictureUpload(ActionEvent e) {
     JFileChooser fileChooser = new JFileChooser();
     FileNameExtensionFilter filter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
     fileChooser.setFileFilter(filter);
     if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
       File selectedFile = fileChooser.getSelectedFile();
-      saveProfilePicture(selectedFile, txtUsername.getText());
+      saveProfilePicture(selectedFile, usernameInput.getText());
+      isProfilePictureUploaded = true;
     }
   }
 
@@ -167,7 +175,7 @@ public class SignUpUI extends BaseUI {
     }
   }
 
-  private void openSignInUI() {
+  private void onSignInClicked(ActionEvent e) {
     MainFrame.getInstance().switchPanel("SignIn");
   }
 

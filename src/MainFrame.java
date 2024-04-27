@@ -63,7 +63,7 @@ public class MainFrame extends JFrame {
     panelSuppliers.put("Explore", ExploreUI::new);
     panelSuppliers.put("Upload", UploadUI::new);
     panelSuppliers.put("Notifications", NotificationsUI::new);
-    panelSuppliers.put("InstagramProfile", InstagramProfileUI::new);
+    panelSuppliers.put("Profile", InstagramProfileUI::new);
 
     // Preload initial panel
     preloadPanel("SignIn");

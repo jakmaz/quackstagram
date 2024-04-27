@@ -12,11 +12,8 @@ public class SignInUI extends BaseUI {
   private static final int WIDTH = 300;
   private static final int HEIGHT = 500;
 
-  private JTextField txtUsername;
-  private JTextField txtPassword;
-  private JButton btnSignIn, btnRegisterNow;
-  private JLabel lblPhoto;
-  private User loggedUser;
+  private JTextField usernameInput;
+  private JTextField passwordInput;
 
   public SignInUI() {
     setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -55,17 +52,17 @@ public class SignInUI extends BaseUI {
     JPanel photoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     photoPanel.add(lblPhoto);
 
-    JTextField txtUsername = new JTextField("Username");
-    JTextField txtPassword = new JTextField("Password");
-    txtUsername.setForeground(Color.GRAY);
-    txtPassword.setForeground(Color.GRAY);
+    usernameInput = new JTextField("Username");
+    passwordInput = new JTextField("Password");
+    usernameInput.setForeground(Color.GRAY);
+    passwordInput.setForeground(Color.GRAY);
 
     fieldsPanel.add(Box.createVerticalStrut(10));
     fieldsPanel.add(photoPanel);
     fieldsPanel.add(Box.createVerticalStrut(10));
-    fieldsPanel.add(txtUsername);
+    fieldsPanel.add(usernameInput);
     fieldsPanel.add(Box.createVerticalStrut(10));
-    fieldsPanel.add(txtPassword);
+    fieldsPanel.add(passwordInput);
     fieldsPanel.add(Box.createVerticalStrut(10));
 
     return fieldsPanel;
@@ -96,19 +93,19 @@ public class SignInUI extends BaseUI {
   }
 
   private void onSignInClicked(ActionEvent event) {
-    String enteredUsername = txtUsername.getText();
-    String enteredPassword = txtPassword.getText();
+    String enteredUsername = usernameInput.getText();
+    String enteredPassword = passwordInput.getText();
 
     try {
       if (verifyCredentials(enteredUsername, enteredPassword)) {
         System.out.println("Login successful");
-        MainFrame.getInstance().switchPanel("InstagramProfile");
+        MainFrame.getInstance().switchPanel("Profile");
       } else {
         JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Login Failed",
             JOptionPane.ERROR_MESSAGE);
         // txtUsername.setText("");
         // txtPassword.setText("");
-        txtUsername.requestFocus(); // Set focus back to the username field
+        usernameInput.requestFocus(); // Set focus back to the username field
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -129,7 +126,7 @@ public class SignInUI extends BaseUI {
         if (credentials[0].equals(username) && credentials[1].equals(password)) {
           String bio = credentials[2];
 
-          loggedUser = new User(username, password, bio);
+          User loggedUser = new User(username, password, bio);
           saveCurrentUserInformation(loggedUser);
 
           return true;
