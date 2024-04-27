@@ -20,7 +20,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class QuakstagramHomeUI extends BaseUI {
+public class HomeUI extends BaseUI {
   private static final int WIDTH = 300;
   private static final int HEIGHT = 500;
   private static final int NAV_ICON_SIZE = 20; // Corrected static size for bottom icons
@@ -32,7 +32,7 @@ public class QuakstagramHomeUI extends BaseUI {
   private JPanel homePanel;
   private JPanel imageViewPanel;
 
-  public QuakstagramHomeUI() {
+  public HomeUI() {
     setSize(WIDTH, HEIGHT);
     setMinimumSize(new Dimension(WIDTH, HEIGHT));
     setLayout(new BorderLayout());

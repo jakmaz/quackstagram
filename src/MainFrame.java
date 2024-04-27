@@ -55,12 +55,13 @@ public class MainFrame extends JFrame {
   private void initializePanels() {
     panelSuppliers = new HashMap<>();
     initializedPanels = new HashMap<>();
+
     // Register panel suppliers
     panelSuppliers.put("SignIn", SignInUI::new);
     panelSuppliers.put("SignUp", SignUpUI::new);
-    panelSuppliers.put("Home", QuakstagramHomeUI::new);
+    panelSuppliers.put("Home", HomeUI::new);
     panelSuppliers.put("Explore", ExploreUI::new);
-    panelSuppliers.put("Upload", ImageUploadUI::new);
+    panelSuppliers.put("Upload", UploadUI::new);
     panelSuppliers.put("Notifications", NotificationsUI::new);
     panelSuppliers.put("InstagramProfile", InstagramProfileUI::new);
 

@@ -10,7 +10,7 @@ import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class ImageUploadUI extends BaseUI {
+public class UploadUI extends BaseUI {
 
   private static final int WIDTH = 300;
   private static final int HEIGHT = 500;
@@ -21,7 +21,7 @@ public class ImageUploadUI extends BaseUI {
   private JButton saveButton;
   private boolean imageUploaded = false;
 
-  public ImageUploadUI() {
+  public UploadUI() {
     setSize(WIDTH, HEIGHT);
     setMinimumSize(new Dimension(WIDTH, HEIGHT));
     setLayout(new BorderLayout());
