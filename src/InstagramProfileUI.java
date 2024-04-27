@@ -362,9 +362,4 @@ public class InstagramProfileUI extends BaseUI {
     return label;
   }
 
-  @Override
-  public String getTitle() {
-    return "DACS Profile";
-  }
-
 }

@@ -216,10 +216,4 @@ public class UploadUI extends BaseUI {
     }
     return null; // Return null if no username is found
   }
-
-  @Override
-  public String getTitle() {
-    return "Upload Image";
-  }
-
 }

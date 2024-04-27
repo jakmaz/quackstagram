@@ -45,8 +45,8 @@ public class MainFrame extends JFrame {
       public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
           System.out.println("Escape pressed, closing application.");
-          dispose(); // Closes the JFrame
-          System.exit(0); // Ensure JVM stops completely
+          dispose();
+          System.exit(0);
         }
       }
     });
@@ -89,7 +89,7 @@ public class MainFrame extends JFrame {
     cardLayout.show(mainPanel, name);
     BaseUI panel = initializedPanels.get(name);
     if (panel != null) {
-      setTitle(panel.getTitle());
+      setTitle(name);
     } else {
       System.out.println("Error: Panel not initialized - " + name);
     }

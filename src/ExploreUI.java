@@ -225,10 +225,4 @@ public class ExploreUI extends BaseUI {
     revalidate();
     repaint();
   }
-
-  @Override
-  public String getTitle() {
-    return "Explore";
-  }
-
 }

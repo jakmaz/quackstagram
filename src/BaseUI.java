@@ -18,8 +18,6 @@ public abstract class BaseUI extends JPanel {
 
   protected abstract void initializeUI();
 
-  public abstract String getTitle();
-
   public JPanel createNavigationPanel() {
     // Navigation Bar
     JPanel navigationPanel = new JPanel();

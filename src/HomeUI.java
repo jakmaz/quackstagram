@@ -369,9 +369,4 @@ public class HomeUI extends BaseUI {
     displayImage(postData);
   }
 
-  @Override
-  public String getTitle() {
-    return "Quakstagram Home";
-  }
-
 }

@@ -113,8 +113,4 @@ public class NotificationsUI extends BaseUI {
     return headerPanel;
   }
 
-  @Override
-  public String getTitle() {
-    return "Notifications";
-  }
 }

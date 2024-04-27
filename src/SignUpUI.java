@@ -171,9 +171,4 @@ public class SignUpUI extends BaseUI {
     MainFrame.getInstance().switchPanel("SignIn");
   }
 
-  @Override
-  public String getTitle() {
-    return "Sign-Up";
-  }
-
 }
