@@ -22,6 +22,13 @@ class User {
     readFollowingDetails();
   }
 
+  public User(String username, String password, String bio) {
+    this.username = username;
+    this.bio = bio;
+    this.password = password;
+    readFollowingDetails();
+  }
+
   // Add a picture to the user's profile
   public void addPicture(Picture picture) {
     pictures.add(picture);
