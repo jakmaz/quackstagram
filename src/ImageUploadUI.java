@@ -10,7 +10,7 @@ import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class ImageUploadUI extends JFrame {
+public class ImageUploadUI extends BaseUI {
 
   private static final int WIDTH = 300;
   private static final int HEIGHT = 500;
@@ -22,15 +22,13 @@ public class ImageUploadUI extends JFrame {
   private boolean imageUploaded = false;
 
   public ImageUploadUI() {
-    setTitle("Upload Image");
     setSize(WIDTH, HEIGHT);
     setMinimumSize(new Dimension(WIDTH, HEIGHT));
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLayout(new BorderLayout());
     initializeUI();
   }
 
-  private void initializeUI() {
+  public void initializeUI() {
     JPanel headerPanel = createHeaderPanel(); // Reuse the createHeaderPanel method
     JPanel navigationPanel = createNavigationPanel(); // Reuse the createNavigationPanel method
 
@@ -219,86 +217,9 @@ public class ImageUploadUI extends JFrame {
     return null; // Return null if no username is found
   }
 
-  private JPanel createNavigationPanel() {
-    // Create and return the navigation panel
-    // Navigation Bar
-    JPanel navigationPanel = new JPanel();
-    navigationPanel.setBackground(new Color(249, 249, 249));
-    navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.X_AXIS));
-    navigationPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-    navigationPanel.add(createIconButton("img/icons/home.png", "home"));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/search.png", "explore"));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/add.png", " "));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/heart.png", "notification"));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/profile.png", "profile"));
-
-    return navigationPanel;
-  }
-
-  private JButton createIconButton(String iconPath, String buttonType) {
-    ImageIcon iconOriginal = new ImageIcon(iconPath);
-    Image iconScaled = iconOriginal.getImage().getScaledInstance(NAV_ICON_SIZE, NAV_ICON_SIZE, Image.SCALE_SMOOTH);
-    JButton button = new JButton(new ImageIcon(iconScaled));
-    button.setBorder(BorderFactory.createEmptyBorder());
-    button.setContentAreaFilled(false);
-
-    // Define actions based on button type
-    if ("home".equals(buttonType)) {
-      button.addActionListener(e -> openHomeUI());
-    } else if ("profile".equals(buttonType)) {
-      button.addActionListener(e -> openProfileUI());
-    } else if ("notification".equals(buttonType)) {
-      button.addActionListener(e -> notificationsUI());
-    } else if ("explore".equals(buttonType)) {
-      button.addActionListener(e -> exploreUI());
-    }
-    return button;
-
-  }
-
-  private void openProfileUI() {
-    // Open InstagramProfileUI frame
-    this.dispose();
-    String loggedInUsername = "";
-
-    // Read the logged-in user's username from users.txt
-    try (BufferedReader reader = Files.newBufferedReader(Paths.get("data", "users.txt"))) {
-      String line = reader.readLine();
-      if (line != null) {
-        loggedInUsername = line.split(":")[0].trim();
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    User user = new User(loggedInUsername);
-    // InstagramProfileUI profileUI = new InstagramProfileUI(user);
-    // profileUI.setVisible(true);
-  }
-
-  private void notificationsUI() {
-    // Open InstagramProfileUI frame
-    this.dispose();
-    NotificationsUI notificationsUI = new NotificationsUI();
-    notificationsUI.setVisible(true);
-  }
-
-  private void openHomeUI() {
-    // Open InstagramProfileUI frame
-    this.dispose();
-    QuakstagramHomeUI homeUI = new QuakstagramHomeUI();
-    homeUI.setVisible(true);
-  }
-
-  private void exploreUI() {
-    // Open InstagramProfileUI frame
-    this.dispose();
-    ExploreUI explore = new ExploreUI();
-    explore.setVisible(true);
+  @Override
+  public String getTitle() {
+    return "Upload Image";
   }
 
 }

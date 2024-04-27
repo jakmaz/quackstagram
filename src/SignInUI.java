@@ -105,8 +105,6 @@ public class SignInUI extends BaseUI {
     String enteredPassword = txtPassword.getText();
 
     try {
-      System.out.println(enteredUsername + " <-> " + enteredPassword); // For debugging purposes, remove in production
-
       if (verifyCredentials(enteredUsername, enteredPassword)) {
         System.out.println("Login successful");
         // Signal MainFrame to switch to the InstagramProfileUI

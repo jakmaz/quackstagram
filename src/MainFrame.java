@@ -1,7 +1,6 @@
 import java.awt.CardLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.geom.QuadCurve2D;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -59,11 +58,11 @@ public class MainFrame extends JFrame {
     // Register panel suppliers
     panelSuppliers.put("SignIn", SignInUI::new);
     panelSuppliers.put("SignUp", SignUpUI::new);
-    panelSuppliers.put("InstagramProfile", InstagramProfileUI::new);
     panelSuppliers.put("Home", QuakstagramHomeUI::new);
-    // panelSuppliers.put("Explore", ExploreUI::new);
-    // panelSuppliers.put("Upload", ImageUploadUI::new);
-    // panelSuppliers.put("Notifications", NotificationsUI::new);
+    panelSuppliers.put("Explore", ExploreUI::new);
+    panelSuppliers.put("Upload", ImageUploadUI::new);
+    panelSuppliers.put("Notifications", NotificationsUI::new);
+    panelSuppliers.put("InstagramProfile", InstagramProfileUI::new);
 
     // Preload initial panel
     preloadPanel("SignIn");

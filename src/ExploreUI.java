@@ -13,11 +13,9 @@ import java.nio.file.Paths;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ExploreUI extends JFrame {
+public class ExploreUI extends BaseUI {
 
   private static final int WIDTH = 300;
   private static final int HEIGHT = 500;
@@ -25,17 +23,14 @@ public class ExploreUI extends JFrame {
   private static final int IMAGE_SIZE = WIDTH / 3; // Size for each image in the grid
 
   public ExploreUI() {
-    setTitle("Explore");
     setSize(WIDTH, HEIGHT);
     setMinimumSize(new Dimension(WIDTH, HEIGHT));
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLayout(new BorderLayout());
     initializeUI();
   }
 
-  private void initializeUI() {
+  public void initializeUI() {
 
-    getContentPane().removeAll(); // Clear existing components
     setLayout(new BorderLayout()); // Reset the layout manager
 
     JPanel headerPanel = createHeaderPanel(); // Method from your InstagramProfileUI class
@@ -110,29 +105,8 @@ public class ExploreUI extends JFrame {
     return headerPanel;
   }
 
-  private JPanel createNavigationPanel() {
-    // Create and return the navigation panel
-    // Navigation Bar
-    JPanel navigationPanel = new JPanel();
-    navigationPanel.setBackground(new Color(249, 249, 249));
-    navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.X_AXIS));
-    navigationPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-    navigationPanel.add(createIconButton("img/icons/home.png", "home"));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/search.png", "explore"));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/add.png", "add"));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/heart.png", "notification"));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/profile.png", "profile"));
-
-    return navigationPanel;
-  }
-
   private void displayImage(String imagePath) {
-    getContentPane().removeAll();
+    // getContentPane().removeAll();
     setLayout(new BorderLayout());
 
     // Add the header and navigation panels back
@@ -221,7 +195,7 @@ public class ExploreUI extends JFrame {
     backButtonPanel.add(backButton);
 
     backButton.addActionListener(e -> {
-      getContentPane().removeAll();
+      // getContentPane().removeAll();
       add(createHeaderPanel(), BorderLayout.NORTH);
       add(createMainContentPanel(), BorderLayout.CENTER);
       add(createNavigationPanel(), BorderLayout.SOUTH);
@@ -234,7 +208,7 @@ public class ExploreUI extends JFrame {
       User user = new User(finalUsername); // Assuming User class has a constructor that takes a username
       // InstagramProfileUI profileUI = new InstagramProfileUI(user);
       // profileUI.setVisible(true);
-      dispose(); // Close the current frame
+      // dispose(); // Close the current frame
     });
 
     // Container panel for image and details
@@ -252,74 +226,9 @@ public class ExploreUI extends JFrame {
     repaint();
   }
 
-  private JButton createIconButton(String iconPath, String buttonType) {
-    ImageIcon iconOriginal = new ImageIcon(iconPath);
-    Image iconScaled = iconOriginal.getImage().getScaledInstance(NAV_ICON_SIZE, NAV_ICON_SIZE, Image.SCALE_SMOOTH);
-    JButton button = new JButton(new ImageIcon(iconScaled));
-    button.setBorder(BorderFactory.createEmptyBorder());
-    button.setContentAreaFilled(false);
-
-    // Define actions based on button type
-    if ("home".equals(buttonType)) {
-      button.addActionListener(e -> openHomeUI());
-    } else if ("profile".equals(buttonType)) {
-      button.addActionListener(e -> openProfileUI());
-    } else if ("notification".equals(buttonType)) {
-      button.addActionListener(e -> notificationsUI());
-    } else if ("explore".equals(buttonType)) {
-      button.addActionListener(e -> exploreUI());
-    } else if ("add".equals(buttonType)) {
-      button.addActionListener(e -> ImageUploadUI());
-    }
-    return button;
-
-  }
-
-  private void ImageUploadUI() {
-    // Open InstagramProfileUI frame
-    this.dispose();
-    ImageUploadUI upload = new ImageUploadUI();
-    upload.setVisible(true);
-  }
-
-  private void openProfileUI() {
-    // Open InstagramProfileUI frame
-    this.dispose();
-    String loggedInUsername = "";
-
-    // Read the logged-in user's username from users.txt
-    try (BufferedReader reader = Files.newBufferedReader(Paths.get("data", "users.txt"))) {
-      String line = reader.readLine();
-      if (line != null) {
-        loggedInUsername = line.split(":")[0].trim();
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    User user = new User(loggedInUsername);
-    // InstagramProfileUI profileUI = new InstagramProfileUI(user);
-    // profileUI.setVisible(true);
-  }
-
-  private void notificationsUI() {
-    // Open InstagramProfileUI frame
-    this.dispose();
-    NotificationsUI notificationsUI = new NotificationsUI();
-    notificationsUI.setVisible(true);
-  }
-
-  private void openHomeUI() {
-    // Open InstagramProfileUI frame
-    this.dispose();
-    QuakstagramHomeUI homeUI = new QuakstagramHomeUI();
-    homeUI.setVisible(true);
-  }
-
-  private void exploreUI() {
-    // Open InstagramProfileUI frame
-    this.dispose();
-    ExploreUI explore = new ExploreUI();
-    explore.setVisible(true);
+  @Override
+  public String getTitle() {
+    return "Explore";
   }
 
 }
