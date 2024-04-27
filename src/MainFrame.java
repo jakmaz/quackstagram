@@ -1,6 +1,7 @@
 import java.awt.CardLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.geom.QuadCurve2D;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -15,6 +16,13 @@ public class MainFrame extends JFrame {
   private JPanel mainPanel;
   private Map<String, Supplier<BaseUI>> panelSuppliers;
   private Map<String, BaseUI> initializedPanels;
+
+  public static MainFrame getInstance() {
+    if (instance == null) {
+      instance = new MainFrame();
+    }
+    return instance;
+  }
 
   private MainFrame() {
     super("Quackstagram Application");
@@ -51,6 +59,11 @@ public class MainFrame extends JFrame {
     // Register panel suppliers
     panelSuppliers.put("SignIn", SignInUI::new);
     panelSuppliers.put("SignUp", SignUpUI::new);
+    panelSuppliers.put("InstagramProfile", InstagramProfileUI::new);
+    panelSuppliers.put("Home", QuakstagramHomeUI::new);
+    // panelSuppliers.put("Explore", ExploreUI::new);
+    // panelSuppliers.put("Upload", ImageUploadUI::new);
+    // panelSuppliers.put("Notifications", NotificationsUI::new);
 
     // Preload initial panel
     preloadPanel("SignIn");
@@ -66,13 +79,6 @@ public class MainFrame extends JFrame {
     } else {
       System.out.println("Error: No supplier found for " + name);
     }
-  }
-
-  public static MainFrame getInstance() {
-    if (instance == null) {
-      instance = new MainFrame();
-    }
-    return instance;
   }
 
   public void switchPanel(String name) {

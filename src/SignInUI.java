@@ -19,7 +19,6 @@ public class SignInUI extends BaseUI {
   private User newUser;
 
   public SignInUI() {
-    super();
     setPreferredSize(new Dimension(WIDTH, HEIGHT));
     initializeUI();
   }
@@ -52,6 +51,7 @@ public class SignInUI extends BaseUI {
     fieldsPanel.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
 
     txtUsername = new JTextField("Username");
+    txtUsername = new JTextField("Zara");
     txtPassword = new JTextField("Password");
     txtUsername.setForeground(Color.GRAY);
     txtPassword.setForeground(Color.GRAY);
@@ -103,14 +103,28 @@ public class SignInUI extends BaseUI {
   private void onSignInClicked(ActionEvent event) {
     String enteredUsername = txtUsername.getText();
     String enteredPassword = txtPassword.getText();
-    System.out.println(enteredUsername + " <-> " + enteredPassword);
-    if (verifyCredentials(enteredUsername, enteredPassword)) {
-      System.out.println("It worked");
-      // Signal MainFrame to switch to the InstagramProfileUI
-      MainFrame.getInstance().switchPanel("InstagramProfile");
-    } else {
-      System.out.println("It Didn't");
-      // Optionally, show an error message or clear fields
+
+    try {
+      System.out.println(enteredUsername + " <-> " + enteredPassword); // For debugging purposes, remove in production
+
+      if (verifyCredentials(enteredUsername, enteredPassword)) {
+        System.out.println("Login successful");
+        // Signal MainFrame to switch to the InstagramProfileUI
+        MainFrame.getInstance().switchPanel("InstagramProfile");
+      } else {
+        // Display an error message directly in the GUI
+        JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Login Failed",
+            JOptionPane.ERROR_MESSAGE);
+        // txtUsername.setText(""); // Optionally clear the username field
+        // txtPassword.setText(""); // Clear the password field
+        // txtUsername.requestFocus(); // Set focus back to the username field
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      // Display a generic error message for any other unexpected errors
+      JOptionPane.showMessageDialog(null, "An error occurred while attempting to log in. Please try again.",
+          "Login Error", JOptionPane.ERROR_MESSAGE);
+      // Consider logging this error to a file or system log for maintenance purposes
     }
   }
 
