@@ -16,7 +16,7 @@ public class SignInUI extends BaseUI {
   private JTextField txtPassword;
   private JButton btnSignIn, btnRegisterNow;
   private JLabel lblPhoto;
-  private User newUser;
+  private User loggedUser;
 
   public SignInUI() {
     setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -107,29 +107,23 @@ public class SignInUI extends BaseUI {
     try {
       if (verifyCredentials(enteredUsername, enteredPassword)) {
         System.out.println("Login successful");
-        // Signal MainFrame to switch to the InstagramProfileUI
         MainFrame.getInstance().switchPanel("InstagramProfile");
       } else {
-        // Display an error message directly in the GUI
         JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Login Failed",
             JOptionPane.ERROR_MESSAGE);
-        // txtUsername.setText(""); // Optionally clear the username field
-        // txtPassword.setText(""); // Clear the password field
-        // txtUsername.requestFocus(); // Set focus back to the username field
+        // txtUsername.setText("");
+        // txtPassword.setText("");
+        txtUsername.requestFocus(); // Set focus back to the username field
       }
     } catch (Exception e) {
       e.printStackTrace();
-      // Display a generic error message for any other unexpected errors
       JOptionPane.showMessageDialog(null, "An error occurred while attempting to log in. Please try again.",
           "Login Error", JOptionPane.ERROR_MESSAGE);
-      // Consider logging this error to a file or system log for maintenance purposes
     }
   }
 
   private void onRegisterNowClicked(ActionEvent event) {
-    System.out.println("Register Now clicked");
-    // Signal MainFrame to switch to the SignUpUI
-    MainFrame.getInstance().switchPanel("SignUp"); // Assuming "SignUpUI" is registered in the MainFrame
+    MainFrame.getInstance().switchPanel("SignUp");
   }
 
   private boolean verifyCredentials(String username, String password) {
@@ -139,9 +133,9 @@ public class SignInUI extends BaseUI {
         String[] credentials = line.split(":");
         if (credentials[0].equals(username) && credentials[1].equals(password)) {
           String bio = credentials[2];
-          // Create User object and save information
-          newUser = new User(username); // Assuming User constructor takes these parameters
-          saveUserInformation(newUser);
+
+          loggedUser = new User(username, password, bio);
+          saveCurrentUserInformation(loggedUser);
 
           return true;
         }
@@ -152,7 +146,7 @@ public class SignInUI extends BaseUI {
     return false;
   }
 
-  private void saveUserInformation(User user) {
+  private void saveCurrentUserInformation(User user) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/users.txt", false))) {
       writer.write(user.toString()); // Implement a suitable toString method in User class
     } catch (IOException e) {
