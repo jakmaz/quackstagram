@@ -140,7 +140,7 @@ public class SignInUI extends BaseUI {
         if (credentials[0].equals(username) && credentials[1].equals(password)) {
           String bio = credentials[2];
           // Create User object and save information
-          newUser = new User(username, bio, password); // Assuming User constructor takes these parameters
+          newUser = new User(username); // Assuming User constructor takes these parameters
           saveUserInformation(newUser);
 
           return true;

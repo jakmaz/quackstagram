@@ -53,7 +53,7 @@ public class InstagramProfileUI extends BaseUI {
       System.out.println("Failed to read user data from file.");
     }
 
-    return new User(username, bio, password);
+    return new User(username);
   }
 
   private void readImageDetails() {
