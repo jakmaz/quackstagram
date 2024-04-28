@@ -63,21 +63,7 @@ public class HomeUI extends BaseUI {
     add(headerPanel, BorderLayout.NORTH);
 
     // Navigation Bar
-    JPanel navigationPanel = new JPanel();
-    navigationPanel.setBackground(new Color(249, 249, 249));
-    navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.X_AXIS));
-    navigationPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-    navigationPanel.add(createIconButton("img/icons/home.png", "home"));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/search.png", "explore"));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/add.png", "add"));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/heart.png", "notification"));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/profile.png", "profile"));
-
+    JPanel navigationPanel = createNavigationPanel();
     add(navigationPanel, BorderLayout.SOUTH);
   }
 

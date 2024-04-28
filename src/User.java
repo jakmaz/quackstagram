@@ -20,6 +20,7 @@ class User {
     this.username = username;
     readUserDetails();
     readFollowingDetails();
+    readPostsDetails();
   }
 
   public User(String username, String password, String bio) {
@@ -83,6 +84,23 @@ class User {
     }
     this.followersCount = followersCount;
     this.followingCount = followingCount;
+  }
+
+  private void readPostsDetails() {
+    int imageCount = 0;
+    Path imageDetailsFilePath = Paths.get("img", "image_details.txt");
+
+    try (BufferedReader imageDetailsReader = Files.newBufferedReader(imageDetailsFilePath)) {
+      String line;
+      while ((line = imageDetailsReader.readLine()) != null) {
+        if (line.contains("Username: " + this.username)) {
+          imageCount++;
+        }
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    this.postsCount = imageCount;
   }
 
   // Getter methods for user details

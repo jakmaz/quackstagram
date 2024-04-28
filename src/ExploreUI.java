@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,7 +18,6 @@ public class ExploreUI extends BaseUI {
 
   private static final int WIDTH = 300;
   private static final int HEIGHT = 500;
-  private static final int NAV_ICON_SIZE = 20; // Size for navigation icons
   private static final int IMAGE_SIZE = WIDTH / 3; // Size for each image in the grid
 
   public ExploreUI() {

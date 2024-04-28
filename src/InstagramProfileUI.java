@@ -11,8 +11,6 @@ import java.util.stream.Stream;
 
 public class InstagramProfileUI extends BaseUI {
 
-  private static final int WIDTH = 300;
-  private static final int HEIGHT = 500;
   private static final int PROFILE_IMAGE_SIZE = 80; // Adjusted size for the profile image to match UI
   private static final int GRID_IMAGE_SIZE = WIDTH / 3; // Static size for grid images
   private JPanel contentPanel; // Panel to display the image grid or the clicked image
@@ -22,104 +20,12 @@ public class InstagramProfileUI extends BaseUI {
 
   public InstagramProfileUI() {
     this.currentUser = readCurrentUser();
-    readImageDetails();
-    readFollowingDetails();
-    readUserBio();
 
     setSize(WIDTH, HEIGHT);
     setMinimumSize(new Dimension(WIDTH, HEIGHT));
     setLayout(new BorderLayout());
     contentPanel = new JPanel();
     initializeUI();
-  }
-
-  private User readCurrentUser() {
-    String username = "";
-    String bio = "";
-    String password = "";
-
-    try (BufferedReader reader = Files.newBufferedReader(Paths.get("data", "users.txt"))) {
-      String line = reader.readLine();
-      if (line != null) {
-        String[] parts = line.split(":", 3); // Limit the split to 3 parts in case bio contains colons
-        if (parts.length >= 3) {
-          username = parts[0].trim();
-          bio = parts[1].trim();
-          password = parts[2].trim();
-        }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-      System.out.println("Failed to read user data from file.");
-    }
-
-    return new User(username);
-  }
-
-  private void readImageDetails() {
-    int imageCount = 0;
-    Path imageDetailsFilePath = Paths.get("img", "image_details.txt");
-
-    try (BufferedReader imageDetailsReader = Files.newBufferedReader(imageDetailsFilePath)) {
-      String line;
-      while ((line = imageDetailsReader.readLine()) != null) {
-        if (line.contains("Username: " + currentUser.getUsername())) {
-          imageCount++;
-        }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    currentUser.setPostCount(imageCount);
-  }
-
-  private void readFollowingDetails() {
-    int followersCount = 0;
-    int followingCount = 0;
-    Path followingFilePath = Paths.get("data", "following.txt");
-
-    try (BufferedReader followingReader = Files.newBufferedReader(followingFilePath)) {
-      String line;
-      while ((line = followingReader.readLine()) != null) {
-        String[] parts = line.split(":");
-        if (parts.length == 2) {
-          String username = parts[0].trim();
-          String[] followingUsers = parts[1].split(";");
-          if (username.equals(currentUser.getUsername())) {
-            followingCount = followingUsers.length;
-          } else {
-            for (String followingUser : followingUsers) {
-              if (followingUser.trim().equals(currentUser.getUsername())) {
-                followersCount++;
-              }
-            }
-          }
-        }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    currentUser.setFollowersCount(followersCount);
-    currentUser.setFollowingCount(followingCount);
-  }
-
-  private void readUserBio() {
-    String bio = "";
-    Path bioDetailsFilePath = Paths.get("data", "credentials.txt");
-
-    try (BufferedReader bioDetailsReader = Files.newBufferedReader(bioDetailsFilePath)) {
-      String line;
-      while ((line = bioDetailsReader.readLine()) != null) {
-        String[] parts = line.split(":");
-        if (parts[0].equals(currentUser.getUsername()) && parts.length >= 3) {
-          bio = parts[2];
-          break;
-        }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    currentUser.setBio(bio);
   }
 
   @Override
@@ -135,6 +41,25 @@ public class InstagramProfileUI extends BaseUI {
 
     revalidate();
     repaint();
+  }
+
+  private User readCurrentUser() {
+    String username = "";
+
+    try (BufferedReader reader = Files.newBufferedReader(Paths.get("data", "users.txt"))) {
+      String line = reader.readLine();
+      if (line != null) {
+        String[] parts = line.split(":", 3); // Limit the split to 3 parts in case bio contains colons
+        if (parts.length >= 3) {
+          username = parts[0].trim();
+        }
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.out.println("Failed to read user data from file.");
+    }
+
+    return new User(username);
   }
 
   private JPanel createHeaderPanel() {

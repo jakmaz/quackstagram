@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public abstract class BaseUI extends JPanel {
+  public static final int WIDTH = 300;
+  public static final int HEIGHT = 500;
   private static final int NAV_ICON_SIZE = 20; // Corrected static size for bottom icons
 
   public BaseUI() {
@@ -39,7 +41,7 @@ public abstract class BaseUI extends JPanel {
 
   }
 
-  public JButton createIconButton(String iconPath, String buttonType) {
+  private JButton createIconButton(String iconPath, String buttonType) {
     ImageIcon iconOriginal = new ImageIcon(iconPath);
     Image iconScaled = iconOriginal.getImage().getScaledInstance(NAV_ICON_SIZE, NAV_ICON_SIZE, Image.SCALE_SMOOTH);
     JButton button = new JButton(new ImageIcon(iconScaled));
