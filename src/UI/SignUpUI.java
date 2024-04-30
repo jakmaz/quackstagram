@@ -1,5 +1,7 @@
 package UI;
 
+import Database.DatabaseUtils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -112,22 +114,17 @@ public class SignUpUI extends BaseUI {
     String password = passwordInput.getText().trim();
     String bio = bioInput.getText().trim();
 
-    // Check if any field is empty or no photo is selected
     if (username.isEmpty() || password.isEmpty() || !isProfilePictureUploaded) {
-      String message = "Please ensure all fields are filled and a photo is selected.";
-      JOptionPane.showMessageDialog(this, message, "Registration Incomplete", JOptionPane.ERROR_MESSAGE);
-      return; // Stop further processing
+      JOptionPane.showMessageDialog(this, "Please ensure all fields are filled and a photo is selected.", "Registration Incomplete", JOptionPane.ERROR_MESSAGE);
+      return;
     }
 
-    // Check if the username exists
-    if (doesUsernameExist(username)) {
-      JOptionPane.showMessageDialog(this, "Username already exists. Please choose a different username.", "Error",
-          JOptionPane.ERROR_MESSAGE);
-      return; // Stop further processing
+    if (DatabaseUtils.usernameExists(username)) {
+      JOptionPane.showMessageDialog(this, "Username already exists. Please choose a different username.", "Error", JOptionPane.ERROR_MESSAGE);
+      return;
     }
 
-    // Save the credentials if all checks are passed
-    saveCredentials(username, password, bio);
+    DatabaseUtils.registerUser(username, password, bio);
     JOptionPane.showMessageDialog(this, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
     MainFrame.getInstance().switchPanel("Profile");
   }

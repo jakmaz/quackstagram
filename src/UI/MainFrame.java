@@ -1,15 +1,14 @@
 package UI;
 
+import Logic.SessionManager;
+
+import javax.swing.*;
 import java.awt.CardLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 public class MainFrame extends JFrame {
   private static MainFrame instance;
@@ -39,7 +38,6 @@ public class MainFrame extends JFrame {
     mainPanel = new JPanel(cardLayout);
     add(mainPanel);
 
-    // Adding key listener to the main panel
     mainPanel.setFocusable(true);
     mainPanel.requestFocusInWindow();
     mainPanel.addKeyListener(new KeyAdapter() {
@@ -91,7 +89,7 @@ public class MainFrame extends JFrame {
     cardLayout.show(mainPanel, name);
     BaseUI panel = initializedPanels.get(name);
     if (panel != null) {
-      setTitle(name);
+      setTitle(name + " - " + SessionManager.getCurrentUser());
     } else {
       System.out.println("Error: Panel not initialized - " + name);
     }

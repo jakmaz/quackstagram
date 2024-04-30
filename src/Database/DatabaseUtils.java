@@ -1,5 +1,7 @@
 package Database;
 
+import Logic.User;
+
 import java.sql.*;
 
 public class DatabaseUtils {
@@ -32,5 +34,37 @@ public class DatabaseUtils {
     } catch (SQLException e) {
       e.printStackTrace();
     }
+  }
+
+  public static boolean verifyCredentials(String username, String password) {
+    String sql = "SELECT password FROM users WHERE username = ?";
+    try (Connection conn = getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+      pstmt.setString(1, username);
+      ResultSet rs = pstmt.executeQuery();
+      if (rs.next()) {
+        String storedPassword = rs.getString("password");
+        // Assuming passwords are stored securely (e.g., hashed with a salt)
+        return storedPassword.equals(password); // For simplicity; in practice, use password hashing+salt
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  public static User getUserDetails(String username) {
+    String sql = "SELECT username, password, bio FROM users WHERE username = ?";
+    try (Connection conn = getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+      pstmt.setString(1, username);
+      ResultSet rs = pstmt.executeQuery();
+      if (rs.next()) {
+        return new User(rs.getString("username"), rs.getString("password"), rs.getString("bio"));
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }

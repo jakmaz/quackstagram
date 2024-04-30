@@ -1,5 +1,7 @@
 package UI;
 
+import Database.DatabaseUtils;
+import Logic.SessionManager;
 import Logic.User;
 
 import javax.swing.*;
@@ -97,24 +99,22 @@ public class SignInUI extends BaseUI {
   }
 
   private void onSignInClicked(ActionEvent event) {
-    String enteredUsername = usernameInput.getText();
-    String enteredPassword = passwordInput.getText();
+    String enteredUsername = usernameInput.getText().trim();
+    String enteredPassword = passwordInput.getText().trim();
 
     try {
-      if (verifyCredentials(enteredUsername, enteredPassword)) {
-        System.out.println("Login successful");
+      if (DatabaseUtils.verifyCredentials(enteredUsername, enteredPassword)) {
+        JOptionPane.showMessageDialog(null, "Login successful", "Success", JOptionPane.INFORMATION_MESSAGE);
+        User currentUser = DatabaseUtils.getUserDetails(enteredUsername);
+        saveCurrentUserInformation(currentUser);
         MainFrame.getInstance().switchPanel("Profile");
       } else {
-        JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Login Failed",
-            JOptionPane.ERROR_MESSAGE);
-        // txtUsername.setText("");
-        // txtPassword.setText("");
-        usernameInput.requestFocus(); // Set focus back to the username field
+        JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+        usernameInput.requestFocus();
       }
     } catch (Exception e) {
       e.printStackTrace();
-      JOptionPane.showMessageDialog(null, "An error occurred while attempting to log in. Please try again.",
-          "Login Error", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(null, "An error occurred while attempting to log in. Please try again.", "Login Error", JOptionPane.ERROR_MESSAGE);
     }
   }
 
@@ -122,32 +122,9 @@ public class SignInUI extends BaseUI {
     MainFrame.getInstance().switchPanel("SignUp");
   }
 
-  private boolean verifyCredentials(String username, String password) {
-    try (BufferedReader reader = new BufferedReader(new FileReader("data/credentials.txt"))) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        String[] credentials = line.split(":");
-        if (credentials[0].equals(username) && credentials[1].equals(password)) {
-          String bio = credentials[2];
-
-          User loggedUser = new User(username, password, bio);
-          saveCurrentUserInformation(loggedUser);
-
-          return true;
-        }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return false;
-  }
 
   private void saveCurrentUserInformation(User user) {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/users.txt", false))) {
-      writer.write(user.toString()); // Implement a suitable toString method in User class
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    SessionManager.setCurrentUser(user);
   }
 
 }
