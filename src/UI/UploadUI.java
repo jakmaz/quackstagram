@@ -1,5 +1,7 @@
 package UI;
 
+import Logic.SessionManager;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -85,7 +87,7 @@ public class UploadUI extends BaseUI {
     if (returnValue == JFileChooser.APPROVE_OPTION) {
       File selectedFile = fileChooser.getSelectedFile();
       try {
-        String username = readUsername(); // Read username from users.txt
+        String username = SessionManager.getCurrentUser().getUsername();
         int imageId = getNextImageId(username);
         String fileExtension = getFileExtension(selectedFile);
         String newFileName = username + "_" + imageId + "." + fileExtension;
@@ -205,16 +207,5 @@ public class UploadUI extends BaseUI {
     headerPanel.add(lblRegister);
     headerPanel.setPreferredSize(new Dimension(WIDTH, 40)); // Give the header a fixed height
     return headerPanel;
-  }
-
-  private String readUsername() throws IOException {
-    Path usersFilePath = Paths.get("data", "users.txt");
-    try (BufferedReader reader = Files.newBufferedReader(usersFilePath)) {
-      String line = reader.readLine();
-      if (line != null) {
-        return line.split(":")[0]; // Extract the username from the first line
-      }
-    }
-    return null; // Return null if no username is found
   }
 }

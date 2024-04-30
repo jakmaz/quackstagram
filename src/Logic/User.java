@@ -1,5 +1,7 @@
 package Logic;
 
+import Database.DatabaseUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-  private String username;
+  private final String username;
   private String bio;
   private String password;
   private int postsCount;
@@ -38,23 +40,7 @@ public class User {
   }
 
   private void readUserDetails() {
-    Path userFilePath = Paths.get("data", "users.txt");
-
-    try (BufferedReader userReader = Files.newBufferedReader(userFilePath)) {
-      String line;
-      while ((line = userReader.readLine()) != null) {
-        String[] parts = line.split(":");
-        if (parts.length == 3) {
-          String username = parts[0].trim();
-          if (username.equals(this.username)) {
-            this.bio = parts[1].trim();
-            this.password = parts[2].trim();
-          }
-        }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    DatabaseUtils.getUserDetails(this.username);
   }
 
   private void readFollowingDetails() {

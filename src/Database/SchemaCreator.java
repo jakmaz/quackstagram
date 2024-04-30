@@ -19,6 +19,7 @@ public class SchemaCreator {
       createFollowTable();
       createNotificationsTable();
       setupForeignKeys();
+      addDummyData();
       System.out.println("Database schema created successfully.");
     } catch (SQLException e) {
       e.printStackTrace();
@@ -111,6 +112,14 @@ public class SchemaCreator {
     for (String sql : sqlStatements) {
       executeUpdate(sql);
     }
+  }
+
+  private static void addDummyData() {
+    addUsers();
+  }
+
+  private static void addUsers() {
+    DatabaseUtils.registerUser("admin", "admin", "admin");
   }
 
   private static void executeUpdate(String sql) throws SQLException {

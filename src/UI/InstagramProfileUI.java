@@ -1,5 +1,6 @@
 package UI;
 
+import Logic.SessionManager;
 import Logic.User;
 
 import javax.swing.*;
@@ -17,25 +18,23 @@ public class InstagramProfileUI extends BaseUI {
 
   private static final int PROFILE_IMAGE_SIZE = 80; // Adjusted size for the profile image to match UI
   private static final int GRID_IMAGE_SIZE = WIDTH / 3; // Static size for grid images
-  private JPanel contentPanel; // Panel to display the image grid or the clicked image
-  private JPanel headerPanel; // Panel for the header
-  private JPanel navigationPanel; // Panel for the navigation
+  private JPanel contentPanel; //  to display the image grid or the clicked image
   private User currentUser; // User object to store the current user's information
 
   public InstagramProfileUI() {
-    this.currentUser = readCurrentUser();
+    this.currentUser = SessionManager.getCurrentUser();
 
     setSize(WIDTH, HEIGHT);
     setMinimumSize(new Dimension(WIDTH, HEIGHT));
     setLayout(new BorderLayout());
-    contentPanel = new JPanel();
     initializeUI();
   }
 
   @Override
   public void initializeUI() {
-    headerPanel = createHeaderPanel(); // attempt to recreate if null
-    navigationPanel = createNavigationPanel(); // attempt to recreate if null
+    contentPanel = new JPanel();
+    JPanel headerPanel = createHeaderPanel(); // attempt to recreate if null
+    JPanel navigationPanel = createNavigationPanel(); // attempt to recreate if null
 
     add(createHeaderPanel(), BorderLayout.NORTH);
     add(navigationPanel, BorderLayout.SOUTH);
@@ -45,25 +44,6 @@ public class InstagramProfileUI extends BaseUI {
 
     revalidate();
     repaint();
-  }
-
-  private User readCurrentUser() {
-    String username = "";
-
-    try (BufferedReader reader = Files.newBufferedReader(Paths.get("data", "users.txt"))) {
-      String line = reader.readLine();
-      if (line != null) {
-        String[] parts = line.split(":", 3); // Limit the split to 3 parts in case bio contains colons
-        if (parts.length >= 3) {
-          username = parts[0].trim();
-        }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-      System.out.println("Failed to read user data from file.");
-    }
-
-    return new User(username);
   }
 
   private JPanel createHeaderPanel() {

@@ -89,7 +89,7 @@ public class MainFrame extends JFrame {
     cardLayout.show(mainPanel, name);
     BaseUI panel = initializedPanels.get(name);
     if (panel != null) {
-      setTitle(name + " - " + SessionManager.getCurrentUser());
+      setTitle(name + " - " + SessionManager.getCurrentUser().getUsername());
     } else {
       System.out.println("Error: Panel not initialized - " + name);
     }
