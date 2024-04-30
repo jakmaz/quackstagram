@@ -103,10 +103,11 @@ public class SignInUI extends BaseUI {
     String enteredPassword = passwordInput.getText().trim();
 
     try {
-      if (DatabaseUtils.verifyCredentials(enteredUsername, enteredPassword)) {
+      Integer userId = DatabaseUtils.verifyCredentials(enteredUsername, enteredPassword);
+      if (userId != null) {
         JOptionPane.showMessageDialog(null, "Login successful", "Success", JOptionPane.INFORMATION_MESSAGE);
-        User currentUser = DatabaseUtils.getUserDetails(enteredUsername);
-        saveCurrentUserInformation(currentUser);
+        User loggedInUser = new User(userId);
+        saveCurrentUserInformation(loggedInUser);
         MainFrame.getInstance().switchPanel("Profile");
       } else {
         JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);

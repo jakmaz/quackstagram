@@ -11,64 +11,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-  private final String username;
+  private final Integer id;  // Changed from int to Integer
+  private String username;
   private String bio;
-  private String password;
+
   private int postsCount;
   private int followersCount;
   private int followingCount;
   private List<Picture> pictures = new ArrayList<>();
 
-  public User(String username) {
-    this.username = username;
+  public User(int id) {
+    this.id = id;
     readUserDetails();
     readFollowingDetails();
     readPostsDetails();
   }
 
-  public User(String username, String password, String bio) {
-    this.username = username;
-    this.bio = bio;
-    this.password = password;
-    readFollowingDetails();
-  }
-
-  // Add a picture to the user's profile
-  public void addPicture(Picture picture) {
-    pictures.add(picture);
-    postsCount++;
-  }
-
   private void readUserDetails() {
-    DatabaseUtils.getUserDetails(this.username);
+    UserDetails userDetails = DatabaseUtils.getUserDetails(this.id);
+    if (userDetails != null) {
+      this.username = userDetails.getUsername();
+      this.bio = userDetails.getBio();
+    }
   }
 
   private void readFollowingDetails() {
     int followersCount = 0;
     int followingCount = 0;
-    Path followingFilePath = Paths.get("data", "following.txt");
-
-    try (BufferedReader followingReader = Files.newBufferedReader(followingFilePath)) {
-      String line;
-      while ((line = followingReader.readLine()) != null) {
-        String[] parts = line.split(":");
-        if (parts.length == 2) {
-          String username = parts[0].trim();
-          String[] followingUsers = parts[1].split(";");
-          if (username.equals(this.username)) {
-            followingCount = followingUsers.length;
-          } else {
-            for (String followingUser : followingUsers) {
-              if (followingUser.trim().equals(this.username)) {
-                followersCount++;
-              }
-            }
-          }
-        }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+//    DatabaseUtils.getFollowingDetails(this.id);
     this.followersCount = followersCount;
     this.followingCount = followingCount;
   }
@@ -135,7 +105,7 @@ public class User {
   // Implement the toString method for saving user information
   @Override
   public String toString() {
-    return username + ":" + bio + ":" + password; // Format as needed
+    return username + ":" + bio + ":"; // Format as needed
   }
 
 }
