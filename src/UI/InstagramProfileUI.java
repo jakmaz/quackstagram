@@ -1,3 +1,7 @@
+package UI;
+
+import Logic.User;
+
 import javax.swing.*;
 
 import java.awt.event.MouseAdapter;

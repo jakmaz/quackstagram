@@ -1,3 +1,7 @@
+package UI;
+
+import Logic.User;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -31,8 +35,8 @@ public class ExploreUI extends BaseUI {
 
     setLayout(new BorderLayout()); // Reset the layout manager
 
-    JPanel headerPanel = createHeaderPanel(); // Method from your InstagramProfileUI class
-    JPanel navigationPanel = createNavigationPanel(); // Method from your InstagramProfileUI class
+    JPanel headerPanel = createHeaderPanel(); // Method from your UI.InstagramProfileUI class
+    JPanel navigationPanel = createNavigationPanel(); // Method from your UI.InstagramProfileUI class
     JPanel mainContentPanel = createMainContentPanel();
 
     // Add panels to the frame
@@ -91,7 +95,7 @@ public class ExploreUI extends BaseUI {
 
   private JPanel createHeaderPanel() {
 
-    // Header Panel (reuse from InstagramProfileUI or customize for home page)
+    // Header Panel (reuse from UI.InstagramProfileUI or customize for home page)
     // Header with the Register label
     JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     headerPanel.setBackground(new Color(51, 51, 51)); // Set a darker background for the header
@@ -204,7 +208,7 @@ public class ExploreUI extends BaseUI {
 
     usernameLabel.addActionListener(e -> {
       User user = new User(finalUsername); // Assuming User class has a constructor that takes a username
-      // InstagramProfileUI profileUI = new InstagramProfileUI(user);
+      // UI.InstagramProfileUI profileUI = new UI.InstagramProfileUI(user);
       // profileUI.setVisible(true);
       // dispose(); // Close the current frame
     });

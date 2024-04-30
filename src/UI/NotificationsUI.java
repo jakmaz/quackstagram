@@ -1,3 +1,5 @@
+package UI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -22,7 +24,7 @@ public class NotificationsUI extends BaseUI {
 
   public void initializeUI() {
     // Reuse the header and navigation panel creation methods from the
-    // InstagramProfileUI class
+    // UI.InstagramProfileUI class
     JPanel headerPanel = createHeaderPanel();
     JPanel navigationPanel = createNavigationPanel();
 
@@ -100,7 +102,7 @@ public class NotificationsUI extends BaseUI {
 
   private JPanel createHeaderPanel() {
 
-    // Header Panel (reuse from InstagramProfileUI or customize for home page)
+    // Header Panel (reuse from UI.InstagramProfileUI or customize for home page)
     // Header with the Register label
     JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     headerPanel.setBackground(new Color(51, 51, 51)); // Set a darker background for the header

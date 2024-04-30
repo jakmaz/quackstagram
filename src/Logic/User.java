@@ -1,3 +1,5 @@
+package Logic;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -6,8 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-// Represents a user on Quackstagram
-class User {
+public class User {
   private String username;
   private String bio;
   private String password;

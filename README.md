@@ -53,7 +53,7 @@ The second phase is about implementing all the proposed changes from phase 1 and
 
 -   Design Pattern Implementation (8%): The appropriateness and justification of design pattern choices and their integration into the larger system architecture.
 
--   Application Functionality and User Experience (6%): The robustness, performance, and user experience of the final application.
+-   Application Functionality and Logic.User Experience (6%): The robustness, performance, and user experience of the final application.
 
 ## Deliverables
 
