@@ -20,7 +20,6 @@ public class SignUpUI extends BaseUI {
   private JTextField bioInput;
   private boolean isProfilePictureUploaded = false;
 
-  private final String credentialsFilePath = "data/credentials.txt";
   private final String profilePhotoStoragePath = "img/storage/profile/";
 
   public SignUpUI() {
@@ -129,20 +128,6 @@ public class SignUpUI extends BaseUI {
     MainFrame.getInstance().switchPanel("Profile");
   }
 
-  private boolean doesUsernameExist(String username) {
-    try (BufferedReader reader = new BufferedReader(new FileReader(credentialsFilePath))) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        if (line.startsWith(username + ":")) {
-          return true;
-        }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return false;
-  }
-
   // Method to handle profile picture upload
   private void handleProfilePictureUpload(ActionEvent e) {
     JFileChooser fileChooser = new JFileChooser();
@@ -160,15 +145,6 @@ public class SignUpUI extends BaseUI {
       BufferedImage image = ImageIO.read(file);
       File outputFile = new File(profilePhotoStoragePath + username + ".png");
       ImageIO.write(image, "png", outputFile);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  private void saveCredentials(String username, String password, String bio) {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/credentials.txt", true))) {
-      writer.write(username + ":" + password + ":" + bio);
-      writer.newLine();
     } catch (IOException e) {
       e.printStackTrace();
     }
