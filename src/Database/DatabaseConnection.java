@@ -9,6 +9,15 @@ public class DatabaseConnection {
   private static final String USER = "BCS1510";
   private static final String PASSWORD = "BCS1510";
 
+//  static {
+//    try {
+//      // Explicitly load the MySQL JDBC driver
+//      Class.forName("com.mysql.jdbc.Driver");
+//    } catch (ClassNotFoundException e) {
+//      e.printStackTrace();
+//    }
+//  }
+
   public static Connection getConnection() {
     try {
       return DriverManager.getConnection(URL, USER, PASSWORD);
