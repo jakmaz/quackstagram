@@ -104,8 +104,8 @@ public class SchemaCreator {
         "ALTER TABLE comments ADD FOREIGN KEY (user_id) REFERENCES users (id)",
         "ALTER TABLE likes ADD FOREIGN KEY (post_id) REFERENCES posts (id)",
         "ALTER TABLE likes ADD FOREIGN KEY (user_id) REFERENCES users (id)",
-        "ALTER TABLE follow ADD FOREIGN KEY (follower_id) REFERENCES users (id)",
-        "ALTER TABLE follow ADD FOREIGN KEY (following_id) REFERENCES users (id)",
+        "ALTER TABLE followers ADD FOREIGN KEY (follower_id) REFERENCES users (id)",
+        "ALTER TABLE followers ADD FOREIGN KEY (following_id) REFERENCES users (id)",
         "ALTER TABLE notifications ADD FOREIGN KEY (user_id) REFERENCES users (id)",
         "ALTER TABLE notifications ADD FOREIGN KEY (post_id) REFERENCES posts (id)"
     };
