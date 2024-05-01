@@ -1,6 +1,7 @@
 package UI;
 
 import Logic.SessionManager;
+import Logic.User;
 
 import javax.swing.*;
 import java.awt.CardLayout;
@@ -63,7 +64,8 @@ public class MainFrame extends JFrame {
     panelSuppliers.put("Explore", ExploreUI::new);
     panelSuppliers.put("Upload", UploadUI::new);
     panelSuppliers.put("Notifications", NotificationsUI::new);
-    panelSuppliers.put("Profile", InstagramProfileUI::new);
+    panelSuppliers.put("Profile", OwnProfileUI::new);
+    panelSuppliers.put("OtherProfile", UserProfileUI::new);
 
     // Preload initial panel
     preloadPanel("SignIn");
@@ -93,6 +95,14 @@ public class MainFrame extends JFrame {
     } else {
       System.out.println("Error: Panel not initialized - " + name);
     }
+  }
+
+  public void switchToUserProfile(User user) {
+    switchPanel("OtherProfile");
+//    UserProfileUI otherProfileUI = (UserProfileUI) initializedPanels.computeIfAbsent("OtherProfile", k -> new UserProfileUI());
+    UserProfileUI otherProfileUI = (UserProfileUI) initializedPanels.get("OtherProfile");
+    otherProfileUI.setUser(user);
+//    switchPanel("OtherProfile");
   }
 
   public static void main(String[] args) {

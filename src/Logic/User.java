@@ -44,20 +44,21 @@ public class User {
   }
 
   private void readPostsDetails() {
-    int imageCount = 0;
-    Path imageDetailsFilePath = Paths.get("img", "image_details.txt");
-
-    try (BufferedReader imageDetailsReader = Files.newBufferedReader(imageDetailsFilePath)) {
-      String line;
-      while ((line = imageDetailsReader.readLine()) != null) {
-        if (line.contains("Username: " + this.username)) {
-          imageCount++;
-        }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    this.postsCount = imageCount;
+//    int imageCount = 0;
+//    Path imageDetailsFilePath = Paths.get("img", "image_details.txt");
+//
+//    try (BufferedReader imageDetailsReader = Files.newBufferedReader(imageDetailsFilePath)) {
+//      String line;
+//      while ((line = imageDetailsReader.readLine()) != null) {
+//        if (line.contains("Username: " + this.username)) {
+//          imageCount++;
+//        }
+//      }
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
+//    this.postsCount = imageCount;
+    this.postsCount = 0;
   }
 
   // Getter methods for user details
