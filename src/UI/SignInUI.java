@@ -7,11 +7,6 @@ import Logic.User;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class SignInUI extends BaseUI {
 
@@ -31,6 +26,25 @@ public class SignInUI extends BaseUI {
     add(createHeaderPanel(), BorderLayout.NORTH);
     add(createFieldsPanel(), BorderLayout.CENTER);
     add(createButtonPanel(), BorderLayout.SOUTH);
+    addKeymap();
+  }
+
+  private void addKeymap() {
+    // Setup key binding for Enter key on username and password input fields
+    KeyStroke enterKeyStroke = KeyStroke.getKeyStroke("ENTER");
+    Action performSignIn = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        onSignInClicked(e);
+      }
+    };
+
+    // Assign the Enter key action to both text fields
+    usernameInput.getInputMap(JComponent.WHEN_FOCUSED).put(enterKeyStroke, "enterPressed");
+    usernameInput.getActionMap().put("enterPressed", performSignIn);
+
+    passwordInput.getInputMap(JComponent.WHEN_FOCUSED).put(enterKeyStroke, "enterPressed");
+    passwordInput.getActionMap().put("enterPressed", performSignIn);
   }
 
   private JPanel createHeaderPanel() {
@@ -58,8 +72,8 @@ public class SignInUI extends BaseUI {
     JPanel photoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     photoPanel.add(lblPhoto);
 
-    usernameInput = new JTextField("Username");
-    passwordInput = new JTextField("Password");
+    usernameInput = new JTextField("admin");
+    passwordInput = new JTextField("admin");
     usernameInput.setForeground(Color.GRAY);
     passwordInput.setForeground(Color.GRAY);
 
