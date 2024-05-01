@@ -123,7 +123,7 @@ public class SignUpUI extends BaseUI {
       return;
     }
 
-    DatabaseUtils.registerUser(username, password, bio);
+    DatabaseUtils.registerUser(username, password, bio, ""); // TODO: implement
     JOptionPane.showMessageDialog(this, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
     MainFrame.getInstance().switchPanel("Profile");
   }

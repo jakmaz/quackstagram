@@ -18,7 +18,6 @@ public class SchemaCreator {
       createLikesTable();
       createFollowersTable();
       createNotificationsTable();
-      setupForeignKeys();
       addDummyData();
       System.out.println("Database schema created successfully.");
     } catch (SQLException e) {
@@ -30,88 +29,81 @@ public class SchemaCreator {
   private static void createUsersTable() throws SQLException {
     String sql = """
         CREATE TABLE IF NOT EXISTS users (
-            id int PRIMARY KEY AUTO_INCREMENT,
-            username varchar(255),
-            password varchar(255),
-            bio varchar(255),
-            profile_photo blob
-        )""";
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          username VARCHAR(255) UNIQUE NOT NULL,
+          password VARCHAR(255) NOT NULL,
+          bio VARCHAR(255),
+          image_path VARCHAR(255)
+        );""";
     executeUpdate(sql);
   }
 
   private static void createPostsTable() throws SQLException {
     String sql = """
         CREATE TABLE IF NOT EXISTS posts (
-            id int PRIMARY KEY AUTO_INCREMENT,
-            user_id int,
-            caption varchar(255),
-            image blob,
-            timestamp timestamp
-        )""";
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          user_id INT NOT NULL,
+          caption VARCHAR(255),
+          image_path VARCHAR(255),
+          timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users(id)
+        );""";
     executeUpdate(sql);
   }
 
   private static void createCommentsTable() throws SQLException {
     String sql = """
         CREATE TABLE IF NOT EXISTS comments (
-            id int PRIMARY KEY AUTO_INCREMENT,
-            post_id int,
-            user_id int,
-            text varchar(255),
-            timestamp timestamp
-        )""";
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          post_id INT NOT NULL,
+          user_id INT NOT NULL,
+          text VARCHAR(255),
+          timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (post_id) REFERENCES posts(id),
+          FOREIGN KEY (user_id) REFERENCES users(id)
+        );""";
     executeUpdate(sql);
   }
 
   private static void createLikesTable() throws SQLException {
     String sql = """
         CREATE TABLE IF NOT EXISTS likes (
-            post_id int,
-            user_id int,
-            timestamp timestamp,
-            PRIMARY KEY (`post_id`, `user_id`)
-        )""";
+          post_id INT,
+          user_id INT,
+          timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          PRIMARY KEY (post_id, user_id),
+          FOREIGN KEY (post_id) REFERENCES posts(id),
+          FOREIGN KEY (user_id) REFERENCES users(id)
+        );""";
     executeUpdate(sql);
   }
 
   private static void createFollowersTable() throws SQLException {
     String sql = """
         CREATE TABLE IF NOT EXISTS followers (
-          follower_id int,
-          following_id int,
-          timestamp timestamp,
-          PRIMARY KEY (`follower_id`, `following_id`)
-        );""";
+          follower_id INT,
+          following_id INT,
+          timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          PRIMARY KEY (follower_id, following_id),
+          FOREIGN KEY (follower_id) REFERENCES users(id),
+          FOREIGN KEY (following_id) REFERENCES users(id)
+        );
+        """;
     executeUpdate(sql);
   }
 
   private static void createNotificationsTable() throws SQLException {
     String sql = """
         CREATE TABLE IF NOT EXISTS notifications (
-            id int PRIMARY KEY AUTO_INCREMENT,
-            user_id int,
-            post_id int,
-            message varchar(255),
-            timestamp timestamp
-        )""";
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          user_id INT NOT NULL,
+          post_id INT,
+          message VARCHAR(255),
+          timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users(id),
+          FOREIGN KEY (post_id) REFERENCES posts(id)
+        );""";
     executeUpdate(sql);
-  }
-
-  private static void setupForeignKeys() throws SQLException {
-    String[] sqlStatements = {
-        "ALTER TABLE posts ADD FOREIGN KEY (user_id) REFERENCES users (id)",
-        "ALTER TABLE comments ADD FOREIGN KEY (post_id) REFERENCES posts (id)",
-        "ALTER TABLE comments ADD FOREIGN KEY (user_id) REFERENCES users (id)",
-        "ALTER TABLE likes ADD FOREIGN KEY (post_id) REFERENCES posts (id)",
-        "ALTER TABLE likes ADD FOREIGN KEY (user_id) REFERENCES users (id)",
-        "ALTER TABLE followers ADD FOREIGN KEY (follower_id) REFERENCES users (id)",
-        "ALTER TABLE followers ADD FOREIGN KEY (following_id) REFERENCES users (id)",
-        "ALTER TABLE notifications ADD FOREIGN KEY (user_id) REFERENCES users (id)",
-        "ALTER TABLE notifications ADD FOREIGN KEY (post_id) REFERENCES posts (id)"
-    };
-    for (String sql : sqlStatements) {
-      executeUpdate(sql);
-    }
   }
 
   private static void addDummyData() {
@@ -119,7 +111,8 @@ public class SchemaCreator {
   }
 
   private static void addUsers() {
-    DatabaseUtils.registerUser("admin", "admin", "admin");
+    DatabaseUtils.registerUser("admin", "admin", "Main chief developer", "img/storage/profile/admin.png");
+    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_1.png");
   }
 
   private static void executeUpdate(String sql) throws SQLException {

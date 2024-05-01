@@ -25,8 +25,8 @@ public class DatabaseUtils {
     return false;
   }
 
-  public static int registerUser(String username, String password, String bio) {
-    String sql = "INSERT INTO users (username, password, bio) VALUES (?, ?, ?)";
+  public static int registerUser(String username, String password, String bio, String imagePath) {
+    String sql = "INSERT INTO users (username, password, bio, image_path) VALUES (?, ?, ?, ?)";
     int userId = -1; // Default or error case, assuming no valid user has an ID of -1
 
     try (Connection conn = getConnection();
@@ -34,6 +34,7 @@ public class DatabaseUtils {
       ps.setString(1, username);
       ps.setString(2, password);
       ps.setString(3, bio);
+      ps.setString(4, imagePath);
       int affectedRows = ps.executeUpdate();
 
       if (affectedRows > 0) {
@@ -98,7 +99,7 @@ public class DatabaseUtils {
   }
 
   public static void postSomething(int userId, String caption, String imagePath) {
-    String sql = "INSERT INTO posts (user_id, caption, image, timestamp) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
+    String sql = "INSERT INTO posts (user_id, caption, image_path, timestamp) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
       ps.setInt(1, userId);
       ps.setString(2, caption);

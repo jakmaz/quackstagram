@@ -62,7 +62,8 @@ public class InstagramProfileUI extends BaseUI {
     topHeaderPanel.setBackground(new Color(249, 249, 249));
 
     // Profile image
-    ImageIcon profileIcon = new ImageIcon(new ImageIcon("img/storage/profile/" + currentUser.getUsername() + ".png")
+    System.out.println("Current user: " + loggedInUsername);
+    ImageIcon profileIcon = new ImageIcon(new ImageIcon("img/storage/profile/admin.png") // TODO: to implement
         .getImage().getScaledInstance(PROFILE_IMAGE_SIZE, PROFILE_IMAGE_SIZE, Image.SCALE_SMOOTH));
     JLabel profileImage = new JLabel(profileIcon);
     profileImage.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
