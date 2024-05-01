@@ -16,7 +16,7 @@ public class SchemaCreator {
       createPostsTable();
       createCommentsTable();
       createLikesTable();
-      createFollowTable();
+      createFollowersTable();
       createNotificationsTable();
       setupForeignKeys();
       addDummyData();
@@ -66,22 +66,22 @@ public class SchemaCreator {
   private static void createLikesTable() throws SQLException {
     String sql = """
         CREATE TABLE IF NOT EXISTS likes (
-            id int PRIMARY KEY AUTO_INCREMENT,
             post_id int,
             user_id int,
-            timestamp timestamp
+            timestamp timestamp,
+            PRIMARY KEY (`post_id`, `user_id`)
         )""";
     executeUpdate(sql);
   }
 
-  private static void createFollowTable() throws SQLException {
+  private static void createFollowersTable() throws SQLException {
     String sql = """
-        CREATE TABLE IF NOT EXISTS follow (
-            id int PRIMARY KEY AUTO_INCREMENT,
-            follower_id int,
-            following_id int,
-            timestamp timestamp
-        )""";
+        CREATE TABLE IF NOT EXISTS followers (
+          follower_id int,
+          following_id int,
+          timestamp timestamp,
+          PRIMARY KEY (`follower_id`, `following_id`)
+        );""";
     executeUpdate(sql);
   }
 

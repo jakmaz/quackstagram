@@ -87,7 +87,7 @@ public class DatabaseUtils {
   }
 
   public static void followUser(int followerId, int followingId) {
-    String sql = "INSERT INTO follow (follower_id, following_id) VALUES (?, ?)";
+    String sql = "INSERT INTO followers (follower_id, following_id) VALUES (?, ?)";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
       ps.setInt(1, followerId);
       ps.setInt(2, followingId);
