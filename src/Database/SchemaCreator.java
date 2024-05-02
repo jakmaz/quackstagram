@@ -108,11 +108,49 @@ public class SchemaCreator {
 
   private static void addDummyData() {
     addUsers();
+    addPosts();
   }
 
   private static void addUsers() {
     DatabaseUtils.registerUser("admin", "admin", "Main chief developer", "img/storage/profile/admin.png");
+    DatabaseUtils.registerUser("mordula", "admin", "Eva Mordface, Inhabitant of Mordor", "img/storage/profile/mordula.png");
+    DatabaseUtils.registerUser("swiniar", "admin", "Jack Swinehead, Mechanic engineer", "img/storage/profile/swiniar.png");
+    DatabaseUtils.registerUser("pluta", "admin", "Vojtech Pluton, Soft ferromagnetics in rotating fields", "img/storage/profile/pluta.png");
+    DatabaseUtils.registerUser("gala", "admin", "Alex Galla-Yaskier, Gala, gala - E!", "img/storage/profile/gala.png");
+    DatabaseUtils.registerUser("baska", "admin", "Barb McWitch, Desing(e)", "img/storage/profile/baska.png");
+  }
+
+  private static void addPosts() {
     DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_1.png");
+    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_2.png");
+    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_3.png");
+    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_4.png");
+    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_5.png");
+    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/storage/uploaded/mordula_1.png");
+    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/storage/uploaded/mordula_2.png");
+    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/storage/uploaded/mordula_3.png");
+    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/storage/uploaded/mordula_4.png");
+    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/storage/uploaded/mordula_5.png");
+    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/storage/uploaded/swiniar_1.png");
+    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/storage/uploaded/swiniar_2.png");
+    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/storage/uploaded/swiniar_3.png");
+    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/storage/uploaded/swiniar_4.png");
+    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/storage/uploaded/swiniar_5.png");
+    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/storage/uploaded/pluta_1.png");
+    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/storage/uploaded/pluta_2.png");
+    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/storage/uploaded/pluta_3.png");
+    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/storage/uploaded/pluta_4.png");
+    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/storage/uploaded/pluta_5.png");
+    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/storage/uploaded/gala_1.png");
+    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/storage/uploaded/gala_2.png");
+    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/storage/uploaded/gala_3.png");
+    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/storage/uploaded/gala_4.png");
+    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/storage/uploaded/gala_5.png");
+    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/storage/uploaded/baska_1.png");
+    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/storage/uploaded/baska_2.png");
+    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/storage/uploaded/baska_3.png");
+    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/storage/uploaded/baska_4.png");
+    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/storage/uploaded/baska_5.png");
   }
 
   private static void executeUpdate(String sql) throws SQLException {
