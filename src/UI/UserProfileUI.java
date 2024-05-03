@@ -17,16 +17,21 @@ public class UserProfileUI extends ProfileUI {
     }
 
     @Override
-    JButton createHeaderActionButton() {
+    JPanel createHeaderActionButtons() {
+        // Create a panel to hold buttons
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));  // Use X_AXIS for horizontal alignment
+
+        // Configure the Follow button
         JButton followButton = new JButton("Follow");
-        followButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         followButton.setFont(new Font("Arial", Font.BOLD, 12));
-        followButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, followButton.getMinimumSize().height)); // Make the button fill the horizontal space
-        followButton.setBackground(new Color(225, 228, 232)); // A soft, appealing color that complements the UI
+        followButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, followButton.getMinimumSize().height));
+        followButton.setBackground(new Color(225, 228, 232)); // A soft, appealing color
         followButton.setForeground(Color.BLACK);
         followButton.setOpaque(true);
         followButton.setBorderPainted(false);
         followButton.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10)); // Add some vertical padding
-        return followButton;
+        buttonPanel.add(followButton);
+        return buttonPanel;
     }
 }

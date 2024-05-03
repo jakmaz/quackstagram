@@ -25,6 +25,11 @@ public class MainFrame extends JFrame {
     return instance;
   }
 
+  public static MainFrame createNewInstance() {
+    instance = new MainFrame();
+    return instance;
+  }
+
   private MainFrame() {
     super("Quackstagram Application");
     initializeFrame();
@@ -95,6 +100,18 @@ public class MainFrame extends JFrame {
     } else {
       System.out.println("Error: Panel not initialized - " + name);
     }
+  }
+
+  public void clearUI() {
+    for (BaseUI panel : initializedPanels.values()) {
+      mainPanel.remove(panel);  // Remove the panel from the mainPanel container
+      panel.setVisible(false);  // Make panel non-visible
+      panel.removeAll();        // Remove all components from the panel
+    }
+    initializedPanels.clear(); // Clear the map to remove all stored references
+    mainPanel.revalidate();    // Revalidate the container to update its state
+    mainPanel.repaint();       // Repaint the container to refresh the UI display
+    System.out.println("All UI panels have been cleared.");
   }
 
   public void switchToUserProfile(User user) {

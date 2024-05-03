@@ -87,8 +87,8 @@ public abstract class ProfileUI extends BaseUI {
     statsFollowPanel.add(statsPanel);
 
     // Add action button
-    JButton headerActionButton = createHeaderActionButton();
-    statsFollowPanel.add(headerActionButton);
+    JPanel headerActionButtons = createHeaderActionButtons();
+    statsFollowPanel.add(headerActionButtons);
 
     // Set a right margin
     statsFollowPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10)); // top, left, bottom, right
@@ -108,7 +108,7 @@ public abstract class ProfileUI extends BaseUI {
     return statsPanel;
   }
 
-  abstract JButton createHeaderActionButton();
+  abstract JPanel createHeaderActionButtons();
 
   private JPanel createProfileNameAndBioPanel() {
     JPanel profileNameAndBioPanel = new JPanel();

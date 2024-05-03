@@ -17,24 +17,29 @@ public class OwnProfileUI extends ProfileUI {
     }
 
     @Override
-    JButton createHeaderActionButton() {
+    JPanel createHeaderActionButtons() {
+        // Create a panel to hold buttons
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+        buttonPanel.setBackground(new Color(249, 249, 249));
+
+        // Create and configure the Edit Profile button
         JButton editProfileButton = new JButton("Edit Profile");
-        editProfileButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        editProfileButton.setFont(new Font("Arial", Font.BOLD, 12));
-        editProfileButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, editProfileButton.getMinimumSize().height)); // Make the button fill the horizontal space
-        editProfileButton.setMargin(new Insets(7, 0, 7, 0)); // top, left, bottom, right padding
-
-        // Add action listener to open the edit profile dialog
-        editProfileButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Assuming the frame of your application is accessible, otherwise pass a suitable parent
-                Frame owner = JOptionPane.getFrameForComponent(editProfileButton); // Get the parent frame
-                EditProfileDialog editDialog = new EditProfileDialog(owner);
-                editDialog.setVisible(true);
-            }
+        editProfileButton.addActionListener(e -> {
+            Frame owner = JOptionPane.getFrameForComponent(editProfileButton); // Get the parent frame
+            EditProfileDialog editDialog = new EditProfileDialog(owner);
+            editDialog.setVisible(true);
         });
+        buttonPanel.add(editProfileButton);
 
-        return editProfileButton;
+        // Create and configure the Log-Out button
+        JButton logOutButton = new JButton("Log Out");
+        logOutButton.addActionListener(e -> {
+            MainFrame.getInstance().clearUI();
+            MainFrame.getInstance().switchPanel("SignIn");
+            SessionManager.clearCurrentUser();
+        });
+        buttonPanel.add(logOutButton);
+
+        return buttonPanel;
     }
 }
