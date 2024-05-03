@@ -126,9 +126,9 @@ public class SchemaCreator {
     DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_3.png");
     DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_4.png");
     DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_5.png");
-    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/storage/uploaded/mordula_1.png");
-    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/storage/uploaded/mordula_2.png");
-    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/storage/uploaded/mordula_3.png");
+    DatabaseUtils.postSomething(2, "Grey soap?! on the tongue?", "img/storage/uploaded/mordula_1.png");
+    DatabaseUtils.postSomething(2, "Helllooooooo!", "img/storage/uploaded/mordula_2.png");
+    DatabaseUtils.postSomething(2, "Creating the new gravitational field", "img/storage/uploaded/mordula_3.png");
     DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/storage/uploaded/mordula_4.png");
     DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/storage/uploaded/mordula_5.png");
     DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/storage/uploaded/swiniar_1.png");
