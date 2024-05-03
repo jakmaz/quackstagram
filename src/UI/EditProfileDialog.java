@@ -63,22 +63,15 @@ public class EditProfileDialog extends JDialog {
 
     private void saveProfile() {
         String name = nameField.getText();
-        char[] password = passwordField.getPassword();
+        String password = new String(passwordField.getPassword());
         String bio = bioField.getText();
 
         try {
-//            DatabaseUtils.updateProfile(name, new String(password), bio);
+//            DatabaseUtils.updateProfile(name, password, bio);
             JOptionPane.showMessageDialog(this, "Profile updated successfully!");
             dispose(); // Close the dialog
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Failed to update profile: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    public static void main(String[] args) {
-        // Example usage
-        JFrame frame = new JFrame();
-        EditProfileDialog editDialog = new EditProfileDialog(frame);
-        editDialog.setVisible(true);
     }
 }

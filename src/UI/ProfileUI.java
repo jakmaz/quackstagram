@@ -70,7 +70,7 @@ public abstract class ProfileUI extends BaseUI {
   }
 
   private JLabel createProfileImage() {
-    ImageIcon profileIcon = new ImageIcon(new ImageIcon("img/storage/profile/admin.png")
+    ImageIcon profileIcon = new ImageIcon(new ImageIcon("img/storage/profile/" + currentUser.getUsername() + ".png")
             .getImage().getScaledInstance(PROFILE_IMAGE_SIZE, PROFILE_IMAGE_SIZE, Image.SCALE_SMOOTH));
     JLabel profileImage = new JLabel(profileIcon);
     profileImage.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
