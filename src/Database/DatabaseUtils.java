@@ -1,9 +1,11 @@
 package Database;
 
-import Logic.User;
+import Logic.Post;
 import Logic.UserDetails;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseUtils {
   private static Connection getConnection() throws SQLException {
@@ -13,9 +15,9 @@ public class DatabaseUtils {
   public static boolean usernameExists(String username) {
     String query = "SELECT COUNT(*) FROM users WHERE username = ?";
     try (Connection conn = getConnection();
-        PreparedStatement stmt = conn.prepareStatement(query)) {
-      stmt.setString(1, username);
-      ResultSet rs = stmt.executeQuery();
+        PreparedStatement ps = conn.prepareStatement(query)) {
+      ps.setString(1, username);
+      ResultSet rs = ps.executeQuery();
       if (rs.next()) {
         return rs.getInt(1) > 0;
       }
@@ -52,9 +54,9 @@ public class DatabaseUtils {
 
   public static Integer verifyCredentials(String username, String password) {
     String sql = "SELECT id, password FROM users WHERE username = ?";
-    try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setString(1, username);
-      ResultSet rs = stmt.executeQuery();
+    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setString(1, username);
+      ResultSet rs = ps.executeQuery();
       if (rs.next()) {
         String storedPassword = rs.getString("password");
         if (storedPassword.equals(password)) {
@@ -71,9 +73,9 @@ public class DatabaseUtils {
   public static UserDetails getUserDetails(int userId) {
     String sql = "SELECT id, username, bio FROM users WHERE id = ?";
     try (Connection conn = getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-      pstmt.setInt(1, userId);
-      ResultSet rs = pstmt.executeQuery();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setInt(1, userId);
+      ResultSet rs = ps.executeQuery();
       if (rs.next()) {
         return new UserDetails(
                 rs.getInt("id"),
@@ -108,5 +110,40 @@ public class DatabaseUtils {
     } catch (SQLException e) {
       e.printStackTrace();
     }
+  }
+
+  public static Integer getPostAmount(int userId) {
+    String sql = "SELECT COUNT(*) FROM posts p JOIN users u ON p.user_id = u.id WHERE u.id = ?";
+    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setInt(1, userId);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public static List<Post> getPosts(int userId) {
+    List<Post> posts = new ArrayList<>();
+    String sql = "SELECT id, user_id, caption, image_path, timestamp FROM posts WHERE user_id = ?";
+
+    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setInt(1, userId);
+      ResultSet rs = ps.executeQuery();
+
+      while (rs.next()) {
+        Post post = new Post(
+                rs.getInt("id"),
+                rs.getInt("user_id"),
+                rs.getString("caption"),
+                rs.getString("image_path"),
+                rs.getTimestamp("timestamp")
+        );
+        posts.add(post);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return posts;
   }
 }

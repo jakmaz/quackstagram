@@ -2,32 +2,65 @@ package Logic;
 
 import Database.DatabaseUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-  private final Integer id;  // Changed from int to Integer
+  private final Integer id;
   private String username;
   private String bio;
 
-  private int postsCount;
-  private int followersCount;
-  private int followingCount;
-  private List<Picture> pictures = new ArrayList<>();
+  private Integer postsCount;
+  private Integer followersCount;
+  private Integer followingCount;
+  private List<Post> posts;
 
   public User(int id) {
     this.id = id;
-    readUserDetails();
-    readFollowingDetails();
-    readPostsDetails();
   }
 
-  private void readUserDetails() {
+  public String getUsername() {
+    if (username == null) {
+      loadUserDetails();
+    }
+    return username;
+  }
+
+  public String getBio() {
+    if (bio == null) {
+      loadUserDetails();
+    }
+    return bio;
+  }
+
+  public int getPostsCount() {
+    if (postsCount == null) {
+      loadPostsAmount();
+    }
+    return postsCount != null ? postsCount : 0;
+  }
+
+  public int getFollowersCount() {
+    if (followersCount == null) {
+      loadFollowingDetails();
+    }
+    return followersCount != null ? followersCount : 0;
+  }
+
+  public int getFollowingCount() {
+    if (followingCount == null) {
+      loadFollowingDetails();
+    }
+    return followingCount != null ? followingCount : 0;
+  }
+
+  public List<Post> getPosts() {
+    if (posts == null) {
+      loadPosts();
+    }
+    return posts;
+  }
+
+  private void loadUserDetails() {
     UserDetails userDetails = DatabaseUtils.getUserDetails(this.id);
     if (userDetails != null) {
       this.username = userDetails.getUsername();
@@ -35,78 +68,19 @@ public class User {
     }
   }
 
-  private void readFollowingDetails() {
-    int followersCount = 0;
+  private void loadFollowingDetails() {
+    int followersCount = 0; // Assume these are fetched from database
     int followingCount = 0;
-//    DatabaseUtils.getFollowingDetails(this.id);
+    // Logic to fetch from database
     this.followersCount = followersCount;
     this.followingCount = followingCount;
   }
 
-  private void readPostsDetails() {
-//    int imageCount = 0;
-//    Path imageDetailsFilePath = Paths.get("img", "image_details.txt");
-//
-//    try (BufferedReader imageDetailsReader = Files.newBufferedReader(imageDetailsFilePath)) {
-//      String line;
-//      while ((line = imageDetailsReader.readLine()) != null) {
-//        if (line.contains("Username: " + this.username)) {
-//          imageCount++;
-//        }
-//      }
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//    }
-//    this.postsCount = imageCount;
-    this.postsCount = 0;
+  private void loadPostsAmount() {
+    this.postsCount = DatabaseUtils.getPostAmount(id);
   }
 
-  // Getter methods for user details
-  public String getUsername() {
-    return username;
+  private void loadPosts() {
+    this.posts = DatabaseUtils.getPosts(id);
   }
-
-  public String getBio() {
-    return bio;
-  }
-
-  public void setBio(String bio) {
-    this.bio = bio;
-  }
-
-  public int getPostsCount() {
-    return postsCount;
-  }
-
-  public int getFollowersCount() {
-    return followersCount;
-  }
-
-  public int getFollowingCount() {
-    return followingCount;
-  }
-
-  public List<Picture> getPictures() {
-    return pictures;
-  }
-
-  // Setter methods for followers and following counts
-  public void setFollowersCount(int followersCount) {
-    this.followersCount = followersCount;
-  }
-
-  public void setFollowingCount(int followingCount) {
-    this.followingCount = followingCount;
-  }
-
-  public void setPostCount(int postCount) {
-    this.postsCount = postCount;
-  }
-
-  // Implement the toString method for saving user information
-  @Override
-  public String toString() {
-    return username + ":" + bio + ":"; // Format as needed
-  }
-
 }
