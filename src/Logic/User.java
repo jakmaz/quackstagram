@@ -8,8 +8,6 @@ public class User {
   private final Integer id;
   private String username;
   private String bio;
-
-  private Integer postsCount;
   private Integer followersCount;
   private Integer followingCount;
   private List<Post> posts;
@@ -33,10 +31,10 @@ public class User {
   }
 
   public int getPostsCount() {
-    if (postsCount == null) {
-      loadPostsAmount();
+    if (posts == null) {
+      loadPosts();
     }
-    return postsCount != null ? postsCount : 0;
+    return posts.size();
   }
 
   public int getFollowersCount() {
@@ -69,15 +67,8 @@ public class User {
   }
 
   private void loadFollowingDetails() {
-    int followersCount = 0; // Assume these are fetched from database
-    int followingCount = 0;
-    // Logic to fetch from database
-    this.followersCount = followersCount;
-    this.followingCount = followingCount;
-  }
-
-  private void loadPostsAmount() {
-    this.postsCount = DatabaseUtils.getPostAmount(id);
+    this.followersCount = DatabaseUtils.getFollowersAmount(id);
+    this.followingCount = DatabaseUtils.getFollowingAmount(id);
   }
 
   private void loadPosts() {

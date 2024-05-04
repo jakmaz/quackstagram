@@ -13,7 +13,7 @@ public class Post {
     private int likesCount;
     private List<Comment> comments;
 
-    public Post(Integer id, Integer userId, String imagePath, String caption, Timestamp timestamp) {
+    public Post(Integer id, Integer userId, String caption, String imagePath, Timestamp timestamp) {
         this.id = id;
         this.userId = userId;
         this.imagePath = imagePath;

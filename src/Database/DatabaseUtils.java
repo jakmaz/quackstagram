@@ -100,6 +100,36 @@ public class DatabaseUtils {
     }
   }
 
+  public static Integer getFollowersAmount(int userId) {
+    String sql = "SELECT COUNT(*) AS count FROM followers WHERE following_id = ?";
+    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setInt(1, userId);
+      ResultSet rs = ps.executeQuery();
+      if (rs.next()) {
+        return rs.getInt("count");
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+
+  public static Integer getFollowingAmount(int userId) {
+    String sql = "SELECT COUNT(*) AS count FROM followers WHERE follower_id = ?";
+    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setInt(1, userId);
+      ResultSet rs = ps.executeQuery();
+      if (rs.next()) {
+        return rs.getInt("count");
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+
   public static void postSomething(int userId, String caption, String imagePath) {
     String sql = "INSERT INTO posts (user_id, caption, image_path, timestamp) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -110,16 +140,6 @@ public class DatabaseUtils {
     } catch (SQLException e) {
       e.printStackTrace();
     }
-  }
-
-  public static Integer getPostAmount(int userId) {
-    String sql = "SELECT COUNT(*) FROM posts p JOIN users u ON p.user_id = u.id WHERE u.id = ?";
-    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-      ps.setInt(1, userId);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return null;
   }
 
   public static List<Post> getPosts(int userId) {

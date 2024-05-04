@@ -1,42 +1,46 @@
 package UI;
 
+import Logic.Post;
 import Logic.User;
 
 import javax.swing.*;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.awt.*;
-import java.nio.file.*;
-import java.util.stream.Stream;
+import java.util.List;
 
 public abstract class ProfileUI extends BaseUI {
 
   public static final int PROFILE_IMAGE_SIZE = 80; // Adjusted size for the profile image to match UI
   public static final int GRID_IMAGE_SIZE = WIDTH / 3; // Static size for grid images
-  private JPanel contentPanel; //  to display the image grid or the clicked image
+  private final JPanel contentPanel;
   public User currentUser; // User object to store the current user's information
+
 
   public ProfileUI() {
     setSize(WIDTH, HEIGHT);
-    setMinimumSize(new Dimension(WIDTH, HEIGHT));
-    setLayout(new BorderLayout());
+    setLayout(new BorderLayout());  // Main layout of the JFrame
+    contentPanel = new JPanel(new CardLayout()); // Panel to switch between different views
+    add(contentPanel, BorderLayout.CENTER);  // Add the content panel to the center of the JFrame
   }
+
 
   @Override
   public void initializeUI() {
-    contentPanel = new JPanel();
-    JPanel headerPanel = createHeaderPanel(); // attempt to recreate if null
-    JPanel navigationPanel = createNavigationPanel(); // attempt to recreate if null
+    JPanel headerPanel = createHeaderPanel();
+    JPanel gridPanel = createImageGrid();
+    JPanel navigationPanel = createNavigationPanel();
 
+    // Add header and navigation directly to the main JFrame's BorderLayout, not in the contentPanel
     add(headerPanel, BorderLayout.NORTH);
     add(navigationPanel, BorderLayout.SOUTH);
 
-    initializeImageGrid();
-//    revalidate();
-//    repaint();
+    // Add the grid panel to the contentPanel which has CardLayout
+    contentPanel.add(gridPanel, "Grid");
+    ((CardLayout) contentPanel.getLayout()).show(contentPanel, "Grid");
   }
+
 
   private JPanel createHeaderPanel() {
     JPanel headerPanel = new JPanel();
@@ -135,38 +139,31 @@ public abstract class ProfileUI extends BaseUI {
     // TODO: to implement
   }
 
-  private void initializeImageGrid() {
-    contentPanel.removeAll(); // Clear existing content
-    contentPanel.setLayout(new GridLayout(0, 3, 5, 5)); // Grid layout for image grid
-
-    Path imageDir = Paths.get("img", "uploaded");
-    try (Stream<Path> paths = Files.list(imageDir)) {
-      paths.filter(path -> path.getFileName().toString().startsWith(currentUser.getUsername() + "_"))
-          .forEach(path -> {
-            ImageIcon imageIcon = new ImageIcon(new ImageIcon(path.toString()).getImage()
-                .getScaledInstance(GRID_IMAGE_SIZE, GRID_IMAGE_SIZE, Image.SCALE_SMOOTH));
-            JLabel imageLabel = new JLabel(imageIcon);
-            imageLabel.addMouseListener(new MouseAdapter() {
-              @Override
-              public void mouseClicked(MouseEvent e) {
-                displayImage(imageIcon); // Call method to display the clicked image
-              }
-            });
-            contentPanel.add(imageLabel);
-          });
-    } catch (IOException ex) {
-      ex.printStackTrace();
-      // Handle exception (e.g., show a message or log)
+  private JPanel createImageGrid() {
+    JPanel gridPanel = new JPanel(new GridLayout(0, 3, 5, 5));  // Adjusted for the grid layout
+    List<Post> posts = currentUser.getPosts();
+    for (Post post : posts) {
+      ImageIcon icon = new ImageIcon(new ImageIcon(post.getImagePath()).getImage().getScaledInstance(GRID_IMAGE_SIZE, GRID_IMAGE_SIZE, Image.SCALE_SMOOTH));
+      JLabel label = new JLabel(icon);
+      label.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          displayPost(post);
+        }
+      });
+      gridPanel.add(label);
     }
+    return gridPanel;
+  }
 
-    JScrollPane scrollPane = new JScrollPane(contentPanel);
-    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-    add(scrollPane, BorderLayout.CENTER); // Add the scroll pane to the center
+  private void displayPost(Post post) {
+    PostPanel postPanel = new PostPanel(post);
+    contentPanel.add(postPanel, "Post");
+    CardLayout cl = (CardLayout) (contentPanel.getLayout());
+    cl.show(contentPanel, "Post");
 
-    revalidate();
-    repaint();
+    postPanel.getBackButton().addActionListener(e -> cl.show(contentPanel, "Grid"));
   }
 
   private void displayImage(ImageIcon imageIcon) {

@@ -156,9 +156,14 @@ public class SchemaCreator {
   }
 
   private static void addFollowers() {
-      for (int i = 2; i < 7; i++) {
-          DatabaseUtils.followUser(1, i);
-      }
+    // Admin follows everyone
+    for (int i = 2; i < 7; i++) {
+        DatabaseUtils.followUser(1, i);
+    }
+      // Everyone follows admin
+    for (int i = 2; i < 7; i++) {
+      DatabaseUtils.followUser(i, 1);
+    }
   }
 
   private static void addLikes() {
