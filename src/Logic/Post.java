@@ -1,6 +1,7 @@
 package Logic;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 // Represents a picture on Quackstagram
@@ -19,6 +20,7 @@ public class Post {
         this.imagePath = imagePath;
         this.caption = caption;
         this.timestamp = timestamp;
+        this.comments = new ArrayList<>();
     }
 
     public Integer getId() {
