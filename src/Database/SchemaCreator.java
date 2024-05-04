@@ -109,6 +109,8 @@ public class SchemaCreator {
   private static void addDummyData() {
     addUsers();
     addPosts();
+    addFollowers();
+    addLikes();
   }
 
   private static void addUsers() {
@@ -151,6 +153,18 @@ public class SchemaCreator {
     DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/storage/uploaded/baska_3.png");
     DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/storage/uploaded/baska_4.png");
     DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/storage/uploaded/baska_5.png");
+  }
+
+  private static void addFollowers() {
+      for (int i = 2; i < 7; i++) {
+          DatabaseUtils.followUser(1, i);
+      }
+  }
+
+  private static void addLikes() {
+      for (int i = 1; i <= 30; i++) {
+          DatabaseUtils.likePost(i, 1);
+      }
   }
 
   private static void executeUpdate(String sql) throws SQLException {

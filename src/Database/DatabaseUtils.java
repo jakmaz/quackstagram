@@ -146,4 +146,15 @@ public class DatabaseUtils {
 
     return posts;
   }
+
+  public static void likePost(int postId, int userId) {
+    String sql = "INSERT INTO likes (post_id, user_id) VALUES (?, ?)";
+    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setInt(1, postId);
+      ps.setInt(2, userId);
+      ps.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
 }
