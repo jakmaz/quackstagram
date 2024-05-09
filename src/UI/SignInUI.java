@@ -77,6 +77,8 @@ public class SignInUI extends BaseUI {
     usernameInput.setForeground(Color.GRAY);
     passwordInput.setForeground(Color.GRAY);
 
+    SwingUtilities.invokeLater(() -> usernameInput.requestFocusInWindow());
+
     fieldsPanel.add(Box.createVerticalStrut(10));
     fieldsPanel.add(photoPanel);
     fieldsPanel.add(Box.createVerticalStrut(10));
