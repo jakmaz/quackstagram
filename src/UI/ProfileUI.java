@@ -1,14 +1,27 @@
 package UI;
 
-import Logic.Post;
-import Logic.User;
-
-import javax.swing.*;
-
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.*;
 import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+
+import Logic.Post;
+import Logic.User;
 
 public abstract class ProfileUI extends BaseUI {
 
@@ -17,14 +30,12 @@ public abstract class ProfileUI extends BaseUI {
   private final JPanel contentPanel;
   public User currentUser; // User object to store the current user's information
 
-
   public ProfileUI() {
     setSize(WIDTH, HEIGHT);
-    setLayout(new BorderLayout());  // Main layout of the JFrame
+    setLayout(new BorderLayout()); // Main layout of the JFrame
     contentPanel = new JPanel(new CardLayout()); // Panel to switch between different views
-    add(contentPanel, BorderLayout.CENTER);  // Add the content panel to the center of the JFrame
+    add(contentPanel, BorderLayout.CENTER); // Add the content panel to the center of the JFrame
   }
-
 
   @Override
   public void initializeUI() {
@@ -32,7 +43,8 @@ public abstract class ProfileUI extends BaseUI {
     JPanel gridPanel = createImageGrid();
     JPanel navigationPanel = createNavigationPanel();
 
-    // Add header and navigation directly to the main JFrame's BorderLayout, not in the contentPanel
+    // Add header and navigation directly to the main JFrame's BorderLayout, not in
+    // the contentPanel
     add(headerPanel, BorderLayout.NORTH);
     add(navigationPanel, BorderLayout.SOUTH);
 
@@ -40,7 +52,6 @@ public abstract class ProfileUI extends BaseUI {
     contentPanel.add(gridPanel, "Grid");
     ((CardLayout) contentPanel.getLayout()).show(contentPanel, "Grid");
   }
-
 
   private JPanel createHeaderPanel() {
     JPanel headerPanel = new JPanel();
@@ -75,7 +86,7 @@ public abstract class ProfileUI extends BaseUI {
 
   private JLabel createProfileImage() {
     ImageIcon profileIcon = new ImageIcon(new ImageIcon("img/storage/profile/" + currentUser.getUsername() + ".png")
-            .getImage().getScaledInstance(PROFILE_IMAGE_SIZE, PROFILE_IMAGE_SIZE, Image.SCALE_SMOOTH));
+        .getImage().getScaledInstance(PROFILE_IMAGE_SIZE, PROFILE_IMAGE_SIZE, Image.SCALE_SMOOTH));
     JLabel profileImage = new JLabel(profileIcon);
     profileImage.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     return profileImage;
@@ -99,7 +110,6 @@ public abstract class ProfileUI extends BaseUI {
 
     return statsFollowPanel;
   }
-
 
   private JPanel createStatsPanel() {
     JPanel statsPanel = new JPanel();
@@ -140,10 +150,11 @@ public abstract class ProfileUI extends BaseUI {
   }
 
   private JPanel createImageGrid() {
-    JPanel gridPanel = new JPanel(new GridLayout(0, 3, 5, 5));  // Adjusted for the grid layout
+    JPanel gridPanel = new JPanel(new GridLayout(0, 3, 5, 5)); // Adjusted for the grid layout
     List<Post> posts = currentUser.getPosts();
     for (Post post : posts) {
-      ImageIcon icon = new ImageIcon(new ImageIcon(post.getImagePath()).getImage().getScaledInstance(GRID_IMAGE_SIZE, GRID_IMAGE_SIZE, Image.SCALE_SMOOTH));
+      ImageIcon icon = new ImageIcon(new ImageIcon(post.getImagePath()).getImage().getScaledInstance(GRID_IMAGE_SIZE,
+          GRID_IMAGE_SIZE, Image.SCALE_SMOOTH));
       JLabel label = new JLabel(icon);
       label.addMouseListener(new MouseAdapter() {
         @Override
@@ -155,7 +166,6 @@ public abstract class ProfileUI extends BaseUI {
     }
     return gridPanel;
   }
-
 
   private void displayPost(Post post) {
     PostPanel postPanel = new PostPanel(post);
