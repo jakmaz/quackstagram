@@ -1,6 +1,7 @@
 package Database;
 
 import Logic.Post;
+import Logic.User;
 import Logic.UserDetails;
 
 import java.sql.*;
@@ -32,7 +33,7 @@ public class DatabaseUtils {
     int userId = -1; // Default or error case, assuming no valid user has an ID of -1
 
     try (Connection conn = getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
       ps.setString(1, username);
       ps.setString(2, password);
       ps.setString(3, bio);
@@ -69,19 +70,17 @@ public class DatabaseUtils {
     return null; // Return null if the credentials are incorrect or any exception occurs
   }
 
-
   public static UserDetails getUserDetails(int userId) {
     String sql = "SELECT id, username, bio FROM users WHERE id = ?";
     try (Connection conn = getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
+        PreparedStatement ps = conn.prepareStatement(sql)) {
       ps.setInt(1, userId);
       ResultSet rs = ps.executeQuery();
       if (rs.next()) {
         return new UserDetails(
-                rs.getInt("id"),
-                rs.getString("username"),
-                rs.getString("bio")
-        );
+            rs.getInt("id"),
+            rs.getString("username"),
+            rs.getString("bio"));
       }
     } catch (SQLException e) {
       e.printStackTrace();
@@ -114,7 +113,6 @@ public class DatabaseUtils {
     return null;
   }
 
-
   public static Integer getFollowingAmount(int userId) {
     String sql = "SELECT COUNT(*) AS count FROM followers WHERE follower_id = ?";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -128,7 +126,6 @@ public class DatabaseUtils {
     }
     return null;
   }
-
 
   public static void postSomething(int userId, String caption, String imagePath) {
     String sql = "INSERT INTO posts (user_id, caption, image_path, timestamp) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
@@ -152,12 +149,11 @@ public class DatabaseUtils {
 
       while (rs.next()) {
         Post post = new Post(
-                rs.getInt("id"),
-                rs.getInt("user_id"),
-                rs.getString("caption"),
-                rs.getString("image_path"),
-                rs.getTimestamp("timestamp")
-        );
+            rs.getInt("id"),
+            new User(rs.getInt("user_id")),
+            rs.getString("caption"),
+            rs.getString("image_path"),
+            rs.getTimestamp("timestamp"));
         posts.add(post);
       }
     } catch (SQLException e) {
