@@ -1,6 +1,7 @@
 package UI;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -9,26 +10,12 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Stream;
 
-import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import Database.PostDAO;
@@ -40,6 +27,8 @@ public class ExploreUI extends BaseUI {
   private static final int HEIGHT = 500;
   private static final int IMAGE_SIZE = (WIDTH / 3) - 10;
 
+  private JPanel contentPanel; // Panel to switch between the grid and individual post views
+
   public ExploreUI() {
     setSize(WIDTH, HEIGHT);
     setMinimumSize(new Dimension(WIDTH, HEIGHT));
@@ -48,201 +37,64 @@ public class ExploreUI extends BaseUI {
   }
 
   public void initializeUI() {
+    JPanel headerPanel = createHeaderPanel();
+    JPanel navigationPanel = createNavigationPanel();
 
-    setLayout(new BorderLayout()); // Reset the layout manager
+    contentPanel = new JPanel(new CardLayout()); // Use CardLayout for the content panel
+    JPanel mainContentPanel = createMainContentPanel(); // This is the grid view
+    contentPanel.add(mainContentPanel, "Grid");
 
-    JPanel headerPanel = createHeaderPanel(); // Method from your UI.InstagramProfileUI class
-    JPanel navigationPanel = createNavigationPanel(); // Method from your UI.InstagramProfileUI class
-    JPanel mainContentPanel = createMainContentPanel();
-
-    // Add panels to the frame
     add(headerPanel, BorderLayout.NORTH);
-    add(mainContentPanel, BorderLayout.CENTER);
+    add(contentPanel, BorderLayout.CENTER);
     add(navigationPanel, BorderLayout.SOUTH);
+  }
 
-    revalidate();
-    repaint();
-
+  private JPanel createHeaderPanel() {
+    JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    headerPanel.setBackground(new Color(51, 51, 51));
+    JLabel lblRegister = new JLabel("Explore 🐥");
+    lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
+    lblRegister.setForeground(Color.WHITE);
+    headerPanel.add(lblRegister);
+    headerPanel.setPreferredSize(new Dimension(WIDTH, 40));
+    return headerPanel;
   }
 
   private JPanel createMainContentPanel() {
-    // Create the main content panel with search and image grid
-    // Search bar at the top
-    JPanel searchPanel = new JPanel(new BorderLayout());
+    JPanel mainContentPanel = new JPanel(new BorderLayout());
     JTextField searchField = new JTextField(" Search Users");
-    searchPanel.add(searchField, BorderLayout.CENTER);
-    searchPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, searchField.getPreferredSize().height)); // Limit the
-                                                                                                         // height
+    mainContentPanel.add(searchField, BorderLayout.NORTH);
 
-    // Image Grid
-    JPanel imageGridPanel = new JPanel(new GridLayout(0, 3, 2, 2)); // 3 columns, auto rows
-
-    // Load images from the database
-    List<Post> posts = PostDAO.getAllPosts(); // Assuming PostDAO has a method to get all posts
+    JPanel imageGridPanel = new JPanel(new GridLayout(0, 3, 2, 2));
+    List<Post> posts = PostDAO.getAllPosts();
     for (Post post : posts) {
-      String imagePath = post.getImagePath();
-      System.out.println(imagePath);
-      JLabel imageLabel = new JLabel();
-      ImageIcon imageIcon = new ImageIcon(new ImageIcon(post.getImagePath()).getImage().getScaledInstance(IMAGE_SIZE,
-          IMAGE_SIZE, Image.SCALE_SMOOTH));
-      imageLabel.setIcon(imageIcon);
-
-      // Add a mouse listener to the image label
+      ImageIcon imageIcon = new ImageIcon(
+          new ImageIcon(post.getImagePath()).getImage().getScaledInstance(IMAGE_SIZE, IMAGE_SIZE, Image.SCALE_SMOOTH));
+      JLabel imageLabel = new JLabel(imageIcon);
       imageLabel.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          displayImage(imagePath);
+          showPostDetails(post);
         }
       });
-
       imageGridPanel.add(imageLabel);
     }
 
     JScrollPane scrollPane = new JScrollPane(imageGridPanel);
     scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    mainContentPanel.add(scrollPane, BorderLayout.CENTER);
 
-    // Main content panel that holds both the search bar and the image grid
-    JPanel mainContentPanel = new JPanel();
-    mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.Y_AXIS));
-    mainContentPanel.add(searchPanel);
-    mainContentPanel.add(scrollPane); // This will stretch to take up remaining space
     return mainContentPanel;
   }
 
-  private JPanel createHeaderPanel() {
+  private void showPostDetails(Post post) {
+    ExplorePostPanel postPanel = new ExplorePostPanel(post);
+    contentPanel.add(postPanel, "PostDetails");
+    CardLayout cl = (CardLayout) (contentPanel.getLayout());
+    cl.show(contentPanel, "PostDetails");
 
-    // Header Panel (reuse from UI.InstagramProfileUI or customize for home page)
-    // Header with the Register label
-    JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    headerPanel.setBackground(new Color(51, 51, 51)); // Set a darker background for the header
-    JLabel lblRegister = new JLabel(" Explore 🐥");
-    lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
-    lblRegister.setForeground(Color.WHITE); // Set the text color to white
-    headerPanel.add(lblRegister);
-    headerPanel.setPreferredSize(new Dimension(WIDTH, 40)); // Give the header a fixed height
-    return headerPanel;
-  }
-
-  private void displayImage(String imagePath) {
-    // getContentPane().removeAll();
-    setLayout(new BorderLayout());
-
-    // Add the header and navigation panels back
-    add(createHeaderPanel(), BorderLayout.NORTH);
-    add(createNavigationPanel(), BorderLayout.SOUTH);
-
-    JPanel imageViewerPanel = new JPanel(new BorderLayout());
-
-    // Extract image ID from the imagePath
-    String imageId = new File(imagePath).getName().split("\\.")[0];
-
-    // Read image details
-    String username = "";
-    String bio = "";
-    String timestampString = "";
-    int likes = 0;
-    Path detailsPath = Paths.get("img", "image_details.txt");
-    try (Stream<String> lines = Files.lines(detailsPath)) {
-      String details = lines.filter(line -> line.contains("ImageID: " + imageId)).findFirst().orElse("");
-      if (!details.isEmpty()) {
-        String[] parts = details.split(", ");
-        username = parts[1].split(": ")[1];
-        bio = parts[2].split(": ")[1];
-        System.out.println(bio + "this is where you get an error " + parts[3]);
-        timestampString = parts[3].split(": ")[1];
-        likes = Integer.parseInt(parts[4].split(": ")[1]);
-      }
-    } catch (IOException ex) {
-      ex.printStackTrace();
-      // Handle exception
-    }
-
-    // Calculate time since posting
-    String timeSincePosting = "Unknown";
-    if (!timestampString.isEmpty()) {
-      LocalDateTime timestamp = LocalDateTime.parse(timestampString,
-          DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-      LocalDateTime now = LocalDateTime.now();
-      long days = ChronoUnit.DAYS.between(timestamp, now);
-      timeSincePosting = days + " day" + (days != 1 ? "s" : "") + " ago";
-    }
-
-    // Top panel for username and time since posting
-    JPanel topPanel = new JPanel(new BorderLayout());
-    JButton usernameLabel = new JButton(username);
-    JLabel timeLabel = new JLabel(timeSincePosting);
-    timeLabel.setHorizontalAlignment(JLabel.RIGHT);
-    topPanel.add(usernameLabel, BorderLayout.WEST);
-    topPanel.add(timeLabel, BorderLayout.EAST);
-
-    // Prepare the image for display
-    JLabel imageLabel = new JLabel();
-    imageLabel.setHorizontalAlignment(JLabel.CENTER);
-    try {
-      BufferedImage originalImage = ImageIO.read(new File(imagePath));
-      ImageIcon imageIcon = new ImageIcon(originalImage);
-      imageLabel.setIcon(imageIcon);
-    } catch (IOException ex) {
-      imageLabel.setText("Image not found");
-    }
-
-    // Bottom panel for bio and likes
-    JPanel bottomPanel = new JPanel(new BorderLayout());
-    JTextArea bioTextArea = new JTextArea(bio);
-    bioTextArea.setEditable(false);
-    JLabel likesLabel = new JLabel("Likes: " + likes);
-    bottomPanel.add(bioTextArea, BorderLayout.CENTER);
-    bottomPanel.add(likesLabel, BorderLayout.SOUTH);
-
-    // Adding the components to the frame
-    add(topPanel, BorderLayout.NORTH);
-    add(imageLabel, BorderLayout.CENTER);
-    add(bottomPanel, BorderLayout.SOUTH);
-
-    // Re-add the header and navigation panels
-    add(createHeaderPanel(), BorderLayout.NORTH);
-    add(createNavigationPanel(), BorderLayout.SOUTH);
-
-    // Panel for the back button
-    JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    JButton backButton = new JButton("Back");
-
-    // Make the button take up the full width
-    backButton.setPreferredSize(new Dimension(WIDTH - 20, backButton.getPreferredSize().height));
-
-    backButtonPanel.add(backButton);
-
-    backButton.addActionListener(e -> {
-      // getContentPane().removeAll();
-      add(createHeaderPanel(), BorderLayout.NORTH);
-      add(createMainContentPanel(), BorderLayout.CENTER);
-      add(createNavigationPanel(), BorderLayout.SOUTH);
-      revalidate();
-      repaint();
-    });
-    final String finalUsername = username;
-
-    usernameLabel.addActionListener(e -> {
-      // User user = new User(finalUsername); // Assuming User class has a constructor
-      // that takes a username
-      // UI.InstagramProfileUI profileUI = new UI.InstagramProfileUI(user);
-      // profileUI.setVisible(true);
-      // dispose(); // Close the current frame
-    });
-
-    // Container panel for image and details
-    JPanel containerPanel = new JPanel(new BorderLayout());
-
-    containerPanel.add(topPanel, BorderLayout.NORTH);
-    containerPanel.add(imageLabel, BorderLayout.CENTER);
-    containerPanel.add(bottomPanel, BorderLayout.SOUTH);
-
-    // Add the container panel and back button panel to the frame
-    add(backButtonPanel, BorderLayout.NORTH);
-    add(containerPanel, BorderLayout.CENTER);
-
-    revalidate();
-    repaint();
+    // To add a 'back' functionality to return to the grid view:
+    postPanel.getBackButton().addActionListener(e -> cl.show(contentPanel, "Grid"));
   }
 }
