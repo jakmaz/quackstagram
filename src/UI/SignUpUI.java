@@ -1,6 +1,6 @@
 package UI;
 
-import Database.DatabaseUtils;
+import Database.UserDAO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -118,12 +118,12 @@ public class SignUpUI extends BaseUI {
       return;
     }
 
-    if (DatabaseUtils.usernameExists(username)) {
+    if (UserDAO.usernameExists(username)) {
       JOptionPane.showMessageDialog(this, "Username already exists. Please choose a different username.", "Error", JOptionPane.ERROR_MESSAGE);
       return;
     }
 
-    DatabaseUtils.registerUser(username, password, bio, ""); // TODO: implement
+    UserDAO.registerUser(username, password, bio, ""); // TODO: implement
     JOptionPane.showMessageDialog(this, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
     MainFrame.getInstance().switchPanel("Profile");
   }

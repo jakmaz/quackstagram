@@ -1,6 +1,8 @@
 package Logic;
 
-import Database.DatabaseUtils;
+import Database.FollowDAO;
+import Database.PostDAO;
+import Database.UserDAO;
 
 import java.util.List;
 
@@ -59,7 +61,7 @@ public class User {
   }
 
   private void loadUserDetails() {
-    UserDetails userDetails = DatabaseUtils.getUserDetails(this.id);
+    UserDetails userDetails = UserDAO.getUserDetails(this.id);
     if (userDetails != null) {
       this.username = userDetails.getUsername();
       this.bio = userDetails.getBio();
@@ -67,11 +69,11 @@ public class User {
   }
 
   private void loadFollowingDetails() {
-    this.followersCount = DatabaseUtils.getFollowersAmount(id);
-    this.followingCount = DatabaseUtils.getFollowingAmount(id);
+    this.followersCount = FollowDAO.getFollowersAmount(id);
+    this.followingCount = FollowDAO.getFollowingAmount(id);
   }
 
   private void loadPosts() {
-    this.posts = DatabaseUtils.getPosts(id);
+    this.posts = PostDAO.getPosts(id);
   }
 }

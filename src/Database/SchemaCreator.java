@@ -114,61 +114,61 @@ public class SchemaCreator {
   }
 
   private static void addUsers() {
-    DatabaseUtils.registerUser("admin", "admin", "Main chief developer", "img/storage/profile/admin.png");
-    DatabaseUtils.registerUser("mordula", "admin", "Eva Mordface, Inhabitant of Mordor", "img/storage/profile/mordula.png");
-    DatabaseUtils.registerUser("swiniar", "admin", "Jack Swinehead, Mechanic engineer", "img/storage/profile/swiniar.png");
-    DatabaseUtils.registerUser("pluta", "admin", "Vojtech Pluton, Soft ferromagnetics in rotating fields", "img/storage/profile/pluta.png");
-    DatabaseUtils.registerUser("gala", "admin", "Alex Galla-Yaskier, Gala, gala - E!", "img/storage/profile/gala.png");
-    DatabaseUtils.registerUser("baska", "admin", "Barb McWitch, Desing(e)", "img/storage/profile/baska.png");
+    UserDAO.registerUser("admin", "admin", "Main chief developer", "img/storage/profile/admin.png");
+    UserDAO.registerUser("mordula", "admin", "Eva Mordface, Inhabitant of Mordor", "img/storage/profile/mordula.png");
+    UserDAO.registerUser("swiniar", "admin", "Jack Swinehead, Mechanic engineer", "img/storage/profile/swiniar.png");
+    UserDAO.registerUser("pluta", "admin", "Vojtech Pluton, Soft ferromagnetics in rotating fields", "img/storage/profile/pluta.png");
+    UserDAO.registerUser("gala", "admin", "Alex Galla-Yaskier, Gala, gala - E!", "img/storage/profile/gala.png");
+    UserDAO.registerUser("baska", "admin", "Barb McWitch, Desing(e)", "img/storage/profile/baska.png");
   }
 
   private static void addPosts() {
-    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_1.png");
-    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_2.png");
-    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_3.png");
-    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_4.png");
-    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_5.png");
-    DatabaseUtils.postSomething(2, "Grey soap?! on the tongue?", "img/uploaded/mordula_1.png");
-    DatabaseUtils.postSomething(2, "Helllooooooo!", "img/uploaded/mordula_2.png");
-    DatabaseUtils.postSomething(2, "Creating the new gravitational field", "img/uploaded/mordula_3.png");
-    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/uploaded/mordula_4.png");
-    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/uploaded/mordula_5.png");
-    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_1.png");
-    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_2.png");
-    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_3.png");
-    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_4.png");
-    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_5.png");
-    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_1.png");
-    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_2.png");
-    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_3.png");
-    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_4.png");
-    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_5.png");
-    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_1.png");
-    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_2.png");
-    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_3.png");
-    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_4.png");
-    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_5.png");
-    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_1.png");
-    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_2.png");
-    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_3.png");
-    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_4.png");
-    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_5.png");
+    PostDAO.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_1.png");
+    PostDAO.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_2.png");
+    PostDAO.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_3.png");
+    PostDAO.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_4.png");
+    PostDAO.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_5.png");
+    PostDAO.postSomething(2, "Grey soap?! on the tongue?", "img/uploaded/mordula_1.png");
+    PostDAO.postSomething(2, "Helllooooooo!", "img/uploaded/mordula_2.png");
+    PostDAO.postSomething(2, "Creating the new gravitational field", "img/uploaded/mordula_3.png");
+    PostDAO.postSomething(2, "Working on the quackstagram", "img/uploaded/mordula_4.png");
+    PostDAO.postSomething(2, "Working on the quackstagram", "img/uploaded/mordula_5.png");
+    PostDAO.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_1.png");
+    PostDAO.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_2.png");
+    PostDAO.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_3.png");
+    PostDAO.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_4.png");
+    PostDAO.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_5.png");
+    PostDAO.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_1.png");
+    PostDAO.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_2.png");
+    PostDAO.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_3.png");
+    PostDAO.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_4.png");
+    PostDAO.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_5.png");
+    PostDAO.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_1.png");
+    PostDAO.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_2.png");
+    PostDAO.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_3.png");
+    PostDAO.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_4.png");
+    PostDAO.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_5.png");
+    PostDAO.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_1.png");
+    PostDAO.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_2.png");
+    PostDAO.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_3.png");
+    PostDAO.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_4.png");
+    PostDAO.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_5.png");
   }
 
   private static void addFollowers() {
     // Admin follows everyone
     for (int i = 2; i < 7; i++) {
-        DatabaseUtils.followUser(1, i);
+        FollowDAO.followUser(1, i);
     }
       // Everyone follows admin
     for (int i = 2; i < 7; i++) {
-      DatabaseUtils.followUser(i, 1);
+      FollowDAO.followUser(i, 1);
     }
   }
 
   private static void addLikes() {
       for (int i = 1; i <= 30; i++) {
-          DatabaseUtils.likePost(i, 1);
+          PostDAO.likePost(i, 1);
       }
   }
 

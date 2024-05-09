@@ -1,6 +1,6 @@
 package UI;
 
-import Database.DatabaseUtils;
+import Database.UserDAO;
 import Logic.SessionManager;
 import Logic.User;
 
@@ -117,7 +117,7 @@ public class SignInUI extends BaseUI {
     String enteredPassword = passwordInput.getText().trim();
 
     try {
-      Integer userId = DatabaseUtils.verifyCredentials(enteredUsername, enteredPassword);
+      Integer userId = UserDAO.verifyCredentials(enteredUsername, enteredPassword);
       if (userId != null) {
         JOptionPane.showMessageDialog(null, "Login successful", "Success", JOptionPane.INFORMATION_MESSAGE);
         User loggedInUser = new User(userId);
