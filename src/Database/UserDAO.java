@@ -1,8 +1,15 @@
 package Database;
 
-import Logic.UserDetails;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Base64;
 
-import java.sql.*;
+import Logic.UserDetails;
 
 public class UserDAO {
   private static Connection getConnection() throws SQLException {
@@ -30,7 +37,7 @@ public class UserDAO {
     try (Connection conn = getConnection();
         PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
       ps.setString(1, username);
-      ps.setString(2, password);
+      ps.setString(2, hashPassword(password)); // Hash the password before storing it
       ps.setString(3, bio);
       ps.setString(4, imagePath);
       int affectedRows = ps.executeUpdate();
@@ -48,6 +55,18 @@ public class UserDAO {
     return userId;
   }
 
+  private static String hashPassword(String password) {
+    try {
+      MessageDigest md = MessageDigest.getInstance("SHA-256");
+      byte[] hashedPassword = md.digest(password.getBytes());
+      return Base64.getEncoder().encodeToString(hashedPassword);
+    } catch (NoSuchAlgorithmException e) {
+      System.err.println("Failed to hash password: " + e.getMessage());
+      return null; // Returning null or alternatively, you could handle it differently based on
+                   // your application's needs.
+    }
+  }
+
   public static Integer verifyCredentials(String username, String password) {
     String sql = "SELECT id, password FROM users WHERE username = ?";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -55,7 +74,8 @@ public class UserDAO {
       ResultSet rs = ps.executeQuery();
       if (rs.next()) {
         String storedPassword = rs.getString("password");
-        if (storedPassword.equals(password)) {
+        String hashedInputPassword = hashPassword(password); // Hash the input password to compare
+        if (storedPassword.equals(hashedInputPassword)) {
           return rs.getInt("id");
         }
       }
