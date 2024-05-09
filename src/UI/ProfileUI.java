@@ -27,28 +27,28 @@ public abstract class ProfileUI extends BaseUI {
 
   public static final int PROFILE_IMAGE_SIZE = 80; // Adjusted size for the profile image to match UI
   public static final int GRID_IMAGE_SIZE = WIDTH / 3; // Static size for grid images
-  private final JPanel contentPanel;
+  private JPanel contentPanel;
   public User currentUser; // User object to store the current user's information
 
   public ProfileUI() {
     setSize(WIDTH, HEIGHT);
     setLayout(new BorderLayout()); // Main layout of the JFrame
-    contentPanel = new JPanel(new CardLayout()); // Panel to switch between different views
-    add(contentPanel, BorderLayout.CENTER); // Add the content panel to the center of the JFrame
   }
 
   @Override
   public void initializeUI() {
     JPanel headerPanel = createHeaderPanel();
-    JPanel gridPanel = createImageGrid();
+    contentPanel = new JPanel(new CardLayout()); // Panel to switch between different views
     JPanel navigationPanel = createNavigationPanel();
 
     // Add header and navigation directly to the main JFrame's BorderLayout, not in
     // the contentPanel
     add(headerPanel, BorderLayout.NORTH);
+    add(contentPanel, BorderLayout.CENTER); // Add the content panel to the center of the JFrame
     add(navigationPanel, BorderLayout.SOUTH);
 
     // Add the grid panel to the contentPanel which has CardLayout
+    JPanel gridPanel = createImageGrid();
     contentPanel.add(gridPanel, "Grid");
     ((CardLayout) contentPanel.getLayout()).show(contentPanel, "Grid");
   }
@@ -153,6 +153,8 @@ public abstract class ProfileUI extends BaseUI {
     JPanel gridPanel = new JPanel(new GridLayout(0, 3, 5, 5)); // Adjusted for the grid layout
     List<Post> posts = currentUser.getPosts();
     for (Post post : posts) {
+      System.out.println(post.getImagePath());
+
       ImageIcon icon = new ImageIcon(new ImageIcon(post.getImagePath()).getImage().getScaledInstance(GRID_IMAGE_SIZE,
           GRID_IMAGE_SIZE, Image.SCALE_SMOOTH));
       JLabel label = new JLabel(icon);

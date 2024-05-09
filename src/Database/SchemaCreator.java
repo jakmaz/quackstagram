@@ -123,36 +123,36 @@ public class SchemaCreator {
   }
 
   private static void addPosts() {
-    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_1.png");
-    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_2.png");
-    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_3.png");
-    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_4.png");
-    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/storage/uploaded/admin_5.png");
-    DatabaseUtils.postSomething(2, "Grey soap?! on the tongue?", "img/storage/uploaded/mordula_1.png");
-    DatabaseUtils.postSomething(2, "Helllooooooo!", "img/storage/uploaded/mordula_2.png");
-    DatabaseUtils.postSomething(2, "Creating the new gravitational field", "img/storage/uploaded/mordula_3.png");
-    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/storage/uploaded/mordula_4.png");
-    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/storage/uploaded/mordula_5.png");
-    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/storage/uploaded/swiniar_1.png");
-    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/storage/uploaded/swiniar_2.png");
-    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/storage/uploaded/swiniar_3.png");
-    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/storage/uploaded/swiniar_4.png");
-    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/storage/uploaded/swiniar_5.png");
-    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/storage/uploaded/pluta_1.png");
-    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/storage/uploaded/pluta_2.png");
-    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/storage/uploaded/pluta_3.png");
-    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/storage/uploaded/pluta_4.png");
-    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/storage/uploaded/pluta_5.png");
-    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/storage/uploaded/gala_1.png");
-    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/storage/uploaded/gala_2.png");
-    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/storage/uploaded/gala_3.png");
-    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/storage/uploaded/gala_4.png");
-    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/storage/uploaded/gala_5.png");
-    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/storage/uploaded/baska_1.png");
-    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/storage/uploaded/baska_2.png");
-    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/storage/uploaded/baska_3.png");
-    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/storage/uploaded/baska_4.png");
-    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/storage/uploaded/baska_5.png");
+    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_1.png");
+    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_2.png");
+    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_3.png");
+    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_4.png");
+    DatabaseUtils.postSomething(1, "Working on the quackstagram", "img/uploaded/admin_5.png");
+    DatabaseUtils.postSomething(2, "Grey soap?! on the tongue?", "img/uploaded/mordula_1.png");
+    DatabaseUtils.postSomething(2, "Helllooooooo!", "img/uploaded/mordula_2.png");
+    DatabaseUtils.postSomething(2, "Creating the new gravitational field", "img/uploaded/mordula_3.png");
+    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/uploaded/mordula_4.png");
+    DatabaseUtils.postSomething(2, "Working on the quackstagram", "img/uploaded/mordula_5.png");
+    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_1.png");
+    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_2.png");
+    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_3.png");
+    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_4.png");
+    DatabaseUtils.postSomething(3, "Working on the quackstagram", "img/uploaded/swiniar_5.png");
+    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_1.png");
+    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_2.png");
+    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_3.png");
+    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_4.png");
+    DatabaseUtils.postSomething(4, "Working on the quackstagram", "img/uploaded/pluta_5.png");
+    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_1.png");
+    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_2.png");
+    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_3.png");
+    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_4.png");
+    DatabaseUtils.postSomething(5, "Working on the quackstagram", "img/uploaded/gala_5.png");
+    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_1.png");
+    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_2.png");
+    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_3.png");
+    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_4.png");
+    DatabaseUtils.postSomething(6, "Working on the quackstagram", "img/uploaded/baska_5.png");
   }
 
   private static void addFollowers() {
