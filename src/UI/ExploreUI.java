@@ -1,10 +1,12 @@
 package UI;
 
-import Logic.User;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -13,10 +15,24 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.*;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.stream.Stream;
+
+import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import Database.PostDAO;
+import Logic.Post;
 
 public class ExploreUI extends BaseUI {
 
@@ -61,24 +77,25 @@ public class ExploreUI extends BaseUI {
     // Image Grid
     JPanel imageGridPanel = new JPanel(new GridLayout(0, 3, 2, 2)); // 3 columns, auto rows
 
-    // Load images from the uploaded folder
-    File imageDir = new File("img/uploaded");
-    if (imageDir.exists() && imageDir.isDirectory()) {
-      File[] imageFiles = imageDir.listFiles((dir, name) -> name.matches(".*\\.(png|jpg|jpeg)"));
-      if (imageFiles != null) {
-        for (File imageFile : imageFiles) {
-          ImageIcon imageIcon = new ImageIcon(new ImageIcon(imageFile.getPath()).getImage()
-              .getScaledInstance(IMAGE_SIZE, IMAGE_SIZE, Image.SCALE_SMOOTH));
-          JLabel imageLabel = new JLabel(imageIcon);
-          imageLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-              displayImage(imageFile.getPath()); // Call method to display the clicked image
-            }
-          });
-          imageGridPanel.add(imageLabel);
+    // Load images from the database
+    List<Post> posts = PostDAO.getAllPosts(); // Assuming PostDAO has a method to get all posts
+    for (Post post : posts) {
+      String imagePath = post.getImagePath();
+      System.out.println(imagePath);
+      JLabel imageLabel = new JLabel();
+      ImageIcon imageIcon = new ImageIcon(new ImageIcon(post.getImagePath()).getImage().getScaledInstance(IMAGE_SIZE,
+          IMAGE_SIZE, Image.SCALE_SMOOTH));
+      imageLabel.setIcon(imageIcon);
+
+      // Add a mouse listener to the image label
+      imageLabel.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          displayImage(imagePath);
         }
-      }
+      });
+
+      imageGridPanel.add(imageLabel);
     }
 
     JScrollPane scrollPane = new JScrollPane(imageGridPanel);

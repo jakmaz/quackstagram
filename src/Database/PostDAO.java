@@ -24,7 +24,7 @@ public class PostDAO {
     }
   }
 
-  public static List<Post> getPosts(int userId) {
+  public static List<Post> getPostsbyUserId(int userId) {
     List<Post> posts = new ArrayList<>();
     String sql = "SELECT id, user_id, caption, image_path, timestamp FROM posts WHERE user_id = ?";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -43,7 +43,27 @@ public class PostDAO {
     } catch (SQLException e) {
       e.printStackTrace();
     }
+    return posts;
+  }
 
+  public static List<Post> getAllPosts() {
+    List<Post> posts = new ArrayList<>();
+    String sql = "SELECT id, user_id, caption, image_path, timestamp FROM posts";
+    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+      ResultSet rs = ps.executeQuery();
+
+      while (rs.next()) {
+        Post post = new Post(
+            rs.getInt("id"),
+            new User(rs.getInt("user_id")),
+            rs.getString("caption"),
+            rs.getString("image_path"),
+            rs.getTimestamp("timestamp"));
+        posts.add(post);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
     return posts;
   }
 
