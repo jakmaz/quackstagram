@@ -1,18 +1,21 @@
 package Logic;
 
+import Database.CommentsDAO;
+import Database.LikesDAO;
+
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
-// Represents a picture on Quackstagram
 public class Post {
   private Integer id;
   private User user;
   private String imagePath;
   private String caption;
   private Timestamp timestamp;
-  private int likesCount;
+  private Integer likesCount;
   private List<Comment> comments;
+  private boolean commentsLoaded = false;
+  private boolean likesLoaded = false;
 
   public Post(Integer id, User user, String caption, String imagePath, Timestamp timestamp) {
     this.id = id;
@@ -20,7 +23,6 @@ public class Post {
     this.imagePath = imagePath;
     this.caption = caption;
     this.timestamp = timestamp;
-    this.comments = new ArrayList<>();
   }
 
   public Integer getId() {
@@ -44,10 +46,18 @@ public class Post {
   }
 
   public int getLikesCount() {
+    if (!likesLoaded) {
+      likesCount = LikesDAO.getLikesCountForPost(id);
+      likesLoaded = true;
+    }
     return likesCount;
   }
 
   public List<Comment> getComments() {
+    if (!commentsLoaded) {
+      comments = CommentsDAO.getCommentsForPost(id);
+      commentsLoaded = true;
+    }
     return comments;
   }
 }

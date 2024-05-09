@@ -64,7 +64,7 @@ public class PostPanel extends JPanel {
   private void displayComments(List<Comment> comments) {
     StringBuilder commentsText = new StringBuilder();
     for (Comment comment : comments) {
-      commentsText.append(comment.getUserId()).append(": ").append(comment.getText()).append("\n");
+      commentsText.append(comment.getUser().getUsername()).append(": ").append(comment.getText()).append("\n");
     }
     commentsArea.setText(commentsText.toString());
   }
