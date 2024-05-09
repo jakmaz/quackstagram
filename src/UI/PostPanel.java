@@ -26,7 +26,8 @@ public class PostPanel extends JPanel {
     setLayout(new BorderLayout());
 
     // Image display
-    ImageIcon imageIcon = new ImageIcon(post.getImagePath());
+    ImageIcon imageIcon = new ImageIcon(new ImageIcon(post.getImagePath()).getImage().getScaledInstance(100,
+        100, Image.SCALE_SMOOTH));
     imageLabel = new JLabel(imageIcon);
     imageLabel.setHorizontalAlignment(JLabel.CENTER);
     add(imageLabel, BorderLayout.CENTER);
