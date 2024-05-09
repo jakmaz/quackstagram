@@ -111,13 +111,15 @@ public class SchemaCreator {
     addPosts();
     addFollowers();
     addLikes();
+    addComments();
   }
 
   private static void addUsers() {
     UserDAO.registerUser("admin", "admin", "Main chief developer", "img/storage/profile/admin.png");
     UserDAO.registerUser("mordula", "admin", "Eva Mordface, Inhabitant of Mordor", "img/storage/profile/mordula.png");
     UserDAO.registerUser("swiniar", "admin", "Jack Swinehead, Mechanic engineer", "img/storage/profile/swiniar.png");
-    UserDAO.registerUser("pluta", "admin", "Vojtech Pluton, Soft ferromagnetics in rotating fields", "img/storage/profile/pluta.png");
+    UserDAO.registerUser("pluta", "admin", "Vojtech Pluton, Soft ferromagnetics in rotating fields",
+        "img/storage/profile/pluta.png");
     UserDAO.registerUser("gala", "admin", "Alex Galla-Yaskier, Gala, gala - E!", "img/storage/profile/gala.png");
     UserDAO.registerUser("baska", "admin", "Barb McWitch, Desing(e)", "img/storage/profile/baska.png");
   }
@@ -158,18 +160,26 @@ public class SchemaCreator {
   private static void addFollowers() {
     // Admin follows everyone
     for (int i = 2; i < 7; i++) {
-        FollowDAO.followUser(1, i);
+      FollowDAO.followUser(1, i);
     }
-      // Everyone follows admin
+    // Everyone follows admin
     for (int i = 2; i < 7; i++) {
       FollowDAO.followUser(i, 1);
     }
   }
 
   private static void addLikes() {
-      for (int i = 1; i <= 30; i++) {
-          PostDAO.likePost(i, 1);
-      }
+    for (int i = 1; i <= 30; i++) {
+      PostDAO.likePost(i, 1);
+    }
+  }
+
+  private static void addComments() {
+    CommentsDAO.postComment(1, 2, "Great job!");
+    CommentsDAO.postComment(2, 3, "Nice work!");
+    CommentsDAO.postComment(3, 4, "Great job!");
+    CommentsDAO.postComment(4, 5, "Keep it up!");
+    CommentsDAO.postComment(5, 6, "Awesome!");
   }
 
   private static void executeUpdate(String sql) throws SQLException {

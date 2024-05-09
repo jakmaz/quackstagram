@@ -14,8 +14,6 @@ public class Post {
   private Timestamp timestamp;
   private Integer likesCount;
   private List<Comment> comments;
-  private boolean commentsLoaded = false;
-  private boolean likesLoaded = false;
 
   public Post(Integer id, User user, String caption, String imagePath, Timestamp timestamp) {
     this.id = id;
@@ -46,17 +44,15 @@ public class Post {
   }
 
   public int getLikesCount() {
-    if (!likesLoaded) {
+    if (likesCount == null) {
       likesCount = LikesDAO.getLikesCountForPost(id);
-      likesLoaded = true;
     }
     return likesCount;
   }
 
   public List<Comment> getComments() {
-    if (!commentsLoaded) {
+    if (comments == null) {
       comments = CommentsDAO.getCommentsForPost(id);
-      commentsLoaded = true;
     }
     return comments;
   }
