@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class PostPanel extends JPanel {
+public class ProfilePostPanel extends JPanel {
   private Post post;
   private JLabel imageLabel;
   private JLabel dateLabel;
@@ -17,7 +17,7 @@ public class PostPanel extends JPanel {
   private JTextArea commentsArea;
   private JButton backButton;
 
-  public PostPanel(Post post) {
+  public ProfilePostPanel(Post post) {
     this.post = post;
     initializeUI();
   }

@@ -16,7 +16,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -180,12 +179,12 @@ public abstract class ProfileUI extends BaseUI {
   }
 
   private void displayPost(Post post) {
-    PostPanel postPanel = new PostPanel(post);
-    contentPanel.add(postPanel, "Post");
+    ProfilePostPanel profilePostPanel = new ProfilePostPanel(post);
+    contentPanel.add(profilePostPanel, "Post");
     CardLayout cl = (CardLayout) (contentPanel.getLayout());
     cl.show(contentPanel, "Post");
 
-    postPanel.getBackButton().addActionListener(e -> cl.show(contentPanel, "Grid"));
+    profilePostPanel.getBackButton().addActionListener(e -> cl.show(contentPanel, "Grid"));
   }
 
   private JLabel createStatLabel(String number, String text) {
