@@ -3,6 +3,8 @@ package UI;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -26,7 +28,7 @@ import Logic.User;
 public abstract class ProfileUI extends BaseUI {
 
   public static final int PROFILE_IMAGE_SIZE = 80; // Adjusted size for the profile image to match UI
-  public static final int GRID_IMAGE_SIZE = WIDTH / 3; // Static size for grid images
+  public static final int GRID_IMAGE_SIZE = (WIDTH / 3) - 9; // Static size for grid images
   private JPanel contentPanel;
   public User currentUser; // User object to store the current user's information
 
@@ -145,12 +147,14 @@ public abstract class ProfileUI extends BaseUI {
     return profileNameAndBioPanel;
   }
 
-  private void handleFollowAction(String usernameToFollow) {
-    // TODO: to implement
-  }
-
   private JPanel createImageGrid() {
-    JPanel gridPanel = new JPanel(new GridLayout(0, 3, 5, 5)); // Adjusted for the grid layout
+    // Main panel with FlowLayout to align items from top-left to bottom-right
+    JPanel gridPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+
+    // Panel that will actually hold the images
+    JPanel imagesPanel = new JPanel(new GridLayout(0, 3, 5, 5)); // GridLayout with 3 columns
+    imagesPanel.setAlignmentX(Component.LEFT_ALIGNMENT); // Align panel to the left
+
     List<Post> posts = currentUser.getPosts();
     for (Post post : posts) {
       System.out.println(post.getImagePath());
@@ -164,8 +168,14 @@ public abstract class ProfileUI extends BaseUI {
           displayPost(post);
         }
       });
-      gridPanel.add(label);
+      imagesPanel.add(label);
     }
+
+    // Ensure the imagesPanel doesn't grow beyond its necessary size
+    imagesPanel
+        .setPreferredSize(new Dimension((GRID_IMAGE_SIZE + 5) * 3, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
+    gridPanel.add(imagesPanel);
+
     return gridPanel;
   }
 
@@ -176,24 +186,6 @@ public abstract class ProfileUI extends BaseUI {
     cl.show(contentPanel, "Post");
 
     postPanel.getBackButton().addActionListener(e -> cl.show(contentPanel, "Grid"));
-  }
-
-  private void displayImage(ImageIcon imageIcon) {
-    contentPanel.removeAll(); // Remove existing content
-    contentPanel.setLayout(new BorderLayout()); // Change layout for image display
-
-    JLabel fullSizeImageLabel = new JLabel(imageIcon);
-    fullSizeImageLabel.setHorizontalAlignment(JLabel.CENTER);
-    contentPanel.add(fullSizeImageLabel, BorderLayout.CENTER);
-
-    JButton backButton = new JButton("Back");
-    backButton.addActionListener(e -> {
-      initializeUI(); // Re-initialize the UI
-    });
-    contentPanel.add(backButton, BorderLayout.SOUTH);
-
-    revalidate();
-    repaint();
   }
 
   private JLabel createStatLabel(String number, String text) {
