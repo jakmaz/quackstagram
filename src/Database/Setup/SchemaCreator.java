@@ -15,7 +15,6 @@ public class SchemaCreator {
 
     public static void createDatabaseTables() {
         try {
-            DatabaseReset.resetDatabase();
             createUsersTable();
             createPostsTable();
             createCommentsTable();
