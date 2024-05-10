@@ -54,7 +54,7 @@ public class MainFrame extends JFrame {
     });
   }
 
-  private void initializeLoginPanels() {
+  public void initializeLoginPanels() {
     panelSuppliers = new HashMap<>();
     initializedPanels = new HashMap<>();
 
