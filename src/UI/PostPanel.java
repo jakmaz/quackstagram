@@ -61,7 +61,7 @@ public class PostPanel extends JPanel {
   private JPanel createTopPanel() {
     JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
     JButton usernameButton = new JButton(post.getUser().getUsername());
-    usernameButton.addActionListener(e -> MainFrame.getInstance().switchToUserProfile(post.getUser()));
+    usernameButton.addActionListener(e -> MainFrame.getInstance().showOtherProfilePanel(post.getUser()));
     LocalDateTime now = LocalDateTime.now();
     String timeSincePosting = ChronoUnit.DAYS.between(post.getTimestamp().toLocalDateTime(), now) + " days ago";
     JLabel timeLabel = new JLabel(timeSincePosting);

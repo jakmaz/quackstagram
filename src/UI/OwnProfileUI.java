@@ -37,8 +37,8 @@ public class OwnProfileUI extends ProfileUI {
     JButton logOutButton = new JButton("Log Out");
     logOutButton.addActionListener(e -> {
       MainFrame.getInstance().clearUI();
-      MainFrame.getInstance().initializeLoginPanels();
-      MainFrame.getInstance().switchPanel("SignIn");
+      MainFrame.getInstance().loadLoginPanels();
+      MainFrame.getInstance().showSignInPanel();
       SessionManager.clearCurrentUser();
     });
     buttonPanel.add(logOutButton);
