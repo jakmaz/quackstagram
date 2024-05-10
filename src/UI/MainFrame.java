@@ -38,6 +38,7 @@ public class MainFrame extends JFrame {
 
   private void initializeFrame() {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setResizable(false);
     setSize(300, 500);
     setLocationRelativeTo(null);
     cardLayout = new CardLayout();
@@ -104,22 +105,23 @@ public class MainFrame extends JFrame {
 
   public void clearUI() {
     for (BaseUI panel : initializedPanels.values()) {
-      mainPanel.remove(panel);  // Remove the panel from the mainPanel container
-      panel.setVisible(false);  // Make panel non-visible
-      panel.removeAll();        // Remove all components from the panel
+      mainPanel.remove(panel); // Remove the panel from the mainPanel container
+      panel.setVisible(false); // Make panel non-visible
+      panel.removeAll(); // Remove all components from the panel
     }
     initializedPanels.clear(); // Clear the map to remove all stored references
-    mainPanel.revalidate();    // Revalidate the container to update its state
-    mainPanel.repaint();       // Repaint the container to refresh the UI display
+    mainPanel.revalidate(); // Revalidate the container to update its state
+    mainPanel.repaint(); // Repaint the container to refresh the UI display
     System.out.println("All UI panels have been cleared.");
   }
 
   public void switchToUserProfile(User user) {
     switchPanel("OtherProfile");
-//    UserProfileUI otherProfileUI = (UserProfileUI) initializedPanels.computeIfAbsent("OtherProfile", k -> new UserProfileUI());
+    // UserProfileUI otherProfileUI = (UserProfileUI)
+    // initializedPanels.computeIfAbsent("OtherProfile", k -> new UserProfileUI());
     UserProfileUI otherProfileUI = (UserProfileUI) initializedPanels.get("OtherProfile");
     otherProfileUI.setUser(user);
-//    switchPanel("OtherProfile");
+    // switchPanel("OtherProfile");
   }
 
   public static void main(String[] args) {
