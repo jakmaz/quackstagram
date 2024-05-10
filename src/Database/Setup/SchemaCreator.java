@@ -20,7 +20,7 @@ public class SchemaCreator {
             createCommentsTable();
             createLikesTable();
             createFollowersTable();
-            //createNotificationsTable();
+            createNotificationsTable();
             System.out.println("Database tables created successfully.");
         } catch (SQLException e) {
             e.printStackTrace();

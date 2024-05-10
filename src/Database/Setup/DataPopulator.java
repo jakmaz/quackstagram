@@ -10,7 +10,7 @@ public class DataPopulator {
     addFollowers();
     addLikes();
     addComments();
-    addNotifications();
+    //addNotifications();
     System.out.println("Data populated successfully.");
   }
 

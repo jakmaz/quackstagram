@@ -34,7 +34,7 @@ public class NotificationsUI extends BaseUI {
     // Fetch notifications from the database
     List<Notification> notifications = NotificationsDAO.getNotificationsByUserId(currentUserId);
     for (Notification notification : notifications) {
-      String notificationMessage = notification.getUser().getUsername() + " liked your picture - " + getElapsedTime(notification.getTimestamp().toLocalDateTime()) + " ago";
+      String notificationMessage = notification.getMessage() + " " + getElapsedTime(notification.getTimestamp().toLocalDateTime());
 
       JPanel notificationPanel = new JPanel(new BorderLayout());
       notificationPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
