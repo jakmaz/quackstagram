@@ -60,4 +60,9 @@ public class Post {
     }
     return comments;
   }
+
+  public List<Comment> reloadComments() {
+    comments = CommentsDAO.getCommentsForPost(id);
+    return comments;
+  }
 }

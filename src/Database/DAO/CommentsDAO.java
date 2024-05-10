@@ -13,15 +13,17 @@ public class CommentsDAO {
     return DatabaseConnection.getConnection();
   }
 
-  public static void postComment(int postId, int userId, String text) {
+  public static boolean postComment(int postId, int userId, String text) {
     String sql = "INSERT INTO comments (post_id, user_id, text, timestamp) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
       ps.setInt(1, postId);
       ps.setInt(2, userId);
       ps.setString(3, text);
       ps.executeUpdate();
+      return true;
     } catch (SQLException e) {
       e.printStackTrace();
+      return false;
     }
   }
 

@@ -1,6 +1,7 @@
 package UI;
 
 import Database.DAO.LikesDAO;
+import Database.DAO.CommentsDAO;
 import Logic.Comment;
 import Logic.Post;
 import Logic.SessionManager;
@@ -21,6 +22,7 @@ public class PostPanel extends JPanel {
   private JButton backButton; // For navigation
   private JLabel likesLabel; // For displaying the likes count
   private JButton likeButton; // For liking the post
+  private JPanel commentsPanel;
 
   public PostPanel(Post post, int pictureSize) {
     this.post = post;
@@ -43,8 +45,8 @@ public class PostPanel extends JPanel {
     scrollPanel.add(createImagePanel());
     scrollPanel.add(createLikePanel());
     scrollPanel.add(createCaptionPanel());
-    scrollPanel.add(createCommentsPanel());
-
+    commentsPanel = createCommentsPanel();
+    scrollPanel.add(commentsPanel);
     JScrollPane scrollPane = new JScrollPane(scrollPanel);
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
     scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -116,7 +118,6 @@ public class PostPanel extends JPanel {
     JPanel commentsPanel = new JPanel();
     commentsPanel.setLayout(new BoxLayout(commentsPanel, BoxLayout.Y_AXIS));
     commentsPanel.setBorder(BorderFactory.createTitledBorder("Comments"));
-
     for (Comment comment : post.getComments()) {
       JPanel singleCommentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
       JLabel commentLabel = new JLabel(
@@ -124,6 +125,33 @@ public class PostPanel extends JPanel {
       singleCommentPanel.add(commentLabel);
       commentsPanel.add(singleCommentPanel);
     }
+    // Input panel for new comment
+    BufferedImage icon = null;
+    try {
+      icon = ImageIO.read(new File("img/icons/submit.png")); // Ensure the path is correct
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JTextField commentField = new JTextField(15); // Adjustable size
+    commentField.setPreferredSize(new Dimension(commentField.getPreferredSize().width, 20)); // Ustawienie wysokości na 30 pikseli
+    ImageIcon scaledIcon = new ImageIcon(icon.getScaledInstance(20, 20, Image.SCALE_AREA_AVERAGING));
+    JButton submitButton = new JButton(scaledIcon);
+    submitButton.setBorderPainted(false);
+    submitButton.setContentAreaFilled(false);
+    submitButton.setFocusPainted(false);
+    submitButton.setOpaque(false);
+
+    submitButton.addActionListener(e -> {
+      handleCommentAction(commentField.getText());
+      commentField.setText(""); // Clear the field after submission
+    });
+
+    inputPanel.add(commentField);
+    inputPanel.add(submitButton);
+
+    // Add the input panel to the main comments panel
+    commentsPanel.add(inputPanel);
 
     return commentsPanel;
   }
@@ -135,6 +163,21 @@ public class PostPanel extends JPanel {
       int newLikesCount = post.getLikesCount() + 1;
       likesLabel.setText("Likes: " + newLikesCount);
       post.setLikesCount(newLikesCount);
+    }
+  }
+
+  private void handleCommentAction(String commentContent){
+    boolean result = CommentsDAO.postComment(post.getId(), SessionManager.getCurrentUser().getId(), commentContent);
+    if (result) {
+      post.reloadComments(); // Refresh the comments list
+
+      remove(commentsPanel); // Remove the old comments panel
+
+      commentsPanel = createCommentsPanel(); // Refresh the comments panel
+      add(commentsPanel, BorderLayout.SOUTH); // Add the new comments panel
+
+      revalidate();
+      repaint();
     }
   }
 
