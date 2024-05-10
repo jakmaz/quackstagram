@@ -1,6 +1,5 @@
 package UI;
 
-import Logic.SessionManager;
 import Logic.User;
 
 import javax.swing.*;
@@ -25,15 +24,11 @@ public class MainFrame extends JFrame {
     return instance;
   }
 
-  public static MainFrame createNewInstance() {
-    instance = new MainFrame();
-    return instance;
-  }
-
   private MainFrame() {
     super("Quackstagram Application");
     initializeFrame();
-    initializePanels();
+    initializeLoginPanels();
+    switchPanel("SignIn");
   }
 
   private void initializeFrame() {
@@ -59,13 +54,21 @@ public class MainFrame extends JFrame {
     });
   }
 
-  private void initializePanels() {
+  private void initializeLoginPanels() {
     panelSuppliers = new HashMap<>();
     initializedPanels = new HashMap<>();
 
-    // Register panel suppliers
-    panelSuppliers.put("SignIn", SignInUI::new);
+    // Register general panels that do not require user info
     panelSuppliers.put("SignUp", SignUpUI::new);
+    panelSuppliers.put("SignIn", SignInUI::new);
+
+    // Initialize these panels
+    for (String key : panelSuppliers.keySet()) {
+      preloadPanel(key);
+    }
+  }
+
+  public void initializeUserPanels() {
     panelSuppliers.put("Home", HomeUI::new);
     panelSuppliers.put("Explore", ExploreUI::new);
     panelSuppliers.put("Upload", UploadUI::new);
@@ -73,8 +76,11 @@ public class MainFrame extends JFrame {
     panelSuppliers.put("Profile", OwnProfileUI::new);
     panelSuppliers.put("OtherProfile", UserProfileUI::new);
 
-    // Preload initial panel
-    preloadPanel("SignIn");
+    for (String key : panelSuppliers.keySet()) {
+      if (!initializedPanels.containsKey(key)) {
+        preloadPanel(key);
+      }
+    }
   }
 
   private void preloadPanel(String name) {
@@ -90,14 +96,11 @@ public class MainFrame extends JFrame {
   }
 
   public void switchPanel(String name) {
-    if (!initializedPanels.containsKey(name)) {
-      preloadPanel(name);
-    }
     System.out.println("Switching to panel: " + name);
     cardLayout.show(mainPanel, name);
     BaseUI panel = initializedPanels.get(name);
     if (panel != null) {
-      setTitle(name + " - " + SessionManager.getCurrentUser().getUsername());
+      setTitle(name);
     } else {
       System.out.println("Error: Panel not initialized - " + name);
     }
@@ -117,11 +120,8 @@ public class MainFrame extends JFrame {
 
   public void switchToUserProfile(User user) {
     switchPanel("OtherProfile");
-    // UserProfileUI otherProfileUI = (UserProfileUI)
-    // initializedPanels.computeIfAbsent("OtherProfile", k -> new UserProfileUI());
     UserProfileUI otherProfileUI = (UserProfileUI) initializedPanels.get("OtherProfile");
     otherProfileUI.setUser(user);
-    // switchPanel("OtherProfile");
   }
 
   public static void main(String[] args) {

@@ -121,24 +121,26 @@ public class SignInUI extends BaseUI {
     try {
       Integer userId = UserDAO.verifyCredentials(enteredUsername, enteredPassword);
       if (userId != null) {
-        JOptionPane.showMessageDialog(null, "Login successful", "Success", JOptionPane.INFORMATION_MESSAGE);
         User loggedInUser = new User(userId);
         saveCurrentUserInformation(loggedInUser);
+        MainFrame.getInstance().initializeUserPanels();
+        JOptionPane.showMessageDialog(null, "Login successful", "Success", JOptionPane.INFORMATION_MESSAGE);
         MainFrame.getInstance().switchPanel("Profile");
       } else {
-        JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Login Failed",
+            JOptionPane.ERROR_MESSAGE);
         usernameInput.requestFocus();
       }
     } catch (Exception e) {
       e.printStackTrace();
-      JOptionPane.showMessageDialog(null, "An error occurred while attempting to log in. Please try again.", "Login Error", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(null, "An error occurred while attempting to log in. Please try again.",
+          "Login Error", JOptionPane.ERROR_MESSAGE);
     }
   }
 
   private void onRegisterNowClicked(ActionEvent event) {
     MainFrame.getInstance().switchPanel("SignUp");
   }
-
 
   private void saveCurrentUserInformation(User user) {
     SessionManager.setCurrentUser(user);
