@@ -89,7 +89,7 @@ public class ExploreUI extends BaseUI {
   }
 
   private void showPostDetails(Post post) {
-    ExplorePostPanel postPanel = new ExplorePostPanel(post);
+    PostPanel postPanel = new PostPanel(post, 200);
     contentPanel.add(postPanel, "PostDetails");
     CardLayout cl = (CardLayout) (contentPanel.getLayout());
     cl.show(contentPanel, "PostDetails");

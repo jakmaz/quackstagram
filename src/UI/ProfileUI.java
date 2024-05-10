@@ -179,7 +179,7 @@ public abstract class ProfileUI extends BaseUI {
   }
 
   private void displayPost(Post post) {
-    ProfilePostPanel profilePostPanel = new ProfilePostPanel(post);
+    PostPanel profilePostPanel = new PostPanel(post, 100);
     contentPanel.add(profilePostPanel, "Post");
     CardLayout cl = (CardLayout) (contentPanel.getLayout());
     cl.show(contentPanel, "Post");

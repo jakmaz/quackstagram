@@ -15,14 +15,16 @@ import javax.imageio.ImageIO;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-public class ExplorePostPanel extends JPanel {
-  private Post post;
+public class PostPanel extends JPanel {
+  private final Post post;
+  private final int pictureSize;
   private JButton backButton; // For navigation
   private JLabel likesLabel; // For displaying the likes count
   private JButton likeButton; // For liking the post
 
-  public ExplorePostPanel(Post post) {
+  public PostPanel(Post post, int pictureSize) {
     this.post = post;
+    this.pictureSize = pictureSize;
     initializeUI();
   }
 
@@ -73,7 +75,7 @@ public class ExplorePostPanel extends JPanel {
     JLabel imageLabel = new JLabel();
     try {
       BufferedImage img = ImageIO.read(new File(post.getImagePath()));
-      ImageIcon imageIcon = new ImageIcon(img.getScaledInstance(200, 200, Image.SCALE_SMOOTH));
+      ImageIcon imageIcon = new ImageIcon(img.getScaledInstance(pictureSize, pictureSize, Image.SCALE_SMOOTH));
       imageLabel.setIcon(imageIcon);
     } catch (IOException ex) {
       imageLabel.setText("Image not found");
