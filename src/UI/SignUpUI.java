@@ -1,6 +1,6 @@
 package UI;
 
-import Database.UserDAO;
+import Database.DAO.UserDAO;
 
 import javax.swing.*;
 import java.awt.*;

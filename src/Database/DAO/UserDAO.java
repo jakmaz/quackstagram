@@ -1,4 +1,4 @@
-package Database;
+package Database.DAO;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Base64;
 
+import Database.Connection.DatabaseConnection;
 import Logic.UserDetails;
 
 public class UserDAO {

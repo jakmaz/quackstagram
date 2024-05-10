@@ -5,7 +5,7 @@ import Logic.SessionManager;
 
 import javax.swing.*;
 
-import Database.LikesDAO;
+import Database.DAO.LikesDAO;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

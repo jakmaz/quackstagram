@@ -1,5 +1,6 @@
-package Database;
+package Database.DAO;
 
+import Database.Connection.DatabaseConnection;
 import Logic.Comment;
 import Logic.User;
 

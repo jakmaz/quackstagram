@@ -1,6 +1,6 @@
 package UI;
 
-import Database.UserDAO;
+import Database.DAO.UserDAO;
 import Logic.SessionManager;
 import Logic.User;
 

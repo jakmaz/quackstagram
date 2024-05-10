@@ -1,7 +1,7 @@
 package Logic;
 
-import Database.CommentsDAO;
-import Database.LikesDAO;
+import Database.DAO.CommentsDAO;
+import Database.DAO.LikesDAO;
 
 import java.sql.Timestamp;
 import java.util.List;

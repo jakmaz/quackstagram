@@ -1,8 +1,8 @@
 package Logic;
 
-import Database.FollowDAO;
-import Database.PostDAO;
-import Database.UserDAO;
+import Database.DAO.FollowDAO;
+import Database.DAO.PostDAO;
+import Database.DAO.UserDAO;
 
 import java.util.List;
 

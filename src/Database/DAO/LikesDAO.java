@@ -1,4 +1,6 @@
-package Database;
+package Database.DAO;
+
+import Database.Connection.DatabaseConnection;
 
 import java.sql.*;
 

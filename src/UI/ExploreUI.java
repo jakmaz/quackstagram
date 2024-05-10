@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import Database.PostDAO;
+import Database.DAO.PostDAO;
 import Logic.Post;
 
 public class ExploreUI extends BaseUI {

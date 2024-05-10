@@ -1,4 +1,6 @@
-package Database;
+package Database.Setup;
+
+import Database.Connection.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.Statement;
