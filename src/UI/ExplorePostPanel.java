@@ -1,20 +1,19 @@
 package UI;
 
+import Database.DAO.LikesDAO;
 import Logic.Comment;
 import Logic.Post;
 import Logic.SessionManager;
 
 import javax.swing.*;
 
-import Database.DAO.LikesDAO;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import javax.imageio.ImageIO;
 
 public class ExplorePostPanel extends JPanel {
   private Post post;
@@ -29,27 +28,30 @@ public class ExplorePostPanel extends JPanel {
 
   private void initializeUI() {
     setLayout(new BorderLayout());
-    add(createMainPanel(), BorderLayout.CENTER);
+    add(createNavPanel(), BorderLayout.NORTH);
+    add(createScrollableContent(), BorderLayout.CENTER);
   }
 
-  private JPanel createMainPanel() {
-    JPanel mainPanel = new JPanel();
-    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-    mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+  private JScrollPane createScrollableContent() {
+    JPanel scrollPanel = new JPanel();
+    scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.Y_AXIS));
+    scrollPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-    mainPanel.add(createNavPanel());
-    mainPanel.add(createTopPanel());
-    mainPanel.add(createImagePanel());
-    mainPanel.add(createBottomPanel());
-    mainPanel.add(createCommentsPanel());
+    scrollPanel.add(createTopPanel());
+    scrollPanel.add(createImagePanel());
+    scrollPanel.add(createLikePanel());
+    scrollPanel.add(createCaptionPanel());
+    scrollPanel.add(createCommentsPanel());
 
-    return mainPanel;
+    JScrollPane scrollPane = new JScrollPane(scrollPanel);
+    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    return scrollPane;
   }
 
   private JPanel createNavPanel() {
     JPanel navPanel = new JPanel(new BorderLayout());
     backButton = new JButton("Back");
-    backButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
     navPanel.add(backButton, BorderLayout.NORTH);
     return navPanel;
   }
@@ -81,65 +83,46 @@ public class ExplorePostPanel extends JPanel {
     return imagePanel;
   }
 
-  private JPanel createBottomPanel() {
-    JPanel bottomPanel = new JPanel();
-    bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
-
-    JLabel captionTextArea = new JLabel(post.getCaption());
-    JScrollPane captionScroll = new JScrollPane(captionTextArea);
-    captionScroll.setPreferredSize(new Dimension(Integer.MAX_VALUE, 60));
-
-    // Create a panel to hold likes label and like button side by side
-    JPanel likePanel = new JPanel();
-    likePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0)); // Small horizontal gap, no vertical gap
-
+  private JPanel createLikePanel() {
+    JPanel likePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
     likesLabel = new JLabel("Likes: " + post.getLikesCount());
     likeButton = new JButton("Like");
     likeButton.addActionListener(e -> handleLikeAction());
-
     likePanel.add(likesLabel);
     likePanel.add(likeButton);
+    return likePanel;
+  }
 
-    bottomPanel.add(captionScroll);
-    bottomPanel.add(likePanel); // Add the likePanel to the bottomPanel
-    return bottomPanel;
+  private JPanel createCaptionPanel() {
+    JPanel captionPanel = new JPanel();
+    JLabel captionLabel = new JLabel(post.getCaption());
+    captionPanel.add(captionLabel);
+    return captionPanel;
   }
 
   private JPanel createCommentsPanel() {
-    JPanel commentsContainer = new JPanel(new BorderLayout()); // Create a container panel for the scroll pane
-
     JPanel commentsPanel = new JPanel();
     commentsPanel.setLayout(new BoxLayout(commentsPanel, BoxLayout.Y_AXIS));
     commentsPanel.setBorder(BorderFactory.createTitledBorder("Comments"));
 
-    // Assuming Post class has a method getComments() that returns a list of Comment
-    // objects
     for (Comment comment : post.getComments()) {
       JPanel singleCommentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
       JLabel commentLabel = new JLabel(
-          "<html><b>User " + comment.getUser().getUsername() + ":</b> " + comment.getText() + "</html>");
+          "<html><b>" + comment.getUser().getUsername() + ":</b> " + comment.getText() + "</html>");
       singleCommentPanel.add(commentLabel);
       commentsPanel.add(singleCommentPanel);
     }
 
-    JScrollPane scrollPane = new JScrollPane(commentsPanel);
-    scrollPane.setPreferredSize(new Dimension(350, 100)); // Adjust size according to your UI needs
-    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-    commentsContainer.add(scrollPane, BorderLayout.CENTER); // Add the scroll pane to the container panel
-    return commentsContainer; // Return the container panel
+    return commentsPanel;
   }
 
   private void handleLikeAction() {
     String result = LikesDAO.likePost(post.getId(), SessionManager.getCurrentUser().getId());
     JOptionPane.showMessageDialog(this, result, "Like Status", JOptionPane.INFORMATION_MESSAGE);
-
-    // Optionally, update the likes label if liked successfully
     if (result.equals("Post successfully liked!")) {
       int newLikesCount = post.getLikesCount() + 1;
       likesLabel.setText("Likes: " + newLikesCount);
-      post.setLikesCount(newLikesCount); // Update the post object too
+      post.setLikesCount(newLikesCount);
     }
   }
 
