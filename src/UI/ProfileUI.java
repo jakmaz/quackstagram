@@ -52,6 +52,7 @@ public abstract class ProfileUI extends BaseUI {
     JPanel gridPanel = createImageGrid();
     contentPanel.add(gridPanel, "Grid");
     ((CardLayout) contentPanel.getLayout()).show(contentPanel, "Grid");
+    setVisible(true);
   }
 
   private JPanel createHeaderPanel() {

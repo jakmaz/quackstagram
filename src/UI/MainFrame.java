@@ -1,8 +1,5 @@
 package UI;
 
-import Logic.User;
-
-import javax.swing.*;
 import java.awt.CardLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -10,12 +7,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import Logic.SessionManager;
+import Logic.User;
+
 public class MainFrame extends JFrame {
   private static MainFrame instance;
   private CardLayout cardLayout;
   private JPanel mainPanel;
-  private Map<String, Supplier<BaseUI>> panelSuppliers;
-  private Map<String, BaseUI> initializedPanels;
+  private Map<String, Supplier<BaseUI>> panelSuppliers = new HashMap<>();
+  private Map<String, BaseUI> initializedPanels = new HashMap<>();
 
   public static MainFrame getInstance() {
     if (instance == null) {
@@ -27,8 +31,9 @@ public class MainFrame extends JFrame {
   private MainFrame() {
     super("Quackstagram Application");
     initializeFrame();
-    initializeLoginPanels();
-    switchPanel("SignIn");
+    initializeSuppliers();
+    loadLoginPanels(); // Initially load only login-related panels
+    showSignInPanel(); // Display the Sign In panel initially
   }
 
   private void initializeFrame() {
@@ -39,7 +44,6 @@ public class MainFrame extends JFrame {
     cardLayout = new CardLayout();
     mainPanel = new JPanel(cardLayout);
     add(mainPanel);
-
     mainPanel.setFocusable(true);
     mainPanel.requestFocusInWindow();
     mainPanel.addKeyListener(new KeyAdapter() {
@@ -54,35 +58,39 @@ public class MainFrame extends JFrame {
     });
   }
 
-  private void initializeLoginPanels() {
-    panelSuppliers = new HashMap<>();
-    initializedPanels = new HashMap<>();
-
-    // Register general panels that do not require user info
-    panelSuppliers.put("SignUp", SignUpUI::new);
+  // Initializes the suppliers for all panel types
+  public void initializeSuppliers() {
     panelSuppliers.put("SignIn", SignInUI::new);
-
-    // Initialize these panels
-    for (String key : panelSuppliers.keySet()) {
-      preloadPanel(key);
-    }
-  }
-
-  public void initializeUserPanels() {
+    panelSuppliers.put("SignUp", SignUpUI::new);
     panelSuppliers.put("Home", HomeUI::new);
     panelSuppliers.put("Explore", ExploreUI::new);
     panelSuppliers.put("Upload", UploadUI::new);
     panelSuppliers.put("Notifications", NotificationsUI::new);
     panelSuppliers.put("Profile", OwnProfileUI::new);
     panelSuppliers.put("OtherProfile", UserProfileUI::new);
-
-    for (String key : panelSuppliers.keySet()) {
-      if (!initializedPanels.containsKey(key)) {
-        preloadPanel(key);
-      }
-    }
   }
 
+  // Load panels necessary for login
+  public void loadLoginPanels() {
+    preloadPanel("SignIn");
+    preloadPanel("SignUp");
+  }
+
+  // Load the Profile panel, typically called after successful sign-in or sign-up
+  public void loadProfilePanel() {
+    preloadPanel("Profile");
+  }
+
+  // Load other panels that require user information, called after showing the
+  // Profile panel
+  public void loadUserPanels() {
+    preloadPanel("Home");
+    preloadPanel("Explore");
+    preloadPanel("Upload");
+    preloadPanel("Notifications");
+  }
+
+  // General method to preload a panel based on the name
   private void preloadPanel(String name) {
     System.out.println("Preloading panel: " + name);
     Supplier<BaseUI> supplier = panelSuppliers.get(name);
@@ -91,37 +99,63 @@ public class MainFrame extends JFrame {
       mainPanel.add(panel, name);
       initializedPanels.put(name, panel);
     } else {
-      System.out.println("Error: No supplier found for " + name);
+      System.out.println("Error: No supplier found for panel " + name);
     }
   }
 
-  public void switchPanel(String name) {
+  // Switch to a specific panel by name
+  private void switchPanel(String name) {
     System.out.println("Switching to panel: " + name);
     cardLayout.show(mainPanel, name);
-    BaseUI panel = initializedPanels.get(name);
-    if (panel != null) {
-      setTitle(name);
-    } else {
-      System.out.println("Error: Panel not initialized - " + name);
-    }
+    setTitle(name);
   }
 
-  public void clearUI() {
-    for (BaseUI panel : initializedPanels.values()) {
-      mainPanel.remove(panel); // Remove the panel from the mainPanel container
-      panel.setVisible(false); // Make panel non-visible
-      panel.removeAll(); // Remove all components from the panel
-    }
-    initializedPanels.clear(); // Clear the map to remove all stored references
-    mainPanel.revalidate(); // Revalidate the container to update its state
-    mainPanel.repaint(); // Repaint the container to refresh the UI display
-    System.out.println("All UI panels have been cleared.");
+  // Individual methods for displaying each panel
+  public void showSignInPanel() {
+    switchPanel("SignIn");
   }
 
-  public void switchToUserProfile(User user) {
-    switchPanel("OtherProfile");
+  public void showSignUpPanel() {
+    switchPanel("SignUp");
+  }
+
+  public void showHomePanel() {
+    switchPanel("Home");
+  }
+
+  public void showExplorePanel() {
+    switchPanel("Explore");
+  }
+
+  public void showUploadPanel() {
+    switchPanel("Upload");
+  }
+
+  public void showNotificationsPanel() {
+    switchPanel("Notifications");
+  }
+
+  public void showProfilePanel() {
+    switchPanel("Profile");
+  }
+
+  public void showOtherProfilePanel(User user) {
     UserProfileUI otherProfileUI = (UserProfileUI) initializedPanels.get("OtherProfile");
     otherProfileUI.setUser(user);
+    switchPanel("OtherProfile");
+  }
+
+  // Clears all UI panels, typically used during log out
+  public void clearUI() {
+    for (BaseUI panel : initializedPanels.values()) {
+      mainPanel.remove(panel);
+      panel.setVisible(false);
+      panel.removeAll();
+    }
+    initializedPanels.clear();
+    mainPanel.revalidate();
+    mainPanel.repaint();
+    System.out.println("All UI panels have been cleared.");
   }
 
   public static void main(String[] args) {

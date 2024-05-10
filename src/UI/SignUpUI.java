@@ -114,18 +114,20 @@ public class SignUpUI extends BaseUI {
     String bio = bioInput.getText().trim();
 
     if (username.isEmpty() || password.isEmpty() || !isProfilePictureUploaded) {
-      JOptionPane.showMessageDialog(this, "Please ensure all fields are filled and a photo is selected.", "Registration Incomplete", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(this, "Please ensure all fields are filled and a photo is selected.",
+          "Registration Incomplete", JOptionPane.ERROR_MESSAGE);
       return;
     }
 
     if (UserDAO.usernameExists(username)) {
-      JOptionPane.showMessageDialog(this, "Username already exists. Please choose a different username.", "Error", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(this, "Username already exists. Please choose a different username.", "Error",
+          JOptionPane.ERROR_MESSAGE);
       return;
     }
 
     UserDAO.registerUser(username, password, bio, ""); // TODO: implement
     JOptionPane.showMessageDialog(this, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-    MainFrame.getInstance().switchPanel("Profile");
+    MainFrame.getInstance().showSignInPanel();
   }
 
   // Method to handle profile picture upload
@@ -151,7 +153,7 @@ public class SignUpUI extends BaseUI {
   }
 
   private void onSignInClicked(ActionEvent e) {
-    MainFrame.getInstance().switchPanel("SignIn");
+    MainFrame.getInstance().showSignInPanel();
   }
 
 }

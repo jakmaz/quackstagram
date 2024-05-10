@@ -114,7 +114,7 @@ public class SignInUI extends BaseUI {
     return buttonPanel;
   }
 
-  private void onSignInClicked(ActionEvent event) {
+private void onSignInClicked(ActionEvent event) {
     String enteredUsername = usernameInput.getText().trim();
     String enteredPassword = passwordInput.getText().trim();
 
@@ -123,9 +123,19 @@ public class SignInUI extends BaseUI {
       if (userId != null) {
         User loggedInUser = new User(userId);
         saveCurrentUserInformation(loggedInUser);
-        MainFrame.getInstance().initializeUserPanels();
         JOptionPane.showMessageDialog(null, "Login successful", "Success", JOptionPane.INFORMATION_MESSAGE);
-        MainFrame.getInstance().switchPanel("Profile");
+        MainFrame.getInstance().loadProfilePanel(); // Load and display the profile panel immediately
+        MainFrame.getInstance().showProfilePanel();
+
+        // Load other user-specific panels in a background thread
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                MainFrame.getInstance().loadUserPanels();
+                return null;
+            }
+        }.execute();
+        
       } else {
         JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Login Failed",
             JOptionPane.ERROR_MESSAGE);
@@ -139,7 +149,7 @@ public class SignInUI extends BaseUI {
   }
 
   private void onRegisterNowClicked(ActionEvent event) {
-    MainFrame.getInstance().switchPanel("SignUp");
+    MainFrame.getInstance().showSignUpPanel();
   }
 
   private void saveCurrentUserInformation(User user) {

@@ -50,15 +50,15 @@ public abstract class BaseUI extends JPanel {
 
     // Define actions based on button type
     if ("home".equals(buttonType)) {
-      button.addActionListener(e -> MainFrame.getInstance().switchPanel("Home"));
+      button.addActionListener(e -> MainFrame.getInstance().showHomePanel());
     } else if ("profile".equals(buttonType)) {
-      button.addActionListener(e -> MainFrame.getInstance().switchPanel("Profile"));
+      button.addActionListener(e -> MainFrame.getInstance().showProfilePanel());
     } else if ("notification".equals(buttonType)) {
-      button.addActionListener(e -> MainFrame.getInstance().switchPanel("Notifications"));
+      button.addActionListener(e -> MainFrame.getInstance().showNotificationsPanel());
     } else if ("explore".equals(buttonType)) {
-      button.addActionListener(e -> MainFrame.getInstance().switchPanel("Explore"));
+      button.addActionListener(e -> MainFrame.getInstance().showExplorePanel());
     } else if ("add".equals(buttonType)) {
-      button.addActionListener(e -> MainFrame.getInstance().switchPanel("Upload"));
+      button.addActionListener(e -> MainFrame.getInstance().showUploadPanel());
     }
     return button;
 
