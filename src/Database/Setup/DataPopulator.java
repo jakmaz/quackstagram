@@ -23,7 +23,7 @@ public class DataPopulator {
     }
 
     private static void addUsers() {
-        UserDAO.registerUser("admin", "admin", "CHUJ", "img/storage/profile/admin.png");
+        UserDAO.registerUser("admin", "admin", "Main chief developer", "img/storage/profile/admin.png");
         UserDAO.registerUser("mordula", "admin", "Eva Mordface, Inhabitant of Mordor", "img/storage/profile/mordula.png");
         UserDAO.registerUser("swiniar", "admin", "Jack Swinehead, Mechanic engineer", "img/storage/profile/swiniar.png");
         UserDAO.registerUser("pluta", "admin", "Vojtech Pluton, Soft ferromagnetics in rotating fields",
