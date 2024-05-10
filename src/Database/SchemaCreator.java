@@ -188,8 +188,11 @@ public class SchemaCreator {
   }
 
   private static void addLikes() {
-    for (int i = 1; i <= 30; i++) {
-      PostDAO.likePost(i, 1);
+    // Everyone besides admin like all posts
+    for (int userId = 2; userId <= 6; userId++) {
+      for (int postId = 1; postId < 30; postId++) {
+        LikesDAO.likePost(postId, userId);
+      }
     }
   }
 
