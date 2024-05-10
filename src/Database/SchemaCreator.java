@@ -188,18 +188,53 @@ public class SchemaCreator {
   }
 
   private static void addLikes() {
-    for (int i = 1; i <= 30; i++) {
-      PostDAO.likePost(i, 1);
+    // Everyone besides admin like all posts
+    for (int userId = 2; userId <= 6; userId++) {
+      for (int postId = 1; postId < 30; postId++) {
+        LikesDAO.likePost(postId, userId);
+      }
     }
   }
 
   private static void addComments() {
-    CommentsDAO.postComment(1, 2, "Great job!");
-    CommentsDAO.postComment(2, 3, "Nice work!");
-    CommentsDAO.postComment(3, 4, "Great job!");
-    CommentsDAO.postComment(4, 5, "Keep it up!");
-    CommentsDAO.postComment(5, 6, "Awesome!");
+    String[] comments = {
+            "Great job!", "Nice work!", "Keep it up!", "Awesome!", "Fantastic effort!",
+            "Really impressive!", "Loving this!", "Can't wait to see more!", "This is just amazing!",
+            "Wow, mind blown!", "So inspiring!", "You really outdid yourself here!", "How did you even manage this?",
+            "This is the best thing I've seen all day!", "Can you share more about your process?", "Incredible detail!",
+            "You've got a real talent there!", "Never stop creating!", "This really speaks to me!", "What a masterpiece!",
+            "Such a creative concept!", "Revolutionary!", "This could change things!", "Brilliant execution!",
+            "You're a genius!", "How creative!", "Pure talent!", "That's so captivating!", "Absolutely stunning work!",
+            "Thank you for sharing this!", "It's beautiful!", "Very impressive!", "What an inspiration!", "Simply spectacular!",
+            "I'm in awe!", "Remarkable work!", "Keep bringing the awesome!", "This is next level!", "Love the style here!",
+            "This is a winner!", "Exceptional piece!", "Truly unique!", "I can feel the passion!", "You nailed it!",
+            "Can't get over how good this is!", "You make it look easy!", "Artistry at its finest!", "What a perfect shot!",
+            "Epic!", "This is fire!", "Slaying!", "A true work of art!", "Breaking new ground!"
+    };
+
+    // Loop through each post ID from 1 to 30
+    for (int postId = 1; postId <= 30; postId++) {
+      int userId1 = 2 + (postId % 5); // Cycles through user IDs 2, 3, 4, 5, 6
+      int userId2 = userId1 + 1; // Shift to the next user
+
+      if (userId2 > 6) { // Ensure userID stays within the range
+        userId2 = 2;
+      }
+
+      // If by incrementing we get the same userID, shift again
+      if (userId1 == userId2) {
+        userId2 = (userId2 % 6) + 2;
+        if (userId2 > 6) userId2 = 2; // Wrap around if necessary
+      }
+
+      // Post two comments to each post, from two different users
+      String comment1 = comments[(postId * 2) % comments.length];
+      String comment2 = comments[(postId * 2 + 1) % comments.length];
+      CommentsDAO.postComment(postId, userId1, comment1);
+      CommentsDAO.postComment(postId, userId2, comment2);
+    }
   }
+
 
   private static void executeUpdate(String sql) throws SQLException {
     try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
