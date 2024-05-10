@@ -116,13 +116,13 @@ public class SchemaCreator {
   }
 
   private static void addUsers() {
-    UserDAO.registerUser("admin", "admin", "Main chief developer", "img/storage/profile/1.png");
-    UserDAO.registerUser("mordula", "admin", "Eva Mordface, Inhabitant of Mordor", "img/storage/profile/2.png");
-    UserDAO.registerUser("swiniar", "admin", "Jack Swinehead, Mechanic engineer", "img/storage/profile/3.png");
+    UserDAO.registerUser("admin", "admin", "Main chief developer", "img/storage/profile/admin.png");
+    UserDAO.registerUser("mordula", "admin", "Eva Mordface, Inhabitant of Mordor", "img/storage/profile/mordula.png");
+    UserDAO.registerUser("swiniar", "admin", "Jack Swinehead, Mechanic engineer", "img/storage/profile/swiniar.png");
     UserDAO.registerUser("pluta", "admin", "Vojtech Pluton, Soft ferromagnetics in rotating fields",
-        "img/storage/profile/4.png");
-    UserDAO.registerUser("gala", "admin", "Alex Galla-Yaskier, Gala, gala - E!", "img/storage/profile/5.png");
-    UserDAO.registerUser("baska", "admin", "Barb McWitch, Desing(e)", "img/storage/profile/6.png");
+        "img/storage/profile/pluta.png");
+    UserDAO.registerUser("gala", "admin", "Alex Galla-Yaskier, Gala, gala - E!", "img/storage/profile/gala.png");
+    UserDAO.registerUser("baska", "admin", "Barb McWitch, Desing(e)", "img/storage/profile/baska.png");
   }
 
   private static void addPosts() {
