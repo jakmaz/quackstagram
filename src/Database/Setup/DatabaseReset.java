@@ -14,45 +14,63 @@ public class DatabaseReset {
     }
 
     public static void resetDatabase() {
+        Connection conn = null;
         try {
-            disableForeignKeyChecks();
-            dropTables();
-            enableForeignKeyChecks();
+            conn = getConnection();
+            conn.setAutoCommit(false);
+
+            disableForeignKeyChecks(conn);
+            dropTables(conn);
+            enableForeignKeyChecks(conn);
+
+            conn.commit();
             System.out.println("Database has been reset successfully");
         } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();  // Rollback changes in case of an error
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
             e.printStackTrace();
             System.out.println("Failed to reset the database.");
-        }
-    }
-
-    private static void dropTables() throws SQLException {
-        String fetchTablesSql = """
-            SELECT CONCAT('DROP TABLE IF EXISTS ', table_name, ';') as dropCommand
-            FROM information_schema.tables
-            WHERE table_schema = 'quackstagram';
-        """;
-        try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(fetchTablesSql)) {
-            while (rs.next()) {
-                String dropTableSql = rs.getString("dropCommand");
-                executeUpdate(dropTableSql);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
-    private static void disableForeignKeyChecks() throws SQLException {
-        String sql = "SET FOREIGN_KEY_CHECKS = 0;";
-        executeUpdate(sql);
+    private static void disableForeignKeyChecks(Connection conn) throws SQLException {
+        executeUpdate(conn, "SET FOREIGN_KEY_CHECKS = 0;");
     }
 
-    private static void enableForeignKeyChecks() throws SQLException {
-        String sql = "SET FOREIGN_KEY_CHECKS = 1;";
-        executeUpdate(sql);
+    private static void enableForeignKeyChecks(Connection conn) throws SQLException {
+        executeUpdate(conn, "SET FOREIGN_KEY_CHECKS = 1;");
     }
 
-    private static void executeUpdate(String sql) throws SQLException {
-        try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
+    private static void dropTables(Connection conn) throws SQLException {
+        String fetchTablesSql = """
+        SELECT CONCAT('DROP TABLE IF EXISTS ', table_name, ';') as dropCommand
+        FROM information_schema.tables
+        WHERE table_schema = 'quackstagram';
+    """;
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(fetchTablesSql)) {
+            while (rs.next()) {
+                String dropTableSql = rs.getString("dropCommand");
+                executeUpdate(conn, dropTableSql);
+            }
+        }
+    }
+
+    private static void executeUpdate(Connection conn, String sql) throws SQLException {
+        try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
         }
     }
