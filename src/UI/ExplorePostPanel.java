@@ -94,9 +94,19 @@ public class ExplorePostPanel extends JPanel {
   }
 
   private JPanel createCaptionPanel() {
-    JPanel captionPanel = new JPanel();
-    JLabel captionLabel = new JLabel(post.getCaption());
-    captionPanel.add(captionLabel);
+    JPanel captionPanel = new JPanel(new BorderLayout());
+    JTextArea captionTextArea = new JTextArea(post.getCaption());
+    captionTextArea.setWrapStyleWord(true);
+    captionTextArea.setLineWrap(true);
+    captionTextArea.setEditable(false);
+    captionTextArea.setBorder(null); // Remove border if not desired
+
+    JScrollPane captionScrollPane = new JScrollPane(captionTextArea);
+    captionScrollPane.setBorder(null); // Optional: remove border
+    captionScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    captionScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+    captionPanel.add(captionScrollPane, BorderLayout.CENTER);
     return captionPanel;
   }
 
