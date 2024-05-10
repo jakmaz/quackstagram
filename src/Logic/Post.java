@@ -50,6 +50,10 @@ public class Post {
     return likesCount;
   }
 
+  public void setLikesCount(int likesCount) {
+    this.likesCount = likesCount;
+  }
+
   public List<Comment> getComments() {
     if (comments == null) {
       comments = CommentsDAO.getCommentsForPost(id);

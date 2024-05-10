@@ -1,8 +1,12 @@
 package UI;
 
 import Logic.Post;
+import Logic.SessionManager;
 
 import javax.swing.*;
+
+import Database.LikesDAO;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,7 +17,9 @@ import javax.imageio.ImageIO;
 
 public class ExplorePostPanel extends JPanel {
   private Post post;
-  private JButton backButton; // Declare backButton at the class level for accessibility
+  private JButton backButton; // For navigation
+  private JLabel likesLabel; // For displaying the likes count
+  private JButton likeButton; // For liking the post
 
   public ExplorePostPanel(Post post) {
     this.post = post;
@@ -22,21 +28,32 @@ public class ExplorePostPanel extends JPanel {
 
   private void initializeUI() {
     setLayout(new BorderLayout());
+    add(createMainPanel(), BorderLayout.CENTER);
+  }
 
-    // Main vertical panel with BoxLayout to simulate Flexbox column
+  private JPanel createMainPanel() {
     JPanel mainPanel = new JPanel();
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-    mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // Add padding to the main panel
+    mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-    // Navigation panel for the back button, with reduced height
+    mainPanel.add(createNavPanel());
+    mainPanel.add(createTopPanel());
+    mainPanel.add(createImagePanel());
+    mainPanel.add(createBottomPanel());
+
+    return mainPanel;
+  }
+
+  private JPanel createNavPanel() {
     JPanel navPanel = new JPanel(new BorderLayout());
     backButton = new JButton("Back");
-    backButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30)); // Control the height more precisely
+    backButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
     navPanel.add(backButton, BorderLayout.NORTH);
-    navPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, backButton.getPreferredSize().height));
+    return navPanel;
+  }
 
-    // Top panel for user and timestamp, with reduced spacing
-    JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)); // Reduce the horizontal and vertical gap
+  private JPanel createTopPanel() {
+    JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
     JButton usernameButton = new JButton(post.getUser().getUsername());
     usernameButton.addActionListener(e -> MainFrame.getInstance().switchToUserProfile(post.getUser()));
     LocalDateTime now = LocalDateTime.now();
@@ -44,9 +61,11 @@ public class ExplorePostPanel extends JPanel {
     JLabel timeLabel = new JLabel(timeSincePosting);
     topPanel.add(usernameButton);
     topPanel.add(timeLabel);
+    return topPanel;
+  }
 
-    // Image display centered
-    JPanel imagePanel = new JPanel(new GridBagLayout()); // Use GridBagLayout for better centering
+  private JPanel createImagePanel() {
+    JPanel imagePanel = new JPanel(new GridBagLayout());
     JLabel imageLabel = new JLabel();
     try {
       BufferedImage img = ImageIO.read(new File(post.getImagePath()));
@@ -56,29 +75,44 @@ public class ExplorePostPanel extends JPanel {
       imageLabel.setText("Image not found");
       ex.printStackTrace();
     }
-    imagePanel.add(imageLabel); // This will center the image
+    imagePanel.add(imageLabel);
+    return imagePanel;
+  }
 
-    // Bottom panel for likes and caption, with adjusted scroll pane dimensions
+  private JPanel createBottomPanel() {
     JPanel bottomPanel = new JPanel();
     bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
-    JTextArea captionTextArea = new JTextArea(post.getCaption(), 2, 20); // Set rows to 2 to reduce area
-    captionTextArea.setEditable(false);
-    captionTextArea.setWrapStyleWord(true);
-    captionTextArea.setLineWrap(true);
+
+    JLabel captionTextArea = new JLabel(post.getCaption());
     JScrollPane captionScroll = new JScrollPane(captionTextArea);
-    captionScroll.setPreferredSize(new Dimension(Integer.MAX_VALUE, 60)); // Control the preferred height
-    JLabel likesLabel = new JLabel("Likes: " + post.getLikesCount());
+    captionScroll.setPreferredSize(new Dimension(Integer.MAX_VALUE, 60));
+
+    // Create a panel to hold likes label and like button side by side
+    JPanel likePanel = new JPanel();
+    likePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0)); // Small horizontal gap, no vertical gap
+
+    likesLabel = new JLabel("Likes: " + post.getLikesCount());
+    likeButton = new JButton("Like");
+    likeButton.addActionListener(e -> handleLikeAction());
+
+    likePanel.add(likesLabel);
+    likePanel.add(likeButton);
+
     bottomPanel.add(captionScroll);
-    bottomPanel.add(likesLabel);
+    bottomPanel.add(likePanel); // Add the likePanel to the bottomPanel
+    return bottomPanel;
+  }
 
-    // Add subpanels to main panel
-    mainPanel.add(navPanel);
-    mainPanel.add(topPanel);
-    mainPanel.add(imagePanel);
-    mainPanel.add(bottomPanel);
+  private void handleLikeAction() {
+    String result = LikesDAO.likePost(post.getId(), SessionManager.getCurrentUser().getId());
+    JOptionPane.showMessageDialog(this, result, "Like Status", JOptionPane.INFORMATION_MESSAGE);
 
-    // Add main panel to ExplorePostPanel
-    add(mainPanel, BorderLayout.CENTER);
+    // Optionally, update the likes label if liked successfully
+    if (result.equals("Post successfully liked!")) {
+      int newLikesCount = post.getLikesCount() + 1;
+      likesLabel.setText("Likes: " + newLikesCount);
+      post.setLikesCount(newLikesCount); // Update the post object too
+    }
   }
 
   public JButton getBackButton() {
