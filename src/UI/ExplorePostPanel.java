@@ -1,5 +1,6 @@
 package UI;
 
+import Logic.Comment;
 import Logic.Post;
 import Logic.SessionManager;
 
@@ -40,6 +41,7 @@ public class ExplorePostPanel extends JPanel {
     mainPanel.add(createTopPanel());
     mainPanel.add(createImagePanel());
     mainPanel.add(createBottomPanel());
+    mainPanel.add(createCommentsPanel());
 
     return mainPanel;
   }
@@ -101,6 +103,32 @@ public class ExplorePostPanel extends JPanel {
     bottomPanel.add(captionScroll);
     bottomPanel.add(likePanel); // Add the likePanel to the bottomPanel
     return bottomPanel;
+  }
+
+  private JPanel createCommentsPanel() {
+    JPanel commentsContainer = new JPanel(new BorderLayout()); // Create a container panel for the scroll pane
+
+    JPanel commentsPanel = new JPanel();
+    commentsPanel.setLayout(new BoxLayout(commentsPanel, BoxLayout.Y_AXIS));
+    commentsPanel.setBorder(BorderFactory.createTitledBorder("Comments"));
+
+    // Assuming Post class has a method getComments() that returns a list of Comment
+    // objects
+    for (Comment comment : post.getComments()) {
+      JPanel singleCommentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+      JLabel commentLabel = new JLabel(
+          "<html><b>User " + comment.getUser().getUsername() + ":</b> " + comment.getText() + "</html>");
+      singleCommentPanel.add(commentLabel);
+      commentsPanel.add(singleCommentPanel);
+    }
+
+    JScrollPane scrollPane = new JScrollPane(commentsPanel);
+    scrollPane.setPreferredSize(new Dimension(350, 100)); // Adjust size according to your UI needs
+    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+    commentsContainer.add(scrollPane, BorderLayout.CENTER); // Add the scroll pane to the container panel
+    return commentsContainer; // Return the container panel
   }
 
   private void handleLikeAction() {
