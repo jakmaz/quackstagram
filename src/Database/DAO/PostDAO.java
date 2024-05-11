@@ -62,7 +62,7 @@ public class PostDAO {
    */
   public static List<Post> getPostsByUserId(int userId) {
     List<Post> posts = new ArrayList<>();
-    String sql = "SELECT id, user_id, caption, image_path, timestamp FROM posts WHERE user_id = ?";
+    String sql = "SELECT id, user_id, caption, image_path, timestamp FROM posts WHERE user_id = ? ORDER BY timestamp DESC";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
       ps.setInt(1, userId);
       ResultSet rs = ps.executeQuery();
@@ -86,7 +86,7 @@ public class PostDAO {
     List<Post> posts = new ArrayList<>();
     String sql = "SELECT p.id, p.user_id, p.caption, p.image_path, p.timestamp FROM posts p " +
         "JOIN users u ON p.user_id = u.id " +
-        "WHERE u.username = ?";
+        "WHERE u.username = ? ORDER BY timestamp DESC";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
       ps.setString(1, username);
       ResultSet rs = ps.executeQuery();
@@ -113,7 +113,7 @@ public class PostDAO {
    */
   public static List<Post> getAllPosts() {
     List<Post> posts = new ArrayList<>();
-    String sql = "SELECT id, user_id, caption, image_path, timestamp FROM posts";
+    String sql = "SELECT id, user_id, caption, image_path, timestamp FROM posts ORDER BY timestamp DESC";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
       ResultSet rs = ps.executeQuery();
 
@@ -142,7 +142,7 @@ public class PostDAO {
     List<Post> posts = new ArrayList<>();
     String sql = "SELECT p.id, p.user_id, p.caption, p.image_path, p.timestamp FROM posts p " +
         "JOIN followers f ON p.user_id = f.following_id " +
-        "WHERE f.follower_id = ?";
+        "WHERE f.follower_id = ? ORDER BY timestamp DESC";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
       ps.setInt(1, userId);
       ResultSet rs = ps.executeQuery();
