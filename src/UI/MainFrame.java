@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import Logic.User;
+import com.formdev.flatlaf.FlatLightLaf;
 
 public class MainFrame extends JFrame {
   private static MainFrame instance;
@@ -158,6 +159,7 @@ public class MainFrame extends JFrame {
   }
 
   public static void main(String[] args) {
+    FlatLightLaf.setup();
     SwingUtilities.invokeLater(() -> {
       MainFrame frame = MainFrame.getInstance();
       frame.setVisible(true);
