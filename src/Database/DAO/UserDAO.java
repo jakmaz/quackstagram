@@ -12,11 +12,27 @@ import java.util.Base64;
 import Database.Connection.DatabaseConnection;
 import Logic.UserDetails;
 
+/**
+ * Handles database operations related to user management.
+ */
 public class UserDAO {
+
+  /**
+   * Retrieves a database connection.
+   *
+   * @return a {@link Connection} object to the database
+   * @throws SQLException if a database access error occurs
+   */
   private static Connection getConnection() throws SQLException {
     return DatabaseConnection.getConnection();
   }
 
+  /**
+   * Checks if a username already exists in the database.
+   *
+   * @param username the username to check
+   * @return true if the username exists, false otherwise
+   */
   public static boolean usernameExists(String username) {
     String query = "SELECT COUNT(*) FROM users WHERE username = ?";
     try (Connection conn = getConnection();
@@ -32,13 +48,22 @@ public class UserDAO {
     return false;
   }
 
-  public static int registerUser(String username, String password, String bio, String imagePath) {
+  /**
+   * Registers a new user in the database.
+   *
+   * @param username  the username of the new user
+   * @param password  the password of the new user
+   * @param bio       the biography of the new user
+   * @param imagePath the image path of the new user's profile picture
+   * @return the user ID of the newly registered user or null if registration
+   *         failed
+   */
+  public static Integer registerUser(String username, String password, String bio, String imagePath) {
     String sql = "INSERT INTO users (username, password, bio, image_path) VALUES (?, ?, ?, ?)";
-    int userId = -1;
     try (Connection conn = getConnection();
         PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
       ps.setString(1, username);
-      ps.setString(2, hashPassword(password)); // Hash the password before storing it
+      ps.setString(2, hashPassword(password));
       ps.setString(3, bio);
       ps.setString(4, imagePath);
       int affectedRows = ps.executeUpdate();
@@ -46,16 +71,22 @@ public class UserDAO {
       if (affectedRows > 0) {
         try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
           if (generatedKeys.next()) {
-            userId = generatedKeys.getInt(1);
+            return generatedKeys.getInt(1);
           }
         }
       }
     } catch (SQLException e) {
       e.printStackTrace();
     }
-    return userId;
+    return null;
   }
 
+  /**
+   * Hashes a password using SHA-256.
+   *
+   * @param password the password to hash
+   * @return the hashed password as a Base64 encoded string
+   */
   private static String hashPassword(String password) {
     try {
       MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -63,11 +94,17 @@ public class UserDAO {
       return Base64.getEncoder().encodeToString(hashedPassword);
     } catch (NoSuchAlgorithmException e) {
       System.err.println("Failed to hash password: " + e.getMessage());
-      return null; // Returning null or alternatively, you could handle it differently based on
-                   // your application's needs.
+      return null;
     }
   }
 
+  /**
+   * Verifies user credentials against stored values in the database.
+   *
+   * @param username the username to verify
+   * @param password the password to verify
+   * @return the user ID if credentials are correct, null otherwise
+   */
   public static Integer verifyCredentials(String username, String password) {
     String sql = "SELECT id, password FROM users WHERE username = ?";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -75,8 +112,7 @@ public class UserDAO {
       ResultSet rs = ps.executeQuery();
       if (rs.next()) {
         String storedPassword = rs.getString("password");
-        String hashedInputPassword = hashPassword(password); // Hash the input password to compare
-        if (storedPassword.equals(hashedInputPassword)) {
+        if (storedPassword.equals(hashPassword(password))) {
           return rs.getInt("id");
         }
       }
@@ -86,6 +122,13 @@ public class UserDAO {
     return null;
   }
 
+  /**
+   * Retrieves the user details for a given user ID.
+   *
+   * @param userId the ID of the user
+   * @return a {@link UserDetails} object containing the user details or null if
+   *         the user does not exist
+   */
   public static UserDetails getUserDetails(int userId) {
     String sql = "SELECT id, username, bio FROM users WHERE id = ?";
     try (Connection conn = getConnection();
