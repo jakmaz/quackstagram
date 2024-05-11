@@ -1,9 +1,15 @@
 package UI;
 
-import Logic.User;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+import Logic.User;
 
 public class UserProfileUI extends ProfileUI {
   User user;

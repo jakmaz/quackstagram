@@ -1,15 +1,11 @@
 package UI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -32,23 +28,13 @@ public class HomeUI extends BaseUI {
     setLayout(new BorderLayout());
 
     // Create and add components to the layout
-    JPanel headerPanel = createHeaderPanel();
+    JPanel headerPanel = createHeaderPanel("Home");
     JScrollPane contentScrollPane = createContentScrollPane();
     JPanel navigationPanel = createNavigationPanel(); // Use the inherited method if applicable
 
     add(headerPanel, BorderLayout.NORTH);
     add(contentScrollPane, BorderLayout.CENTER);
     add(navigationPanel, BorderLayout.SOUTH);
-  }
-
-  private JPanel createHeaderPanel() {
-    JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    headerPanel.setBackground(new Color(51, 51, 51));
-    JLabel lblHeader = new JLabel("🐥 Quackstagram 🐥");
-    lblHeader.setFont(new Font("Arial", Font.BOLD, 16));
-    lblHeader.setForeground(Color.WHITE);
-    headerPanel.add(lblHeader);
-    return headerPanel;
   }
 
   private JScrollPane createContentScrollPane() {

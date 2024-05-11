@@ -7,6 +7,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public abstract class BaseUI extends JPanel {
@@ -19,6 +20,17 @@ public abstract class BaseUI extends JPanel {
   }
 
   protected abstract void initializeUI();
+
+  public JPanel createHeaderPanel(String title) {
+    JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    headerPanel.setBackground(new Color(51, 51, 51));
+    JLabel titleLabel = new JLabel(title + " 🐥");
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+    titleLabel.setForeground(Color.WHITE);
+    headerPanel.add(titleLabel);
+    headerPanel.setPreferredSize(new Dimension(WIDTH, 40));
+    return headerPanel;
+  }
 
   public JPanel createNavigationPanel() {
     // Navigation Bar

@@ -1,14 +1,20 @@
 package UI;
 
-import javax.swing.*;
-import java.awt.*;
-import Logic.Notification;
-import Database.DAO.NotificationsDAO;
-import Logic.SessionManager;
-
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import Database.DAO.NotificationsDAO;
+import Logic.Notification;
+import Logic.SessionManager;
 
 public class NotificationsUI extends BaseUI {
 
@@ -23,7 +29,7 @@ public class NotificationsUI extends BaseUI {
   }
 
   public void initializeUI() {
-    JPanel headerPanel = createHeaderPanel();
+    JPanel headerPanel = createHeaderPanel("Notifications");
     JPanel navigationPanel = createNavigationPanel();
     JPanel contentPanel = new JPanel();
     contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
@@ -34,7 +40,8 @@ public class NotificationsUI extends BaseUI {
     // Fetch notifications from the database
     List<Notification> notifications = NotificationsDAO.getNotificationsByUserId(currentUserId);
     for (Notification notification : notifications) {
-      String notificationMessage = notification.getMessage() + " " + getElapsedTime(notification.getTimestamp().toLocalDateTime());
+      String notificationMessage = notification.getMessage() + " "
+          + getElapsedTime(notification.getTimestamp().toLocalDateTime());
 
       JPanel notificationPanel = new JPanel(new BorderLayout());
       notificationPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -64,16 +71,5 @@ public class NotificationsUI extends BaseUI {
       timeElapsed.append(minutesBetween).append(" minute").append(minutesBetween > 1 ? "s" : "");
     }
     return timeElapsed.toString();
-  }
-
-  private JPanel createHeaderPanel() {
-    JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    headerPanel.setBackground(new Color(51, 51, 51));
-    JLabel lblRegister = new JLabel(" Notifications 🐥");
-    lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
-    lblRegister.setForeground(Color.WHITE);
-    headerPanel.add(lblRegister);
-    headerPanel.setPreferredSize(new Dimension(WIDTH, 40));
-    return headerPanel;
   }
 }

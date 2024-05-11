@@ -1,14 +1,30 @@
 package UI;
 
-import Database.DAO.UserDAO;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import Database.DAO.UserDAO;
 
 public class SignUpUI extends BaseUI {
 
@@ -30,20 +46,14 @@ public class SignUpUI extends BaseUI {
 
   @Override
   public void initializeUI() {
-    add(createHeaderPanel(), BorderLayout.NORTH);
-    add(createFieldsPanel(), BorderLayout.CENTER);
-    add(createRegisterPanel(), BorderLayout.SOUTH);
-  }
+    JPanel headerPanel = createHeaderPanel("Sign Up");
+    JPanel fieldsPanel = createFieldsPanel();
+    JPanel registerPanel = createRegisterPanel();
 
-  private JPanel createHeaderPanel() {
-    JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    headerPanel.setBackground(new Color(51, 51, 51));
-    JLabel lblRegister = new JLabel("Quackstagram 🐥");
-    lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
-    lblRegister.setForeground(Color.WHITE);
-    headerPanel.add(lblRegister);
-    headerPanel.setPreferredSize(new Dimension(WIDTH, 40));
-    return headerPanel;
+    setLayout(new BorderLayout());
+    add(headerPanel, BorderLayout.NORTH);
+    add(fieldsPanel, BorderLayout.CENTER);
+    add(registerPanel, BorderLayout.SOUTH);
   }
 
   private JPanel createFieldsPanel() {

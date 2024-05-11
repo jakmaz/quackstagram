@@ -1,12 +1,33 @@
 package UI;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+
 import Database.DAO.UserDAO;
 import Logic.SessionManager;
 import Logic.User;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class SignInUI extends BaseUI {
 
@@ -23,9 +44,16 @@ public class SignInUI extends BaseUI {
 
   @Override
   protected void initializeUI() {
-    add(createHeaderPanel(), BorderLayout.NORTH);
-    add(createFieldsPanel(), BorderLayout.CENTER);
-    add(createButtonPanel(), BorderLayout.SOUTH);
+
+    JPanel headerPanel = createHeaderPanel("Sign In");
+    JPanel fieldsPanel = createFieldsPanel();
+    JPanel buttonPanel = createButtonPanel();
+
+    setLayout(new BorderLayout());
+    add(headerPanel, BorderLayout.NORTH);
+    add(fieldsPanel, BorderLayout.CENTER);
+    add(buttonPanel, BorderLayout.SOUTH);
+
     addKeymap();
   }
 
@@ -47,18 +75,8 @@ public class SignInUI extends BaseUI {
     passwordInput.getActionMap().put("enterPressed", performSignIn);
   }
 
-  private JPanel createHeaderPanel() {
-    JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    headerPanel.setBackground(new Color(51, 51, 51));
-    JLabel lblRegister = new JLabel("Quackstagram 🐥");
-    lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
-    lblRegister.setForeground(Color.WHITE);
-    headerPanel.add(lblRegister);
-    headerPanel.setPreferredSize(new Dimension(WIDTH, 40));
-    return headerPanel;
-  }
-
   private JPanel createFieldsPanel() {
+
     JPanel fieldsPanel = new JPanel();
     fieldsPanel.setLayout(new BoxLayout(fieldsPanel, BoxLayout.Y_AXIS));
     fieldsPanel.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
@@ -114,7 +132,7 @@ public class SignInUI extends BaseUI {
     return buttonPanel;
   }
 
-private void onSignInClicked(ActionEvent event) {
+  private void onSignInClicked(ActionEvent event) {
     String enteredUsername = usernameInput.getText().trim();
     String enteredPassword = passwordInput.getText().trim();
 
@@ -129,13 +147,13 @@ private void onSignInClicked(ActionEvent event) {
 
         // Load other user-specific panels in a background thread
         new SwingWorker<Void, Void>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-                MainFrame.getInstance().loadUserPanels();
-                return null;
-            }
+          @Override
+          protected Void doInBackground() throws Exception {
+            MainFrame.getInstance().loadUserPanels();
+            return null;
+          }
         }.execute();
-        
+
       } else {
         JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Login Failed",
             JOptionPane.ERROR_MESSAGE);

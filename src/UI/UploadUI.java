@@ -1,15 +1,25 @@
 package UI;
 
-import Logic.SessionManager;
-import Logic.FileUploadHandler;
-
-import javax.swing.*;
-
-import Database.DAO.PostDAO;
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.nio.file.Path;
+
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+import Database.DAO.PostDAO;
+import Logic.FileUploadHandler;
+import Logic.SessionManager;
 
 public class UploadUI extends BaseUI {
 
@@ -33,7 +43,7 @@ public class UploadUI extends BaseUI {
   }
 
   public void initializeUI() {
-    JPanel headerPanel = createHeaderPanel();
+    JPanel headerPanel = createHeaderPanel("Upload Post");
     JPanel navigationPanel = createNavigationPanel();
     JPanel contentPanel = createContentPanel();
 
@@ -103,16 +113,5 @@ public class UploadUI extends BaseUI {
       JOptionPane.showMessageDialog(this, "Please select an image and write a caption before uploading.", "Warning",
           JOptionPane.WARNING_MESSAGE);
     }
-  }
-
-  private JPanel createHeaderPanel() {
-    JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    headerPanel.setBackground(new Color(51, 51, 51));
-    JLabel lblRegister = new JLabel("Upload Image 🐥");
-    lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
-    lblRegister.setForeground(Color.WHITE);
-    headerPanel.add(lblRegister);
-    headerPanel.setPreferredSize(new Dimension(WIDTH, 40));
-    return headerPanel;
   }
 }

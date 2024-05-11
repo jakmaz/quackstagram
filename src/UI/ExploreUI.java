@@ -2,10 +2,7 @@ package UI;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -37,7 +34,7 @@ public class ExploreUI extends BaseUI {
   }
 
   public void initializeUI() {
-    JPanel headerPanel = createHeaderPanel();
+    JPanel headerPanel = createHeaderPanel("Explore");
     JPanel navigationPanel = createNavigationPanel();
 
     contentPanel = new JPanel(new CardLayout()); // Use CardLayout for the content panel
@@ -47,17 +44,6 @@ public class ExploreUI extends BaseUI {
     add(headerPanel, BorderLayout.NORTH);
     add(contentPanel, BorderLayout.CENTER);
     add(navigationPanel, BorderLayout.SOUTH);
-  }
-
-  private JPanel createHeaderPanel() {
-    JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    headerPanel.setBackground(new Color(51, 51, 51));
-    JLabel lblRegister = new JLabel("Explore 🐥");
-    lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
-    lblRegister.setForeground(Color.WHITE);
-    headerPanel.add(lblRegister);
-    headerPanel.setPreferredSize(new Dimension(WIDTH, 40));
-    return headerPanel;
   }
 
   private JPanel createMainContentPanel() {
