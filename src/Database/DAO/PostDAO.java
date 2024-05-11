@@ -82,6 +82,30 @@ public class PostDAO {
     return posts;
   }
 
+  public static List<Post> getPostsByUsername(String username) {
+    List<Post> posts = new ArrayList<>();
+    String sql = "SELECT p.id, p.user_id, p.caption, p.image_path, p.timestamp FROM posts p " +
+        "JOIN users u ON p.user_id = u.id " +
+        "WHERE u.username = ?";
+    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setString(1, username);
+      ResultSet rs = ps.executeQuery();
+
+      while (rs.next()) {
+        Post post = new Post(
+            rs.getInt("id"),
+            new User(rs.getInt("user_id")),
+            rs.getString("caption"),
+            rs.getString("image_path"),
+            rs.getTimestamp("timestamp"));
+        posts.add(post);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return posts;
+  }
+
   /**
    * Retrieves all posts in the database.
    *
