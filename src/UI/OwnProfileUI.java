@@ -1,8 +1,6 @@
 package UI;
 
-import java.awt.Color;
-import java.awt.Frame;
-import java.awt.GridLayout;
+import java.awt.*;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -26,6 +24,7 @@ public class OwnProfileUI extends ProfileUI {
 
     // Create and configure the Edit Profile button
     JButton editProfileButton = new JButton("Edit Profile");
+    editProfileButton.setMargin( new Insets(5, 5, 5, 5) );
     editProfileButton.addActionListener(e -> {
       Frame owner = JOptionPane.getFrameForComponent(editProfileButton); // Get the parent frame
       EditProfileDialog editDialog = new EditProfileDialog(owner);
@@ -35,6 +34,7 @@ public class OwnProfileUI extends ProfileUI {
 
     // Create and configure the Log-Out button
     JButton logOutButton = new JButton("Log Out");
+    logOutButton.setMargin( new Insets(5, 5, 5, 5) );
     logOutButton.addActionListener(e -> {
       MainFrame.getInstance().clearUI();
       MainFrame.getInstance().loadLoginPanels();
