@@ -13,13 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import Logic.Post;
 import Logic.User;
@@ -42,10 +36,12 @@ public abstract class ProfileUI extends BaseUI {
     contentPanel = new JPanel(new CardLayout()); // Panel to switch between different views
     JPanel navigationPanel = createNavigationPanel();
 
-    // Add header and navigation directly to the main JFrame's BorderLayout, not in
-    // the contentPanel
+    // Create a JScrollPane that wraps around the contentPanel
+    JScrollPane scrollPane = new JScrollPane(contentPanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    // Add header and navigation directly to the main JFrame's BorderLayout, not in the contentPanel
+    scrollPane.getVerticalScrollBar().setUnitIncrement(3);
     add(headerPanel, BorderLayout.NORTH);
-    add(contentPanel, BorderLayout.CENTER); // Add the content panel to the center of the JFrame
+    add(scrollPane, BorderLayout.CENTER); // Add the scroll pane (which contains contentPanel) to the center of the JFrame
     add(navigationPanel, BorderLayout.SOUTH);
 
     // Add the grid panel to the contentPanel which has CardLayout

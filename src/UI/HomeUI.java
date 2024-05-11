@@ -43,6 +43,8 @@ public class HomeUI extends BaseUI {
     loadUserPosts(); // Load and display posts before returning the scroll pane
     JScrollPane scrollPane = new JScrollPane(contentPanel);
     scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    // set speed
+    scrollPane.getVerticalScrollBar().setUnitIncrement(6);
     return scrollPane;
   }
 

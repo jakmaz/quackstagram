@@ -66,9 +66,8 @@ public class ExploreUI extends BaseUI {
       imageGridPanel.add(imageLabel);
     }
 
-    JScrollPane scrollPane = new JScrollPane(imageGridPanel);
-    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    JScrollPane scrollPane = new JScrollPane(imageGridPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    scrollPane.getVerticalScrollBar().setUnitIncrement(6);
     mainContentPanel.add(scrollPane, BorderLayout.CENTER);
 
     return mainContentPanel;
@@ -76,7 +75,9 @@ public class ExploreUI extends BaseUI {
 
   private void showPostDetails(Post post) {
     PostPanel postPanel = new PostPanel(post, 200, true);
-    contentPanel.add(postPanel, "PostDetails");
+    JScrollPane scrollPane = new JScrollPane(postPanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    scrollPane.getVerticalScrollBar().setUnitIncrement(3);
+    contentPanel.add(scrollPane, "PostDetails");
     CardLayout cl = (CardLayout) (contentPanel.getLayout());
     cl.show(contentPanel, "PostDetails");
 
