@@ -151,7 +151,7 @@ public abstract class ProfileUI extends BaseUI {
     // Main panel with FlowLayout to align items from top-left to bottom-right
     JPanel gridPanel;
     if (osName.contains("win")) {
-      gridPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 1, 0));
+      gridPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
     } else {
       gridPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
     }
@@ -178,7 +178,7 @@ public abstract class ProfileUI extends BaseUI {
 
     // Ensure the imagesPanel doesn't grow beyond its necessary size
     if (osName.contains("win")) {
-      imagesPanel.setPreferredSize(new Dimension((GRID_IMAGE_SIZE ) * 3 + 10, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
+      imagesPanel.setPreferredSize(new Dimension((GRID_IMAGE_SIZE ) * 3 + 7, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
     } else {
       imagesPanel.setPreferredSize(new Dimension((GRID_IMAGE_SIZE + 5) * 3, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
     }
