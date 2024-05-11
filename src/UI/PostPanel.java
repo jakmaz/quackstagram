@@ -24,6 +24,7 @@ public class PostPanel extends JPanel {
   private JLabel likesLabel; // For displaying the likes count
   private JButton likeButton; // For liking the post
   private JPanel commentsPanel;
+  private JPanel scrollPanel;
 
   public PostPanel(Post post, int pictureSize, boolean displayBackButton) {
     this.post = post;
@@ -39,7 +40,7 @@ public class PostPanel extends JPanel {
   }
 
   private JScrollPane createScrollableContent() {
-    JPanel scrollPanel = new JPanel();
+    scrollPanel = new JPanel();
     scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.Y_AXIS));
     scrollPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -180,10 +181,10 @@ public class PostPanel extends JPanel {
     if (result) {
       post.reloadComments(); // Refresh the comments list
 
-      remove(commentsPanel); // Remove the old comments panel
+      scrollPanel.remove(commentsPanel); // Remove the old comments panel
 
       commentsPanel = createCommentsPanel(); // Refresh the comments panel
-      add(commentsPanel, BorderLayout.SOUTH); // Add the new comments panel
+      scrollPanel.add(commentsPanel, BorderLayout.SOUTH); // Add the new comments panel
 
       revalidate();
       repaint();
