@@ -68,8 +68,12 @@ public class PostPanel extends JPanel {
     JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
     JButton usernameButton = new JButton(post.getUser().getUsername());
     usernameButton.addActionListener(e -> MainFrame.getInstance().showOtherProfilePanel(post.getUser()));
+
     LocalDateTime now = LocalDateTime.now();
-    String timeSincePosting = ChronoUnit.DAYS.between(post.getTimestamp().toLocalDateTime(), now) + " days ago";
+    LocalDateTime postTimestamp = post.getTimestamp().toLocalDateTime(); // Assuming post.getTimestamp() returns a
+                                                                         // LocalDateTime
+    String timeSincePosting = getTimeSincePosting(postTimestamp, now);
+
     JLabel timeLabel = new JLabel(timeSincePosting);
     topPanel.add(usernameButton);
     topPanel.add(timeLabel);
@@ -188,5 +192,40 @@ public class PostPanel extends JPanel {
 
   public JButton getBackButton() {
     return backButton;
+  }
+
+  /**
+   * Creates a human-readable string representing the time elapsed since the given
+   * timestamp.
+   * 
+   * @param postTimestamp The timestamp of the post.
+   * @param now           The current time.
+   * @return A string describing how long ago the post was made.
+   */
+  private String getTimeSincePosting(LocalDateTime postTimestamp, LocalDateTime now) {
+    long days = ChronoUnit.DAYS.between(postTimestamp, now);
+    long hours = ChronoUnit.HOURS.between(postTimestamp, now) % 24;
+    long minutes = ChronoUnit.MINUTES.between(postTimestamp, now) % 60;
+
+    StringBuilder timeSince = new StringBuilder();
+    if (days > 0) {
+      timeSince.append(days).append(" day").append(days > 1 ? "s" : "");
+    }
+    if (hours > 0) {
+      if (timeSince.length() > 0)
+        timeSince.append(", ");
+      timeSince.append(hours).append(" hour").append(hours > 1 ? "s" : "");
+    }
+    if (minutes > 0 && days == 0) { // Only show minutes if there are no days counted
+      if (timeSince.length() > 0)
+        timeSince.append(", ");
+      timeSince.append(minutes).append(" minute").append(minutes > 1 ? "s" : "");
+    }
+
+    if (timeSince.length() == 0) {
+      return "Just now";
+    } else {
+      return timeSince.append(" ago").toString();
+    }
   }
 }
