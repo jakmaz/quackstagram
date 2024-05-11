@@ -74,7 +74,7 @@ public class User {
   }
 
   private void loadPosts() {
-    this.posts = PostDAO.getPostsbyUserId(id);
+    this.posts = PostDAO.getPostsByUserId(id);
   }
 
   public Integer getId() {

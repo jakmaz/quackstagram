@@ -1,5 +1,10 @@
 package Database.Setup;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.concurrent.ThreadLocalRandom;
+
 import Database.DAO.*;
 
 public class DataPopulator {
@@ -10,7 +15,7 @@ public class DataPopulator {
     addFollowers();
     addLikes();
     addComments();
-    //addNotifications();
+    // addNotifications();
     System.out.println("Data populated successfully.");
   }
 
@@ -34,53 +39,88 @@ public class DataPopulator {
 
   private static void addPosts() {
     // Admin
-    PostDAO.postSomething(1, "Debugging the night away. #CodeLife", "img/storage/posts/1_1.png");
-    PostDAO.postSomething(1, "Pushing new features at 2 AM. Who needs sleep?", "img/storage/posts/1_2.png");
+    PostDAO.postSomething(1, "Debugging the night away. #CodeLife", "img/storage/posts/1_1.png", getRandomTimestamp());
+    PostDAO.postSomething(1, "Pushing new features at 2 AM. Who needs sleep?", "img/storage/posts/1_2.png",
+        getRandomTimestamp());
     PostDAO.postSomething(1, "When you finally fix that bug that's been bugging you. #Victory",
-        "img/storage/posts/1_3.png");
-    PostDAO.postSomething(1, "Hack the planet! Or at least this small part of it. 🌐", "img/storage/posts/1_4.png");
-    PostDAO.postSomething(1, "The code's compiling... time for a break!", "img/storage/posts/1_5.png");
+        "img/storage/posts/1_3.png", getRandomTimestamp());
+    PostDAO.postSomething(1, "Hack the planet! Or at least this small part of it. 🌐", "img/storage/posts/1_4.png",
+        getRandomTimestamp());
+    PostDAO.postSomething(1, "The code's compiling... time for a break!", "img/storage/posts/1_5.png",
+        getRandomTimestamp());
 
     // Mordula
-    PostDAO.postSomething(2, "Exploring the quantum weirdness of everyday physics.", "img/storage/posts/2_1.png");
-    PostDAO.postSomething(2, "Helllooooooo! Diving deep into Einstein's spacetime.", "img/storage/posts/2_2.png");
+    PostDAO.postSomething(2, "Exploring the quantum weirdness of everyday physics.", "img/storage/posts/2_1.png",
+        getRandomTimestamp());
+    PostDAO.postSomething(2, "Helllooooooo! Diving deep into Einstein's spacetime.", "img/storage/posts/2_2.png",
+        getRandomTimestamp());
     PostDAO.postSomething(2, "Creating the new gravitational field. Or just messing with magnets.",
-        "img/storage/posts/2_3.png");
-    PostDAO.postSomething(2, "Distorting reality, one physics equation at a time.", "img/storage/posts/2_4.png");
-    PostDAO.postSomething(2, "If only my potions were as stable as my theories!", "img/storage/posts/2_5.png");
+        "img/storage/posts/2_3.png", getRandomTimestamp());
+    PostDAO.postSomething(2, "Distorting reality, one physics equation at a time.", "img/storage/posts/2_4.png",
+        getRandomTimestamp());
+    PostDAO.postSomething(2, "If only my potions were as stable as my theories!", "img/storage/posts/2_5.png",
+        getRandomTimestamp());
 
     // Swiniar
-    PostDAO.postSomething(3, "Just another day in the workshop, forging realities.", "img/storage/posts/3_1.png");
-    PostDAO.postSomething(3, "Cranking gears and taking names. #MechanicLife", "img/storage/posts/3_2.png");
-    PostDAO.postSomething(3, "Nothing like a bit of grease and a lot of gears.", "img/storage/posts/3_3.png");
+    PostDAO.postSomething(3, "Just another day in the workshop, forging realities.", "img/storage/posts/3_1.png",
+        getRandomTimestamp());
+    PostDAO.postSomething(3, "Cranking gears and taking names. #MechanicLife", "img/storage/posts/3_2.png",
+        getRandomTimestamp());
+    PostDAO.postSomething(3, "Nothing like a bit of grease and a lot of gears.", "img/storage/posts/3_3.png",
+        getRandomTimestamp());
     PostDAO.postSomething(3, "Teaching levers and pulleys, the building blocks of innovation.",
-        "img/storage/posts/3_4.png");
+        "img/storage/posts/3_4.png", getRandomTimestamp());
     PostDAO.postSomething(3, "When your machine works on the first try, you know it's going to be a good day.",
-        "img/storage/posts/3_5.png");
+        "img/storage/posts/3_5.png", getRandomTimestamp());
 
     // Pluta
-    PostDAO.postSomething(4, "Wired for success. 🎚️", "img/storage/posts/4_1.png");
-    PostDAO.postSomething(4, "When your circuit works and it’s not a shock. #Electronics", "img/storage/posts/4_2.png");
-    PostDAO.postSomething(4, "Soldering my way through problems. Quite literally.", "img/storage/posts/4_3.png");
+    PostDAO.postSomething(4, "Wired for success. 🎚️", "img/storage/posts/4_1.png", getRandomTimestamp());
+    PostDAO.postSomething(4, "When your circuit works and it’s not a shock. #Electronics", "img/storage/posts/4_2.png",
+        getRandomTimestamp());
+    PostDAO.postSomething(4, "Soldering my way through problems. Quite literally.", "img/storage/posts/4_3.png",
+        getRandomTimestamp());
     PostDAO.postSomething(4, "Barking up the right tree with these new electronic modules!",
-        "img/storage/posts/4_4.png");
-    PostDAO.postSomething(4, "Sometimes I think in code and dream in circuit diagrams.", "img/storage/posts/4_5.png");
+        "img/storage/posts/4_4.png", getRandomTimestamp());
+    PostDAO.postSomething(4, "Sometimes I think in code and dream in circuit diagrams.", "img/storage/posts/4_5.png",
+        getRandomTimestamp());
 
     // Gala
     PostDAO.postSomething(5, "Math: where we find the problems fun and the solutions even funner!",
-        "img/storage/posts/5_1.png");
+        "img/storage/posts/5_1.png", getRandomTimestamp());
     PostDAO.postSomething(5, "Numbers are the language of nature and I'm just composing poetry.",
-        "img/storage/posts/5_2.png");
-    PostDAO.postSomething(5, "Integrating my thoughts one equation at a time.", "img/storage/posts/5_3.png");
-    PostDAO.postSomething(5, "Where there's a cosine, there's a way!", "img/storage/posts/5_4.png");
-    PostDAO.postSomething(5, "Solving for X, Y, and Z. Because why not?", "img/storage/posts/5_5.png");
+        "img/storage/posts/5_2.png", getRandomTimestamp());
+    PostDAO.postSomething(5, "Integrating my thoughts one equation at a time.", "img/storage/posts/5_3.png",
+        getRandomTimestamp());
+    PostDAO.postSomething(5, "Where there's a cosine, there's a way!", "img/storage/posts/5_4.png",
+        getRandomTimestamp());
+    PostDAO.postSomething(5, "Solving for X, Y, and Z. Because why not?", "img/storage/posts/5_5.png",
+        getRandomTimestamp());
 
     // Baska
-    PostDAO.postSomething(6, "Painting pixels and sketching dreams.", "img/storage/posts/6_1.png");
-    PostDAO.postSomething(6, "Designing a more colorful tomorrow.", "img/storage/posts/6_2.png");
-    PostDAO.postSomething(6, "Art is where work meets love.", "img/storage/posts/6_3.png");
-    PostDAO.postSomething(6, "Bringing my visions to life, one design at a time.", "img/storage/posts/6_4.png");
-    PostDAO.postSomething(6, "If it's not bold, it's not worth designing.", "img/storage/posts/6_5.png");
+    PostDAO.postSomething(6, "Painting pixels and sketching dreams.", "img/storage/posts/6_1.png",
+        getRandomTimestamp());
+    PostDAO.postSomething(6, "Designing a more colorful tomorrow.", "img/storage/posts/6_2.png", getRandomTimestamp());
+    PostDAO.postSomething(6, "Art is where work meets love.", "img/storage/posts/6_3.png", getRandomTimestamp());
+    PostDAO.postSomething(6, "Bringing my visions to life, one design at a time.", "img/storage/posts/6_4.png",
+        getRandomTimestamp());
+    PostDAO.postSomething(6, "If it's not bold, it's not worth designing.", "img/storage/posts/6_5.png",
+        getRandomTimestamp());
+  }
+
+  /**
+   * Generates a random Timestamp within the last week.
+   *
+   * @return A randomly generated Timestamp from the last 7 days.
+   */
+  private static Timestamp getRandomTimestamp() {
+    // Get the current time
+    LocalDateTime now = LocalDateTime.now();
+    // Generate a random duration between 0 and 7 days in minutes
+    long randomMinutes = ThreadLocalRandom.current().nextLong(0, 7 * 24 * 60);
+    // Subtract this duration from 'now' to get a random past datetime
+    LocalDateTime randomTime = now.minusMinutes(randomMinutes);
+    // Convert LocalDateTime to Timestamp
+    return Timestamp.valueOf(randomTime);
   }
 
   private static void addFollowers() {
