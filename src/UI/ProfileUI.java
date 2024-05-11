@@ -178,7 +178,7 @@ public abstract class ProfileUI extends BaseUI {
 
     // Ensure the imagesPanel doesn't grow beyond its necessary size
     if (osName.contains("win")) {
-      imagesPanel.setPreferredSize(new Dimension((GRID_IMAGE_SIZE ) * 3 + 7, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
+      imagesPanel.setPreferredSize(new Dimension((GRID_IMAGE_SIZE ) * 3 + 11, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
     } else {
       imagesPanel.setPreferredSize(new Dimension((GRID_IMAGE_SIZE + 5) * 3, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
     }
