@@ -114,12 +114,7 @@ public class PostPanel extends JPanel {
     captionTextArea.setEditable(false);
     captionTextArea.setBorder(null); // Remove border if not desired
 
-    JScrollPane captionScrollPane = new JScrollPane(captionTextArea);
-    captionScrollPane.setBorder(null); // Optional: remove border
-    captionScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-    captionScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-    captionPanel.add(captionScrollPane, BorderLayout.CENTER);
+    captionPanel.add(captionTextArea, BorderLayout.CENTER);
     return captionPanel;
   }
 
