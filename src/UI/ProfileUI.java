@@ -111,7 +111,11 @@ public abstract class ProfileUI extends BaseUI {
 
   private JPanel createStatsPanel() {
     JPanel statsPanel = new JPanel();
-    statsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
+    if (osName.contains("win")) {
+      statsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 8, 0));
+    } else {
+      statsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
+    }
     statsPanel.setBackground(new Color(249, 249, 249));
     statsPanel.add(createStatLabel(Integer.toString(currentUser.getPostsCount()), "Posts"));
     statsPanel.add(createStatLabel(Integer.toString(currentUser.getFollowersCount()), "Followers"));
