@@ -145,7 +145,12 @@ public abstract class ProfileUI extends BaseUI {
 
   private JPanel createImageGrid() {
     // Main panel with FlowLayout to align items from top-left to bottom-right
-    JPanel gridPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 1, 0));
+    JPanel gridPanel;
+    if (osName.contains("win")) {
+      gridPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 1, 0));
+    } else {
+      gridPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+    }
 
     // Panel that will actually hold the images
     JPanel imagesPanel = new JPanel(new GridLayout(0, 3, 5, 5)); // GridLayout with 3 columns
@@ -168,8 +173,12 @@ public abstract class ProfileUI extends BaseUI {
     }
 
     // Ensure the imagesPanel doesn't grow beyond its necessary size
-    imagesPanel
-        .setPreferredSize(new Dimension((GRID_IMAGE_SIZE ) * 3 + 10, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
+    if (osName.contains("win")) {
+      imagesPanel.setPreferredSize(new Dimension((GRID_IMAGE_SIZE ) * 3 + 10, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
+    } else {
+      imagesPanel.setPreferredSize(new Dimension((GRID_IMAGE_SIZE + 5) * 3, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
+    }
+
     gridPanel.add(imagesPanel);
 
     return gridPanel;
