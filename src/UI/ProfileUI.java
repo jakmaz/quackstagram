@@ -39,6 +39,7 @@ public abstract class ProfileUI extends BaseUI {
     // Create a JScrollPane that wraps around the contentPanel
     JScrollPane scrollPane = new JScrollPane(contentPanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     // Add header and navigation directly to the main JFrame's BorderLayout, not in the contentPanel
+    scrollPane.getVerticalScrollBar().setUnitIncrement(3);
     add(headerPanel, BorderLayout.NORTH);
     add(scrollPane, BorderLayout.CENTER); // Add the scroll pane (which contains contentPanel) to the center of the JFrame
     add(navigationPanel, BorderLayout.SOUTH);
