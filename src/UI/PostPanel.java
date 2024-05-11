@@ -19,14 +19,16 @@ import java.time.temporal.ChronoUnit;
 public class PostPanel extends JPanel {
   private final Post post;
   private final int pictureSize;
+  private final boolean displayBackButton;
   private JButton backButton; // For navigation
   private JLabel likesLabel; // For displaying the likes count
   private JButton likeButton; // For liking the post
   private JPanel commentsPanel;
 
-  public PostPanel(Post post, int pictureSize) {
+  public PostPanel(Post post, int pictureSize, boolean displayBackButton) {
     this.post = post;
     this.pictureSize = pictureSize;
+    this.displayBackButton = displayBackButton;
     initializeUI();
   }
 
@@ -55,8 +57,10 @@ public class PostPanel extends JPanel {
 
   private JPanel createNavPanel() {
     JPanel navPanel = new JPanel(new BorderLayout());
-    backButton = new JButton("Back");
-    navPanel.add(backButton, BorderLayout.NORTH);
+    if (displayBackButton) {
+      backButton = new JButton("Back");
+      navPanel.add(backButton, BorderLayout.WEST);
+    }
     return navPanel;
   }
 
@@ -134,7 +138,8 @@ public class PostPanel extends JPanel {
     }
     JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JTextField commentField = new JTextField(15); // Adjustable size
-    commentField.setPreferredSize(new Dimension(commentField.getPreferredSize().width, 20)); // Ustawienie wysokości na 30 pikseli
+    commentField.setPreferredSize(new Dimension(commentField.getPreferredSize().width, 20)); // Ustawienie wysokości na
+                                                                                             // 30 pikseli
     ImageIcon scaledIcon = new ImageIcon(icon.getScaledInstance(20, 20, Image.SCALE_AREA_AVERAGING));
     JButton submitButton = new JButton(scaledIcon);
     submitButton.setBorderPainted(false);
@@ -166,7 +171,7 @@ public class PostPanel extends JPanel {
     }
   }
 
-  private void handleCommentAction(String commentContent){
+  private void handleCommentAction(String commentContent) {
     boolean result = CommentsDAO.postComment(post.getId(), SessionManager.getCurrentUser().getId(), commentContent);
     if (result) {
       post.reloadComments(); // Refresh the comments list

@@ -68,6 +68,30 @@ public class PostDAO {
     return posts;
   }
 
+  public static List<Post> getFollowingPosts(int userId) {
+    List<Post> posts = new ArrayList<>();
+    String sql = "SELECT p.id, p.user_id, p.caption, p.image_path, p.timestamp FROM posts p " +
+        "JOIN followers f ON p.user_id = f.following_id " +
+        "WHERE f.follower_id = ?";
+    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setInt(1, userId);
+      ResultSet rs = ps.executeQuery();
+
+      while (rs.next()) {
+        Post post = new Post(
+            rs.getInt("id"),
+            new User(rs.getInt("user_id")),
+            rs.getString("caption"),
+            rs.getString("image_path"),
+            rs.getTimestamp("timestamp"));
+        posts.add(post);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return posts;
+  }
+
   public static void likePost(int postId, int userId) {
     String sql = "INSERT INTO likes (post_id, user_id) VALUES (?, ?)";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
