@@ -146,4 +146,28 @@ public class UserDAO {
     }
     return null;
   }
+
+  /**
+   * Updates the profile details of a user.
+   *
+   * @param userId   the ID of the user
+   * @param name     the new name of the user
+   * @param password the new password of the user
+   * @param bio      the new biography of the user
+   * @return true if the profile was updated successfully, false otherwise
+   */
+  public static boolean updateProfile(int userId, String name, String password, String bio) {
+    String sql = "UPDATE users SET username = ?, password = ?, bio = ? WHERE id = ?";
+    try (Connection conn = getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setString(1, name);
+      ps.setString(2, hashPassword(password));
+      ps.setString(3, bio);
+      ps.setInt(4, userId);
+      return ps.executeUpdate() > 0;
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
 }
