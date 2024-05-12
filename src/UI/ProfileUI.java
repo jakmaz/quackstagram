@@ -162,8 +162,6 @@ public abstract class ProfileUI extends BaseUI {
 
     List<Post> posts = currentUser.getPosts();
     for (Post post : posts) {
-      System.out.println(post.getImagePath());
-
       ImageIcon icon = new ImageIcon(new ImageIcon(post.getImagePath()).getImage().getScaledInstance(GRID_IMAGE_SIZE,
           GRID_IMAGE_SIZE, Image.SCALE_SMOOTH));
       JLabel label = new JLabel(icon);
