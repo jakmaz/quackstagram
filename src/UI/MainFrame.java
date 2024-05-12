@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import Logic.User;
-import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 public class MainFrame extends JFrame {
   private static MainFrame instance;
@@ -38,7 +38,6 @@ public class MainFrame extends JFrame {
 
   private void initializeFrame() {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setResizable(false);
     setSize(300, 500);
     setLocationRelativeTo(null);
     cardLayout = new CardLayout();
@@ -159,7 +158,7 @@ public class MainFrame extends JFrame {
   }
 
   public static void main(String[] args) {
-    FlatLightLaf.setup();
+    FlatMacLightLaf.setup();
     SwingUtilities.invokeLater(() -> {
       MainFrame frame = MainFrame.getInstance();
       frame.setVisible(true);
