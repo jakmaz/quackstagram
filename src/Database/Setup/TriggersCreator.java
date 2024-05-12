@@ -57,7 +57,7 @@ public class TriggersCreator {
             FOR EACH ROW
             BEGIN
                 INSERT INTO notifications (user_id, post_id, message, timestamp)
-                VALUES ((SELECT user_id FROM posts WHERE id = NEW.post_id), NEW.post_id, CONCAT('Your post was commented on by ', (SELECT username FROM users WHERE id = NEW.user_id), ': ', NEW.text), CURRENT_TIMESTAMP);
+                VALUES ((SELECT user_id FROM posts WHERE id = NEW.post_id), NEW.post_id, CONCAT('Your post was commented on ', (SELECT username FROM users WHERE id = NEW.user_id), ': ', NEW.text), CURRENT_TIMESTAMP);
             END;
             """;
         executeUpdate(sql);

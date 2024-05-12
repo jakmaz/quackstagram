@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 import Database.DAO.NotificationsDAO;
 import Logic.Notification;
 import Logic.SessionManager;
+import Logic.TimeElapsedCalculator;
 
 public class NotificationsUI extends BaseUI {
 
@@ -61,7 +62,7 @@ public class NotificationsUI extends BaseUI {
     JLabel notificationLabel = new JLabel(notification.getMessage());
     notificationLabel.setFont(new Font("Arial", Font.BOLD, 14));
 
-    JLabel timeLabel = new JLabel(getElapsedTime(notification.getTimestamp().toLocalDateTime()));
+    JLabel timeLabel = new JLabel(TimeElapsedCalculator.getElapsedTime(notification.getTimestamp().toLocalDateTime()));
     timeLabel.setFont(new Font("Arial", Font.PLAIN, 12));
     timeLabel.setForeground(new Color(130, 130, 130)); // Dark gray text for time
 
@@ -72,31 +73,4 @@ public class NotificationsUI extends BaseUI {
     return notificationPanel;
   }
 
-  private String getElapsedTime(LocalDateTime notificationTimestamp) {
-    LocalDateTime now = LocalDateTime.now();
-    long days = ChronoUnit.DAYS.between(notificationTimestamp, now);
-    long hours = ChronoUnit.HOURS.between(notificationTimestamp, now) % 24;
-    long minutes = ChronoUnit.MINUTES.between(notificationTimestamp, now) % 60;
-
-    StringBuilder timeSince = new StringBuilder();
-    if (days > 0) {
-      timeSince.append(days).append(" days");
-    }
-    if (hours > 0) {
-      if (timeSince.length() > 0)
-        timeSince.append(", ");
-      timeSince.append(hours).append(" hours");
-    }
-    if (minutes > 0 && days == 0) { // Only show minutes if there are no days counted
-      if (timeSince.length() > 0)
-        timeSince.append(", ");
-      timeSince.append(minutes).append(" minutes");
-    }
-
-    if (timeSince.length() == 0) {
-      return "Just now";
-    } else {
-      return timeSince.append(" ago").toString();
-    }
-  }
 }
