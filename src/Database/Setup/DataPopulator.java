@@ -117,7 +117,7 @@ public class DataPopulator {
   private static void addFollowers() {
     // Admin follows everyone
     for (int i = 2; i < 7; i++) {
-      FollowDAO.followUser(1, i);
+      FollowDAO.followUser(1, i, getRandomTimestamp());
     }
     // Everyone follows admin
     for (int i = 2; i < 7; i++) {
@@ -129,7 +129,7 @@ public class DataPopulator {
     // Everyone besides admin like all posts
     for (int userId = 2; userId <= 6; userId++) {
       for (int postId = 1; postId < 30; postId++) {
-        LikesDAO.likePost(postId, userId);
+        LikesDAO.likePost(postId, userId, getRandomTimestamp());
       }
     }
   }
@@ -167,8 +167,8 @@ public class DataPopulator {
       // Post two comments to each post, from two different users
       String comment1 = comments[(postId * 2) % comments.length];
       String comment2 = comments[(postId * 2 + 1) % comments.length];
-      CommentsDAO.postComment(postId, userId1, comment1);
-      CommentsDAO.postComment(postId, userId2, comment2);
+      CommentsDAO.postComment(postId, userId1, comment1, getRandomTimestamp());
+      CommentsDAO.postComment(postId, userId2, comment2, getRandomTimestamp());
     }
   }
 }
