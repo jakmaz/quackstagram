@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 public class PostPanel extends JPanel {
   private final Post post;
@@ -120,14 +119,19 @@ public class PostPanel extends JPanel {
     JPanel commentsPanel = new JPanel();
     commentsPanel.setLayout(new BoxLayout(commentsPanel, BoxLayout.Y_AXIS));
     commentsPanel.setBorder(BorderFactory.createTitledBorder("Comments"));
+
     for (Comment comment : post.getComments()) {
       JPanel singleCommentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+      String formattedDate = TimeElapsedCalculator.getElapsedTime(comment.getTimestamp().toLocalDateTime());
+
       JLabel commentLabel = new JLabel(
-          "<html><b>" + comment.getUser().getUsername() + ":</b> " + comment.getText() + "</html>");
+          "<html><b>" + comment.getUser().getUsername() + ":</b> " + comment.getText() +
+              " <span style='color:gray;'>[" + formattedDate + "]</span></html>"); // Including timestamp in the label
       singleCommentPanel.add(commentLabel);
       commentsPanel.add(singleCommentPanel);
     }
-    // Input panel for new comment
+
+    // Below code for the input panel remains unchanged
     BufferedImage icon = null;
     try {
       icon = ImageIO.read(new File("img/icons/submit.png")); // Ensure the path is correct
@@ -136,8 +140,8 @@ public class PostPanel extends JPanel {
     }
     JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JTextField commentField = new JTextField(15); // Adjustable size
-    commentField.setPreferredSize(new Dimension(commentField.getPreferredSize().width, 20)); // Ustawienie wysokości na
-                                                                                             // 30 pikseli
+    commentField.setPreferredSize(new Dimension(commentField.getPreferredSize().width, 20)); // Setting height to 20
+                                                                                             // pixels
     ImageIcon scaledIcon = new ImageIcon(icon.getScaledInstance(20, 20, Image.SCALE_AREA_AVERAGING));
     JButton submitButton = new JButton(scaledIcon);
     submitButton.setBorderPainted(false);
