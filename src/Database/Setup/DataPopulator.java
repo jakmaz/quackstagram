@@ -15,16 +15,7 @@ public class DataPopulator {
     addFollowers();
     addLikes();
     addComments();
-    // addNotifications();
     System.out.println("Data populated successfully.");
-  }
-
-  private static void addNotifications() {
-    NotificationsDAO.createNotification(1, "You have a new follower!");
-    NotificationsDAO.createNotification(1, "You have a new follower!");
-    NotificationsDAO.createNotification(1, "You have a new follower!");
-    NotificationsDAO.createNotification(1, "You have a new follower!");
-    NotificationsDAO.createNotification(1, "You have a new follower!");
   }
 
   private static void addUsers() {

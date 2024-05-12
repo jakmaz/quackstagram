@@ -13,17 +13,6 @@ public class NotificationsDAO {
     return DatabaseConnection.getConnection();
   }
 
-  public static void createNotification(int userId, String message) {
-    String sql = "INSERT INTO notifications (user_id, message, timestamp) VALUES (?, ?, CURRENT_TIMESTAMP)";
-    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-      ps.setInt(1, userId);
-      ps.setString(2, message);
-      ps.executeUpdate();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-  }
-
   public static List<Notification> getNotificationsByUserId(int userId) {
     List<Notification> notifications = new ArrayList<>();
     String sql = "SELECT id, user_id, message, timestamp FROM notifications WHERE user_id = ? ORDER BY timestamp DESC";
