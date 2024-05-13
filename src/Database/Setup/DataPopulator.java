@@ -2,7 +2,6 @@ package Database.Setup;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ThreadLocalRandom;
 
 import Database.DAO.*;
@@ -121,7 +120,7 @@ public class DataPopulator {
     }
     // Everyone follows admin
     for (int i = 2; i < 7; i++) {
-      FollowDAO.followUser(i, 1);
+      FollowDAO.followUser(i, 1, getRandomTimestamp());
     }
   }
 
