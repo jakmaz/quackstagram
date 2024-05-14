@@ -83,10 +83,10 @@ public class MainFrame extends JFrame {
   // Load other panels that require user information, called after showing the
   // Profile panel
   public void loadUserPanels() {
+    preloadPanel("Notifications");
+    preloadPanel("Upload");
     preloadPanel("Home");
     preloadPanel("Explore");
-    preloadPanel("Upload");
-    preloadPanel("Notifications");
   }
 
   // General method to preload or reload a panel based on the name
