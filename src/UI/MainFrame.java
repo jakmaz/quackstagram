@@ -89,14 +89,25 @@ public class MainFrame extends JFrame {
     preloadPanel("Notifications");
   }
 
-  // General method to preload a panel based on the name
+  // General method to preload or reload a panel based on the name
   private void preloadPanel(String name) {
-    System.out.println("Preloading panel: " + name);
+    System.out.println("Preloading or reloading panel: " + name);
     Supplier<BaseUI> supplier = panelSuppliers.get(name);
     if (supplier != null) {
-      BaseUI panel = supplier.get();
-      mainPanel.add(panel, name);
-      initializedPanels.put(name, panel);
+      // Remove the existing panel if it has already been initialized
+      BaseUI existingPanel = initializedPanels.get(name);
+      if (existingPanel != null) {
+        mainPanel.remove(existingPanel);
+        System.out.println("Existing panel removed: " + name);
+      }
+
+      // Get a new instance of the panel from the supplier
+      BaseUI newPanel = supplier.get();
+      mainPanel.add(newPanel, name);
+      mainPanel.revalidate();
+      mainPanel.repaint();
+      initializedPanels.put(name, newPanel); // Update the map with the new panel instance
+      System.out.println("Panel loaded: " + name);
     } else {
       System.out.println("Error: No supplier found for panel " + name);
     }
