@@ -31,7 +31,7 @@ public class TriggersCreator {
         FOR EACH ROW
         BEGIN
             INSERT INTO notifications (user_id, message, timestamp)
-            VALUES (NEW.following_id, CONCAT('You have a new follower: ', (SELECT username FROM users WHERE id = NEW.follower_id)), NEW.timestamp);
+            VALUES (NEW.following_id, CONCAT('You got followed by ', (SELECT username FROM users WHERE id = NEW.follower_id)), NEW.timestamp);
         END;
         """;
     executeUpdate(sql);
@@ -57,7 +57,7 @@ public class TriggersCreator {
         FOR EACH ROW
         BEGIN
             INSERT INTO notifications (user_id, post_id, message, timestamp)
-            VALUES ((SELECT user_id FROM posts WHERE id = NEW.post_id), NEW.post_id, CONCAT('Your post was commented on ', (SELECT username FROM users WHERE id = NEW.user_id), ': ', NEW.text), NEW.timestamp);
+            VALUES ((SELECT user_id FROM posts WHERE id = NEW.post_id), NEW.post_id, CONCAT('Your post was commented by', (SELECT username FROM users WHERE id = NEW.user_id), ': ', NEW.text), NEW.timestamp);
         END;
         """;
     executeUpdate(sql);
