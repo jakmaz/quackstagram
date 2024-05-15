@@ -37,11 +37,14 @@ public abstract class ProfileUI extends BaseUI {
     JPanel navigationPanel = createNavigationPanel();
 
     // Create a JScrollPane that wraps around the contentPanel
-    JScrollPane scrollPane = new JScrollPane(contentPanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    // Add header and navigation directly to the main JFrame's BorderLayout, not in the contentPanel
+    JScrollPane scrollPane = new JScrollPane(contentPanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    // Add header and navigation directly to the main JFrame's BorderLayout, not in
+    // the contentPanel
     scrollPane.getVerticalScrollBar().setUnitIncrement(3);
     add(headerPanel, BorderLayout.NORTH);
-    add(scrollPane, BorderLayout.CENTER); // Add the scroll pane (which contains contentPanel) to the center of the JFrame
+    add(scrollPane, BorderLayout.CENTER); // Add the scroll pane (which contains contentPanel) to the center of the
+                                          // JFrame
     add(navigationPanel, BorderLayout.SOUTH);
 
     // Add the grid panel to the contentPanel which has CardLayout
@@ -176,9 +179,11 @@ public abstract class ProfileUI extends BaseUI {
 
     // Ensure the imagesPanel doesn't grow beyond its necessary size
     if (osName.contains("win")) {
-      imagesPanel.setPreferredSize(new Dimension((GRID_IMAGE_SIZE ) * 3 + 11, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
+      imagesPanel.setPreferredSize(
+          new Dimension((GRID_IMAGE_SIZE) * 3 + 11, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
     } else {
-      imagesPanel.setPreferredSize(new Dimension((GRID_IMAGE_SIZE + 5) * 3, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
+      imagesPanel
+          .setPreferredSize(new Dimension((GRID_IMAGE_SIZE + 5) * 3, (GRID_IMAGE_SIZE + 5) * ((posts.size() + 2) / 3)));
     }
 
     gridPanel.add(imagesPanel);
@@ -198,7 +203,6 @@ public abstract class ProfileUI extends BaseUI {
   private JLabel createStatLabel(String number, String text) {
     JLabel label = new JLabel("<html><div style='text-align: center;'>" + number + "<br/>" + text + "</div></html>",
         SwingConstants.CENTER);
-    label.setFont(new Font("Arial", Font.BOLD, 12));
     label.setForeground(Color.BLACK);
     return label;
   }
