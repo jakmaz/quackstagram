@@ -32,6 +32,7 @@ public class MainFrame extends JFrame {
 
   private MainFrame() {
     super("Quackstagram Application");
+    setTitle("Quackstagram Application");
     initializeFrame();
     initializeSuppliers();
     loadLoginPanels(); // Initially load only login-related panels
@@ -119,7 +120,6 @@ public class MainFrame extends JFrame {
   private void switchPanel(String name) {
     System.out.println("Switching to panel: " + name);
     cardLayout.show(mainPanel, name);
-    setTitle(name);
   }
 
   // Individual methods for displaying each panel
@@ -171,7 +171,7 @@ public class MainFrame extends JFrame {
   }
 
   public static void main(String[] args) {
-    FlatLaf.setGlobalExtraDefaults( Collections.singletonMap( "@accentColor", "#1E1F22" ) );
+    FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", "#1E1F22"));
     FlatMacLightLaf.setup();
     SwingUtilities.invokeLater(() -> {
       MainFrame frame = MainFrame.getInstance();
