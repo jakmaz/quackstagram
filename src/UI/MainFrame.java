@@ -3,7 +3,6 @@ package UI;
 import java.awt.CardLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -11,8 +10,6 @@ import java.util.function.Supplier;
 import javax.swing.*;
 
 import Logic.User;
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 public class MainFrame extends JFrame {
   private static MainFrame instance;
@@ -67,7 +64,6 @@ public class MainFrame extends JFrame {
     panelSuppliers.put("Upload", UploadUI::new);
     panelSuppliers.put("Notifications", NotificationsUI::new);
     panelSuppliers.put("Profile", OwnProfileUI::new);
-    panelSuppliers.put("OtherProfile", UserProfileUI::new);
   }
 
   // Load panels necessary for login
@@ -170,9 +166,17 @@ public class MainFrame extends JFrame {
   }
 
   public void showOtherProfilePanel(User user) {
-    UserProfileUI otherProfileUI = (UserProfileUI) initializedPanels.get("OtherProfile");
-    otherProfileUI.setUser(user);
-    switchPanel("OtherProfile");
+    // Create a new instance of UserProfileUI each time
+    OtherUserProfileUI otherProfileUI = new OtherUserProfileUI(user); // Assume constructor that accepts a User
+
+    // Unique identifier for each user panel
+    String panelKey = "UserProfile_" + user.getId(); // Assuming each user has a unique ID
+
+    // Add the new UserProfileUI to the mainPanel with a unique key
+    mainPanel.add(otherProfileUI, panelKey);
+
+    // Show the newly added panel
+    switchPanel(panelKey);
   }
 
   // Clears all UI panels, typically used during log out

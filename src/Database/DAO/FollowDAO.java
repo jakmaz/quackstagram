@@ -9,8 +9,33 @@ public class FollowDAO {
     return DatabaseConnection.getConnection();
   }
 
+  // Check if the user is currently following another user
+  public static boolean isFollowing(int followerId, int followingId) {
+    String sql = "SELECT COUNT(*) AS count FROM followers WHERE follower_id = ? AND following_id = ?";
+    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setInt(1, followerId);
+      ps.setInt(2, followingId);
+      ResultSet rs = ps.executeQuery();
+      return rs.next() && rs.getInt("count") > 0;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
   public static void followUser(int followerId, int followingId) {
     String sql = "INSERT INTO followers (follower_id, following_id) VALUES (?, ?)";
+    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setInt(1, followerId);
+      ps.setInt(2, followingId);
+      ps.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void unfollowUser(int followerId, int followingId) {
+    String sql = "DELETE FROM followers WHERE follower_id = ? AND following_id = ?";
     try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
       ps.setInt(1, followerId);
       ps.setInt(2, followingId);

@@ -1,20 +1,32 @@
 package UI;
 
-import Database.DAO.LikesDAO;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+
 import Database.DAO.CommentsDAO;
+import Database.DAO.LikesDAO;
 import Logic.Comment;
 import Logic.Post;
 import Logic.SessionManager;
 import Logic.TimeElapsedCalculator;
-
-import javax.swing.*;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import java.time.LocalDateTime;
 
 public class PostPanel extends JPanel {
   private final Post post;
@@ -42,7 +54,6 @@ public class PostPanel extends JPanel {
   private JPanel createScrollableContent() {
     scrollPanel = new JPanel();
     scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.Y_AXIS));
-    scrollPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
     scrollPanel.add(createTopPanel());
     scrollPanel.add(createImagePanel());
@@ -65,7 +76,6 @@ public class PostPanel extends JPanel {
 
   private JPanel createTopPanel() {
     JPanel topPanel = new JPanel(new BorderLayout());
-    topPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
     JButton ownerBtn = new JButton(post.getUser().getUsername());
     ownerBtn.setBorderPainted(false);
@@ -97,7 +107,7 @@ public class PostPanel extends JPanel {
   }
 
   private JPanel createLikePanel() {
-    JPanel likePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+    JPanel likePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     likesLabel = new JLabel("Likes: " + post.getLikesCount());
     likeButton = new JButton("Like");
     likeButton.addActionListener(e -> handleLikeAction());
@@ -138,9 +148,9 @@ public class PostPanel extends JPanel {
     }
     JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JTextField commentField = new JTextField(15); // Adjustable size
-    commentField.setPreferredSize(new Dimension(commentField.getPreferredSize().width, 20)); // Ustawienie wysokości na
-                                                                                             // 30 pikseli
-    ImageIcon scaledIcon = new ImageIcon(icon.getScaledInstance(20, 20, Image.SCALE_AREA_AVERAGING));
+    commentField.setPreferredSize(new Dimension(commentField.getPreferredSize().width, 20));
+
+    ImageIcon scaledIcon = new ImageIcon(icon.getScaledInstance(15, 15, Image.SCALE_AREA_AVERAGING));
     JButton submitButton = new JButton(scaledIcon);
     submitButton.setBorderPainted(false);
     submitButton.setContentAreaFilled(false);

@@ -6,11 +6,12 @@ import javax.swing.*;
 public abstract class BaseUI extends JPanel {
   public static final int WIDTH = 300;
   public static final int HEIGHT = 500;
-  private static final int NAV_ICON_SIZE = 20; // Corrected static size for bottom icons
+  private static final int NAV_ICON_SIZE = 20;
   protected String osName = System.getProperty("os.name").toLowerCase();
 
   public BaseUI() {
     setLayout(new BorderLayout());
+    setPreferredSize(new Dimension(WIDTH, HEIGHT));
   }
 
   protected abstract void initializeUI();
@@ -24,7 +25,7 @@ public abstract class BaseUI extends JPanel {
     titleLabel.setForeground(Color.WHITE);
 
     headerPanel.add(titleLabel, BorderLayout.CENTER);
-    headerPanel.setPreferredSize(new Dimension(400, 40)); // Replace 400 with your WIDTH constant if you have one.
+    headerPanel.setPreferredSize(new Dimension(WIDTH, 40));
 
     return headerPanel;
   }
