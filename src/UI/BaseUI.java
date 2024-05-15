@@ -1,14 +1,7 @@
 package UI;
 
 import java.awt.*;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public abstract class BaseUI extends JPanel {
   public static final int WIDTH = 300;
@@ -22,14 +15,17 @@ public abstract class BaseUI extends JPanel {
 
   protected abstract void initializeUI();
 
-  public JPanel createHeaderPanel(String title) {
-    JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+  public static JPanel createHeaderPanel(String title) {
+    JPanel headerPanel = new JPanel(new BorderLayout());
     headerPanel.setBackground(new Color(51, 51, 51));
-    JLabel titleLabel = new JLabel(title + " 🐥");
+
+    JLabel titleLabel = new JLabel(title + " 🐥", SwingConstants.CENTER);
     titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
     titleLabel.setForeground(Color.WHITE);
-    headerPanel.add(titleLabel);
-    headerPanel.setPreferredSize(new Dimension(WIDTH, 40));
+
+    headerPanel.add(titleLabel, BorderLayout.CENTER);
+    headerPanel.setPreferredSize(new Dimension(400, 40)); // Replace 400 with your WIDTH constant if you have one.
+
     return headerPanel;
   }
 
