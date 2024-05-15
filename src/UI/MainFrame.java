@@ -5,12 +5,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import Logic.User;
 import com.formdev.flatlaf.FlatLaf;
@@ -83,17 +82,36 @@ public class MainFrame extends JFrame {
     preloadPanel("Profile");
   }
 
-  // Load other panels that require user information, called after showing the
-  // Profile panel
   public void loadUserPanels() {
-    preloadPanel("Notifications");
-    preloadPanel("Upload");
-    preloadPanel("Home");
-    preloadPanel("Explore");
+    String[] panelNames = { "Notifications", "Upload", "Home", "Explore" };
+
+    for (String name : panelNames) {
+      SwingWorker<BaseUI, Void> worker = new SwingWorker<>() {
+        @Override
+        protected BaseUI doInBackground() throws Exception {
+          return preloadPanel(name);
+        }
+
+        @Override
+        protected void done() {
+          try {
+            BaseUI panel = get(); // Retrieve the loaded panel
+            if (panel != null) {
+              System.out.println("Panel loaded and added to mainPanel: " + name);
+              mainPanel.revalidate();
+              mainPanel.repaint();
+            }
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+        }
+      };
+      worker.execute(); // Start the worker thread
+    }
   }
 
   // General method to preload or reload a panel based on the name
-  private void preloadPanel(String name) {
+  private BaseUI preloadPanel(String name) {
     System.out.println("Preloading or reloading panel: " + name);
     Supplier<BaseUI> supplier = panelSuppliers.get(name);
     if (supplier != null) {
@@ -107,12 +125,11 @@ public class MainFrame extends JFrame {
       // Get a new instance of the panel from the supplier
       BaseUI newPanel = supplier.get();
       mainPanel.add(newPanel, name);
-      mainPanel.revalidate();
-      mainPanel.repaint();
       initializedPanels.put(name, newPanel); // Update the map with the new panel instance
-      System.out.println("Panel loaded: " + name);
+      return newPanel;
     } else {
       System.out.println("Error: No supplier found for panel " + name);
+      return null;
     }
   }
 
