@@ -5,7 +5,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -19,8 +18,8 @@ public class MainFrame extends JFrame {
   private static MainFrame instance;
   private CardLayout cardLayout;
   private JPanel mainPanel;
-  private Map<String, Supplier<BaseUI>> panelSuppliers = new HashMap<>();
-  private Map<String, BaseUI> initializedPanels = new HashMap<>();
+  private final Map<String, Supplier<BaseUI>> panelSuppliers = new HashMap<>();
+  private final Map<String, BaseUI> initializedPanels = new HashMap<>();
 
   public static MainFrame getInstance() {
     if (instance == null) {
@@ -83,8 +82,10 @@ public class MainFrame extends JFrame {
   }
 
   public void loadUserPanels() {
-    String[] panelNames = { "Notifications", "Upload", "Home", "Explore" };
+    loadPanelsInThreads("Notifications", "Upload", "Home", "Explore");
+  }
 
+  private void loadPanelsInThreads(String... panelNames) {
     for (String name : panelNames) {
       SwingWorker<BaseUI, Void> worker = new SwingWorker<>() {
         @Override
