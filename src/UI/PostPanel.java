@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 public class PostPanel extends JPanel {
   private final Post post;
@@ -59,23 +58,26 @@ public class PostPanel extends JPanel {
     JPanel navPanel = new JPanel(new BorderLayout());
     if (displayBackButton) {
       backButton = new JButton("Back");
-      navPanel.add(backButton, BorderLayout.WEST);
+      navPanel.add(backButton, BorderLayout.CENTER); // This will make the button take the full width
     }
     return navPanel;
   }
 
   private JPanel createTopPanel() {
-    JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-    JButton usernameButton = new JButton(post.getUser().getUsername());
-    usernameButton.addActionListener(e -> MainFrame.getInstance().showOtherProfilePanel(post.getUser()));
+    JPanel topPanel = new JPanel(new BorderLayout());
+    topPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
-    LocalDateTime postTimestamp = post.getTimestamp().toLocalDateTime(); // Assuming post.getTimestamp() returns a
-                                                                         // LocalDateTime
+    JButton ownerBtn = new JButton(post.getUser().getUsername());
+    ownerBtn.setBorderPainted(false);
+    ownerBtn.setOpaque(true);
+    ownerBtn.addActionListener(e -> MainFrame.getInstance().showOtherProfilePanel(post.getUser()));
+
+    LocalDateTime postTimestamp = post.getTimestamp().toLocalDateTime();
     String timeSincePosting = TimeElapsedCalculator.getElapsedTime(postTimestamp);
 
     JLabel timeLabel = new JLabel(timeSincePosting);
-    topPanel.add(usernameButton);
-    topPanel.add(timeLabel);
+    topPanel.add(ownerBtn, BorderLayout.WEST);
+    topPanel.add(timeLabel, BorderLayout.EAST);
     return topPanel;
   }
 
@@ -160,12 +162,19 @@ public class PostPanel extends JPanel {
   }
 
   private void handleLikeAction() {
-    String result = LikesDAO.likePost(post.getId(), SessionManager.getCurrentUser().getId());
-    JOptionPane.showMessageDialog(this, result, "Like Status", JOptionPane.INFORMATION_MESSAGE);
-    if (result.equals("Post successfully liked!")) {
-      int newLikesCount = post.getLikesCount() + 1;
-      likesLabel.setText("Likes: " + newLikesCount);
-      post.setLikesCount(newLikesCount);
+    boolean isLiked = LikesDAO.checkLike(post.getId(), SessionManager.getCurrentUser().getId());
+    if (isLiked) {
+      if (LikesDAO.unlikePost(post.getId(), SessionManager.getCurrentUser().getId())) {
+        int newLikesCount = post.getLikesCount() - 1;
+        likesLabel.setText("Likes: " + newLikesCount);
+        post.setLikesCount(newLikesCount);
+      }
+    } else {
+      if (LikesDAO.likePost(post.getId(), SessionManager.getCurrentUser().getId())) {
+        int newLikesCount = post.getLikesCount() + 1;
+        likesLabel.setText("Likes: " + newLikesCount);
+        post.setLikesCount(newLikesCount);
+      }
     }
   }
 
