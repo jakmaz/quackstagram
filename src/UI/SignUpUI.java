@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
@@ -22,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Database.DAO.UserDAO;
@@ -48,7 +50,7 @@ public class SignUpUI extends BaseUI {
   public void initializeUI() {
     JPanel headerPanel = createHeaderPanel("Sign Up");
     JPanel fieldsPanel = createFieldsPanel();
-    JPanel registerPanel = createRegisterPanel();
+    JPanel registerPanel = createButtonPanel();
 
     setLayout(new BorderLayout());
     add(headerPanel, BorderLayout.NORTH);
@@ -98,24 +100,33 @@ public class SignUpUI extends BaseUI {
     return fieldsPanel;
   }
 
-  private JPanel createRegisterPanel() {
+  private JPanel createButtonPanel() {
+    // Create a JPanel with GridLayout
+    JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+    buttonPanel.setBackground(Color.white);
+
+    // Create padding border: top, left, bottom, right
+    Border padding = BorderFactory.createEmptyBorder(10, 20, 10, 20);
+    buttonPanel.setBorder(padding);
+
+    // Create and configure the Sign-In button
     JButton btnRegister = new JButton("Register");
     btnRegister.addActionListener(this::onRegisterClicked);
-    btnRegister.setBackground(new Color(255, 90, 95));
-    btnRegister.setForeground(Color.BLACK);
     btnRegister.setFocusPainted(false);
     btnRegister.setBorderPainted(false);
     btnRegister.setFont(new Font("Arial", Font.BOLD, 14));
 
-    JPanel registerPanel = new JPanel(new BorderLayout());
-    registerPanel.setBackground(Color.WHITE);
-    registerPanel.add(btnRegister, BorderLayout.CENTER);
+    // Create and configure the Register button
+    JButton btnSignUp = new JButton("Already have an account? Sign In");
+    btnSignUp.addActionListener(this::onSignInClicked);
+    btnSignUp.setFocusPainted(false);
+    btnSignUp.setBorderPainted(false);
 
-    JButton btnSignIn = new JButton("Already have an account? Sign In");
-    btnSignIn.addActionListener(this::onSignInClicked);
-    registerPanel.add(btnSignIn, BorderLayout.SOUTH);
+    // Add buttons to the panel
+    buttonPanel.add(btnRegister);
+    buttonPanel.add(btnSignUp);
 
-    return registerPanel;
+    return buttonPanel;
   }
 
   private void onRegisterClicked(ActionEvent event) {
