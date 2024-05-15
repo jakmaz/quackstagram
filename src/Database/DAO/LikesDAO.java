@@ -56,7 +56,7 @@ public class LikesDAO {
     // Add a new like with a timestamp
     try (Connection conn = getConnection();
         PreparedStatement insertStmt = conn
-            .prepareStatement("INSERT INTO likes (post_id, user_id, created_at) VALUES (?, ?, ?)")) {
+            .prepareStatement("INSERT INTO likes (post_id, user_id, timestamp) VALUES (?, ?, ?)")) {
       insertStmt.setInt(1, postId);
       insertStmt.setInt(2, userId);
       insertStmt.setTimestamp(3, timestamp);
