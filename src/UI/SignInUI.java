@@ -20,22 +20,21 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.border.Border;
 
 import Database.DAO.UserDAO;
 import Logic.SessionManager;
 import Logic.User;
 
 public class SignInUI extends BaseUI {
-
-  private static final int WIDTH = 300;
-  private static final int HEIGHT = 500;
-
-  private JTextField usernameInput;
-  private JTextField passwordInput;
+  private JTextField usernameField;
+  private JPasswordField passwordField;
+  private JButton btnSignIn;
 
   public SignInUI() {
     setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -68,11 +67,11 @@ public class SignInUI extends BaseUI {
     };
 
     // Assign the Enter key action to both text fields
-    usernameInput.getInputMap(JComponent.WHEN_FOCUSED).put(enterKeyStroke, "enterPressed");
-    usernameInput.getActionMap().put("enterPressed", performSignIn);
+    usernameField.getInputMap(JComponent.WHEN_FOCUSED).put(enterKeyStroke, "enterPressed");
+    usernameField.getActionMap().put("enterPressed", performSignIn);
 
-    passwordInput.getInputMap(JComponent.WHEN_FOCUSED).put(enterKeyStroke, "enterPressed");
-    passwordInput.getActionMap().put("enterPressed", performSignIn);
+    passwordField.getInputMap(JComponent.WHEN_FOCUSED).put(enterKeyStroke, "enterPressed");
+    passwordField.getActionMap().put("enterPressed", performSignIn);
   }
 
   private JPanel createFieldsPanel() {
@@ -90,33 +89,39 @@ public class SignInUI extends BaseUI {
     JPanel photoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     photoPanel.add(lblPhoto);
 
-    usernameInput = new JTextField("admin");
-    passwordInput = new JTextField("admin");
-    usernameInput.setForeground(Color.GRAY);
-    passwordInput.setForeground(Color.GRAY);
+    usernameField = new JTextField("admin");
+    passwordField = new JPasswordField("admin");
 
-    SwingUtilities.invokeLater(() -> usernameInput.requestFocusInWindow());
+    SwingUtilities.invokeLater(() -> usernameField.requestFocusInWindow());
 
-    fieldsPanel.add(Box.createVerticalStrut(10));
+    fieldsPanel.add(Box.createVerticalStrut(20));
     fieldsPanel.add(photoPanel);
+    fieldsPanel.add(Box.createVerticalStrut(30));
+    fieldsPanel.add(usernameField);
     fieldsPanel.add(Box.createVerticalStrut(10));
-    fieldsPanel.add(usernameInput);
-    fieldsPanel.add(Box.createVerticalStrut(10));
-    fieldsPanel.add(passwordInput);
-    fieldsPanel.add(Box.createVerticalStrut(10));
+    fieldsPanel.add(passwordField);
+    fieldsPanel.add(Box.createVerticalStrut(50));
 
     return fieldsPanel;
   }
 
   private JPanel createButtonPanel() {
-    JButton btnSignIn = new JButton("Sign-In");
+    // Create a JPanel with GridLayout
+    JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+    buttonPanel.setBackground(Color.white);
+
+    // Create padding border: top, left, bottom, right
+    Border padding = BorderFactory.createEmptyBorder(10, 20, 10, 20);
+    buttonPanel.setBorder(padding);
+
+    // Create and configure the Sign-In button
+    btnSignIn = new JButton("Sign In");
     btnSignIn.addActionListener(this::onSignInClicked);
-    btnSignIn.setBackground(new Color(255, 90, 95));
-    btnSignIn.setForeground(Color.BLACK);
     btnSignIn.setFocusPainted(false);
     btnSignIn.setBorderPainted(false);
     btnSignIn.setFont(new Font("Arial", Font.BOLD, 14));
 
+    // Create and configure the Register button
     JButton btnRegisterNow = new JButton("No Account? Register Now");
     btnRegisterNow.addActionListener(this::onRegisterNowClicked);
     btnRegisterNow.setBackground(Color.WHITE);
@@ -124,8 +129,7 @@ public class SignInUI extends BaseUI {
     btnRegisterNow.setFocusPainted(false);
     btnRegisterNow.setBorderPainted(false);
 
-    JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 10, 10));
-    buttonPanel.setBackground(Color.white);
+    // Add buttons to the panel
     buttonPanel.add(btnSignIn);
     buttonPanel.add(btnRegisterNow);
 
@@ -133,15 +137,16 @@ public class SignInUI extends BaseUI {
   }
 
   private void onSignInClicked(ActionEvent event) {
-    String enteredUsername = usernameInput.getText().trim();
-    String enteredPassword = passwordInput.getText().trim();
+    String enteredUsername = usernameField.getText().trim();
+    String enteredPassword = passwordField.getText().trim();
 
     try {
       Integer userId = UserDAO.verifyCredentials(enteredUsername, enteredPassword);
       if (userId != null) {
         User loggedInUser = new User(userId);
         saveCurrentUserInformation(loggedInUser);
-        JOptionPane.showMessageDialog(null, "Login successful", "Success", JOptionPane.INFORMATION_MESSAGE);
+        btnSignIn.setEnabled(false); // Prevent multiple sign-in attempts
+        btnSignIn.setText("Opening your profile...");
         MainFrame.getInstance().loadProfilePanel(); // Load and display the profile panel immediately
         MainFrame.getInstance().showProfilePanel();
 
@@ -157,7 +162,7 @@ public class SignInUI extends BaseUI {
       } else {
         JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Login Failed",
             JOptionPane.ERROR_MESSAGE);
-        usernameInput.requestFocus();
+        usernameField.requestFocus();
       }
     } catch (Exception e) {
       e.printStackTrace();

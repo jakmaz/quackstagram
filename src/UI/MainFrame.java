@@ -3,6 +3,7 @@ package UI;
 import java.awt.CardLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -12,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import Logic.User;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 public class MainFrame extends JFrame {
@@ -169,6 +171,7 @@ public class MainFrame extends JFrame {
   }
 
   public static void main(String[] args) {
+    FlatLaf.setGlobalExtraDefaults( Collections.singletonMap( "@accentColor", "#1E1F22" ) );
     FlatMacLightLaf.setup();
     SwingUtilities.invokeLater(() -> {
       MainFrame frame = MainFrame.getInstance();
