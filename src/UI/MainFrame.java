@@ -187,13 +187,4 @@ public class MainFrame extends JFrame {
     mainPanel.repaint();
     System.out.println("All UI panels have been cleared.");
   }
-
-  public static void main(String[] args) {
-    FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", "#1E1F22"));
-    FlatMacLightLaf.setup();
-    SwingUtilities.invokeLater(() -> {
-      MainFrame frame = MainFrame.getInstance();
-      frame.setVisible(true);
-    });
-  }
 }
