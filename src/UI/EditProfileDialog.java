@@ -50,7 +50,7 @@ public class EditProfileDialog extends JDialog {
 
   private JPanel createPasswordPanel() {
     JPanel passwordPanel = new JPanel(new BorderLayout());
-    passwordPanel.add(new JLabel("Password:"), BorderLayout.WEST);
+    passwordPanel.add(new JLabel("New password:"), BorderLayout.WEST);
     passwordField = new JPasswordField();
     passwordPanel.add(passwordField, BorderLayout.CENTER);
     return passwordPanel;
@@ -88,13 +88,21 @@ public class EditProfileDialog extends JDialog {
     String password = new String(passwordField.getPassword());
     String bio = bioField.getText();
 
+    if (password == null || password.trim().isEmpty()) {
+      JOptionPane.showMessageDialog(this, "Password cannot be empty", "Error",
+              JOptionPane.ERROR_MESSAGE);
+      passwordField.putClientProperty("JComponent.outline", "error");
+      return;
+    }
+
     try {
+      passwordField.putClientProperty("JComponent.outline", "valid");
       UserDAO.updateProfile(currentUser.getId(), name, password, bio);
       JOptionPane.showMessageDialog(this, "Profile updated successfully!");
-      dispose(); // Close the dialog
+      dispose();
     } catch (Exception e) {
       JOptionPane.showMessageDialog(this, "Failed to update profile: " + e.getMessage(), "Error",
-          JOptionPane.ERROR_MESSAGE);
+              JOptionPane.ERROR_MESSAGE);
     }
   }
 }
