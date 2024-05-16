@@ -151,7 +151,7 @@ public class PostPanel extends JPanel {
     JTextField commentField = new JTextField(15); // Adjustable size
     commentField.setPreferredSize(new Dimension(commentField.getPreferredSize().width, 20));
 
-    ImageIcon scaledIcon = new ImageIcon(icon.getScaledInstance(15, 15, Image.SCALE_AREA_AVERAGING));
+    ImageIcon scaledIcon = new ImageIcon(icon.getScaledInstance(15, 15, Image.SCALE_SMOOTH));
     JButton submitButton = new JButton(scaledIcon);
     submitButton.setBorderPainted(false);
     submitButton.setContentAreaFilled(false);
@@ -195,6 +195,9 @@ public class PostPanel extends JPanel {
   }
 
   private void handleCommentAction(String commentContent) {
+    if(commentContent.isEmpty()) {
+      return;
+    }
     boolean result = CommentsDAO.postComment(post.getId(), SessionManager.getCurrentUser().getId(), commentContent);
     if (result) {
       post.reloadComments(); // Refresh the comments list
