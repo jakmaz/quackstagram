@@ -20,9 +20,15 @@ public abstract class BaseUI extends JPanel {
     JPanel headerPanel = new JPanel(new BorderLayout());
     headerPanel.setBackground(new Color(51, 51, 51));
 
-    JLabel titleLabel = new JLabel(title + " 🐥", SwingConstants.CENTER);
+    // Load and scale the image icon
+    ImageIcon chickenIcon = new ImageIcon(new ImageIcon("img/icons/chicken.png").getImage().getScaledInstance(20, 20, Image.SCALE_AREA_AVERAGING));
+
+    // Create the label with text and an icon positioned to the right
+    JLabel titleLabel = new JLabel(title, chickenIcon, SwingConstants.CENTER);
     titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
     titleLabel.setForeground(Color.WHITE);
+    titleLabel.setHorizontalTextPosition(SwingConstants.LEFT); // Position text to the left of the icon
+    titleLabel.setIconTextGap(10); // Set gap between text and icon
 
     headerPanel.add(titleLabel, BorderLayout.CENTER);
     headerPanel.setPreferredSize(new Dimension(WIDTH, 40));

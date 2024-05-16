@@ -40,10 +40,4 @@ public class LoadingPanelUI extends BaseUI {
         loadingPanel.add(loadingLabel, BorderLayout.CENTER);
         return loadingPanel;
     }
-
-    public static void main(String[] args) {
-        // Start the UI
-        LoadingPanelUI loadingUI = new LoadingPanelUI();
-        loadingUI.setVisible(true);
-    }
 }
