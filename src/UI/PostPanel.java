@@ -174,23 +174,24 @@ public class PostPanel extends JPanel {
 
   private void handleLikeAction(JButton likeButton) {
     boolean isLiked = LikesDAO.checkLike(post.getId(), SessionManager.getCurrentUser().getId());
-    if (isLiked) {
-      if (LikesDAO.unlikePost(post.getId(), SessionManager.getCurrentUser().getId())) {
-        int newLikesCount = post.getLikesCount() - 1;
-        likesLabel.setText("Likes: " + newLikesCount);
-        post.setLikesCount(newLikesCount);
-        likeButton.setText("Like");
-      }
-    } else {
-      if (LikesDAO.likePost(post.getId(), SessionManager.getCurrentUser().getId())) {
-        int newLikesCount = post.getLikesCount() + 1;
-        likesLabel.setText("Likes: " + newLikesCount);
-        post.setLikesCount(newLikesCount);
-        likeButton.setText("Unlike");
-      }
-    }
+    updatePostLikes(isLiked, likeButton);
     likeButton.revalidate();
     likeButton.repaint();
+  }
+
+  private void updatePostLikes(boolean isLiked, JButton likeButton) {
+    if (isLiked && LikesDAO.unlikePost(post.getId(), SessionManager.getCurrentUser().getId())) {
+      updateLikesCount(-1, "Like", likeButton);
+    } else if (!isLiked && LikesDAO.likePost(post.getId(), SessionManager.getCurrentUser().getId())) {
+      updateLikesCount(1, "Unlike", likeButton);
+    }
+  }
+
+  private void updateLikesCount(int delta, String buttonText, JButton likeButton) {
+    int newLikesCount = post.getLikesCount() + delta;
+    likesLabel.setText("Likes: " + newLikesCount);
+    post.setLikesCount(newLikesCount);
+    likeButton.setText(buttonText);
   }
 
   private void handleCommentAction(String commentContent) {
