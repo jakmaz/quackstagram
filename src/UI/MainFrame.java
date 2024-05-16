@@ -64,6 +64,7 @@ public class MainFrame extends JFrame {
     panelSuppliers.put("Upload", UploadUI::new);
     panelSuppliers.put("Notifications", NotificationsUI::new);
     panelSuppliers.put("Profile", OwnProfileUI::new);
+    panelSuppliers.put("Loading", LoadingPanelUI::new);
   }
 
   // Load panels necessary for login
@@ -78,7 +79,7 @@ public class MainFrame extends JFrame {
   }
 
   public void loadUserPanels() {
-    loadPanelsInThreads("Notifications", "Upload", "Home", "Explore");
+    loadPanelsInThreads("Loading", "Notifications", "Upload", "Home", "Explore");
   }
 
   private void loadPanelsInThreads(String... panelNames) {
@@ -132,8 +133,33 @@ public class MainFrame extends JFrame {
 
   // Switch to a specific panel by name
   private void switchPanel(String name) {
-    System.out.println("Switching to panel: " + name);
-    cardLayout.show(mainPanel, name);
+    System.out.println("Request to switch to panel: " + name);
+    if (!initializedPanels.containsKey(name)) {
+      System.out.println("Panel not loaded yet: " + name);
+      showLoadingPanel();
+
+      SwingWorker<Void, Void> worker = new SwingWorker<>() {
+        @Override
+        protected Void doInBackground() throws Exception {
+          preloadPanel(name); // Load the panel
+          return null;
+        }
+
+        @Override
+        protected void done() {
+          cardLayout.show(mainPanel, name); // Switch to the panel after it is loaded
+          System.out.println("Switched to panel: " + name);
+        }
+      };
+      worker.execute();
+    } else {
+      System.out.println("Switching to panel: " + name);
+      cardLayout.show(mainPanel, name); // Panel already loaded, just switch
+    }
+  }
+
+  public void showLoadingPanel() {
+    switchPanel("Loading");
   }
 
   // Individual methods for displaying each panel
