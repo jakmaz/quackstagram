@@ -1,24 +1,14 @@
 package UI;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.Image;
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 import Database.DAO.CommentsDAO;
@@ -77,7 +67,10 @@ public class PostPanel extends JPanel {
   private JPanel createTopPanel() {
     JPanel topPanel = new JPanel(new BorderLayout());
 
-    JButton ownerBtn = new JButton(post.getUser().getUsername());
+    ImageIcon avatarIcon = new ImageIcon(post.getUser().getProfilePicturePath());
+    Image roundedAvatarIcon = makeRoundedImage(avatarIcon.getImage());
+    ImageIcon scaledRoundedAvatar = new ImageIcon(roundedAvatarIcon.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+    JButton ownerBtn = new JButton(post.getUser().getUsername(), scaledRoundedAvatar);
     ownerBtn.setBorderPainted(false);
     ownerBtn.setOpaque(true);
     ownerBtn.addActionListener(e -> MainFrame.getInstance().showOtherProfilePanel(post.getUser()));
@@ -214,5 +207,28 @@ public class PostPanel extends JPanel {
 
   public JButton getBackButton() {
     return backButton;
+  }
+
+  private Image makeRoundedImage(Image img) {
+    int width = img.getWidth(null);
+    int height = img.getHeight(null);
+    BufferedImage circleBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2 = circleBuffer.createGraphics();
+
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+    Ellipse2D shape = new Ellipse2D.Float(0, 0, width, height);
+    g2.setClip(shape);
+
+    g2.drawImage(img, 0, 0, width, height, null);
+
+    g2.setClip(null);
+    g2.setStroke(new BasicStroke(50));
+    g2.setColor(Color.BLACK);
+    g2.draw(shape);
+
+    g2.dispose();
+
+    return circleBuffer;
   }
 }
