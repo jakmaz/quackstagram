@@ -64,14 +64,14 @@ public class DataPopulator {
         "img/storage/posts/3_5.jpg", getRandomTimestamp());
 
     // Pluta
-    PostDAO.postSomething(4, "Wired for success. 🎚️", "img/storage/posts/4_1.png", getRandomTimestamp());
-    PostDAO.postSomething(4, "When your circuit works and it’s not a shock. #Electronics", "img/storage/posts/4_2.png",
+    PostDAO.postSomething(4, "Wired for success. 🎚️", "img/storage/posts/4_1.jpg", getRandomTimestamp());
+    PostDAO.postSomething(4, "When your circuit works and it’s not a shock. #Electronics", "img/storage/posts/4_2.jpg",
         getRandomTimestamp());
-    PostDAO.postSomething(4, "Soldering my way through problems. Quite literally.", "img/storage/posts/4_3.png",
+    PostDAO.postSomething(4, "Soldering my way through problems. Quite literally.", "img/storage/posts/4_3.jpg",
         getRandomTimestamp());
     PostDAO.postSomething(4, "Barking up the right tree with these new electronic modules!",
-        "img/storage/posts/4_4.png", getRandomTimestamp());
-    PostDAO.postSomething(4, "Sometimes I think in code and dream in circuit diagrams.", "img/storage/posts/4_5.png",
+        "img/storage/posts/4_4.jpg", getRandomTimestamp());
+    PostDAO.postSomething(4, "Sometimes I think in code and dream in circuit diagrams.", "img/storage/posts/4_5.jpg",
         getRandomTimestamp());
 
     // Gala
@@ -87,13 +87,13 @@ public class DataPopulator {
         getRandomTimestamp());
 
     // Baska
-    PostDAO.postSomething(6, "Painting pixels and sketching dreams.", "img/storage/posts/6_1.png",
+    PostDAO.postSomething(6, "Painting pixels and sketching dreams.", "img/storage/posts/6_1.jpg",
         getRandomTimestamp());
-    PostDAO.postSomething(6, "Designing a more colorful tomorrow.", "img/storage/posts/6_2.png", getRandomTimestamp());
-    PostDAO.postSomething(6, "Art is where work meets love.", "img/storage/posts/6_3.png", getRandomTimestamp());
-    PostDAO.postSomething(6, "Bringing my visions to life, one design at a time.", "img/storage/posts/6_4.png",
+    PostDAO.postSomething(6, "Designing a more colorful tomorrow.", "img/storage/posts/6_2.jpg", getRandomTimestamp());
+    PostDAO.postSomething(6, "Art is where work meets love.", "img/storage/posts/6_3.jpg", getRandomTimestamp());
+    PostDAO.postSomething(6, "Bringing my visions to life, one design at a time.", "img/storage/posts/6_4.jpg",
         getRandomTimestamp());
-    PostDAO.postSomething(6, "If it's not bold, it's not worth designing.", "img/storage/posts/6_5.png",
+    PostDAO.postSomething(6, "If it's not bold, it's not worth designing.", "img/storage/posts/6_5.jpg",
         getRandomTimestamp());
   }
 
