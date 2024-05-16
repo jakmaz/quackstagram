@@ -146,7 +146,7 @@ public class SignUpUI extends BaseUI {
       return;
     }
 
-    UserDAO.registerUser(username, password, bio, ""); // TODO: implement
+    UserDAO.registerUser(username, password, bio, "img/storage/profile/" + username + ".png");
     JOptionPane.showMessageDialog(this, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
     MainFrame.getInstance().showSignInPanel();
   }

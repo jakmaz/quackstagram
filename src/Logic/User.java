@@ -60,6 +60,10 @@ public class User {
     return posts;
   }
 
+  public String getProfilePicturePath() {
+    return UserDAO.getProfilePicturePath(this.id);
+  }
+
   private void loadUserDetails() {
     UserDetails userDetails = UserDAO.getUserDetails(this.id);
     if (userDetails != null) {
