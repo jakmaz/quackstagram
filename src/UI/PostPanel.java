@@ -108,9 +108,10 @@ public class PostPanel extends JPanel {
 
   private JPanel createLikePanel() {
     JPanel likePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    boolean isLiked = LikesDAO.checkLike(post.getId(), SessionManager.getCurrentUser().getId());
     likesLabel = new JLabel("Likes: " + post.getLikesCount());
-    likeButton = new JButton("Like");
-    likeButton.addActionListener(e -> handleLikeAction());
+    likeButton = new JButton(isLiked ? "Unlike" : "Like");
+    likeButton.addActionListener(e -> handleLikeAction(likeButton));
     likePanel.add(likesLabel);
     likePanel.add(likeButton);
     return likePanel;
@@ -171,21 +172,25 @@ public class PostPanel extends JPanel {
     return commentsPanel;
   }
 
-  private void handleLikeAction() {
+  private void handleLikeAction(JButton likeButton) {
     boolean isLiked = LikesDAO.checkLike(post.getId(), SessionManager.getCurrentUser().getId());
     if (isLiked) {
       if (LikesDAO.unlikePost(post.getId(), SessionManager.getCurrentUser().getId())) {
         int newLikesCount = post.getLikesCount() - 1;
         likesLabel.setText("Likes: " + newLikesCount);
         post.setLikesCount(newLikesCount);
+        likeButton.setText("Like");
       }
     } else {
       if (LikesDAO.likePost(post.getId(), SessionManager.getCurrentUser().getId())) {
         int newLikesCount = post.getLikesCount() + 1;
         likesLabel.setText("Likes: " + newLikesCount);
         post.setLikesCount(newLikesCount);
+        likeButton.setText("Unlike");
       }
     }
+    likeButton.revalidate();
+    likeButton.repaint();
   }
 
   private void handleCommentAction(String commentContent) {
