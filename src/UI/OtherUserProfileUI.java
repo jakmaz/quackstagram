@@ -40,6 +40,6 @@ public class OtherUserProfileUI extends ProfileUI {
 
   private void updateFollowButton() {
     boolean isFollowing = FollowDAO.isFollowing(SessionManager.getCurrentUser().getId(), currentUser.getId());
-    followButton.setText(isFollowing ? "Followed" : "Follow");
+    followButton.setText(isFollowing ? "Unfollow" : "Follow");
   }
 }
