@@ -124,7 +124,7 @@ public class SignInUI extends BaseUI {
     // Create and configure the Register button
     JButton btnRegisterNow = new JButton("No Account? Register Now");
     btnRegisterNow.addActionListener(this::onRegisterNowClicked);
-    btnRegisterNow.setBackground(Color.WHITE);
+    btnRegisterNow.setBackground(Color.decode("#f0f0f0"));
     btnRegisterNow.setForeground(Color.BLACK);
     btnRegisterNow.setFocusPainted(false);
     btnRegisterNow.setBorderPainted(false);
