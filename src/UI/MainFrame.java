@@ -1,22 +1,26 @@
 package UI;
 
-import java.awt.CardLayout;
+import Logic.SessionManager;
+import Logic.User;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
-
-import javax.swing.*;
-
-import Logic.User;
 
 public class MainFrame extends JFrame {
   private static MainFrame instance;
   private CardLayout cardLayout;
   private JPanel mainPanel;
+  private JPanel loadingPanel;
   private final Map<String, Supplier<BaseUI>> panelSuppliers = new HashMap<>();
   private final Map<String, BaseUI> initializedPanels = new HashMap<>();
+  private String expectedPanelToShow = null;
+
 
   public static MainFrame getInstance() {
     if (instance == null) {
@@ -30,8 +34,9 @@ public class MainFrame extends JFrame {
     setTitle("Quackstagram Application");
     initializeFrame();
     initializeSuppliers();
-    loadLoginPanels(); // Initially load only login-related panels
-    showSignInPanel(); // Display the Sign In panel initially
+    initializeLoadingPanel();
+    loadLoginPanels();
+    showSignInPanel();
   }
 
   private void initializeFrame() {
@@ -55,7 +60,11 @@ public class MainFrame extends JFrame {
     });
   }
 
-  // Initializes the suppliers for all panel types
+  private void initializeLoadingPanel() {
+    loadingPanel = new LoadingPanelUI();
+    mainPanel.add(loadingPanel, "LoadingPanel");
+  }
+
   public void initializeSuppliers() {
     panelSuppliers.put("SignIn", SignInUI::new);
     panelSuppliers.put("SignUp", SignUpUI::new);
@@ -64,22 +73,15 @@ public class MainFrame extends JFrame {
     panelSuppliers.put("Upload", UploadUI::new);
     panelSuppliers.put("Notifications", NotificationsUI::new);
     panelSuppliers.put("Profile", OwnProfileUI::new);
-    panelSuppliers.put("Loading", LoadingPanelUI::new);
   }
 
-  // Load panels necessary for login
   public void loadLoginPanels() {
     preloadPanel("SignIn");
     preloadPanel("SignUp");
   }
 
-  // Load the Profile panel, typically called after successful sign-in or sign-up
-  public void loadProfilePanel() {
-    preloadPanel("Profile");
-  }
-
   public void loadUserPanels() {
-    loadPanelsInThreads("Loading", "Notifications", "Upload", "Home", "Explore");
+    loadPanelsInThreads("Home", "Explore", "Upload", "Notifications");
   }
 
   private void loadPanelsInThreads(String... panelNames) {
@@ -87,43 +89,61 @@ public class MainFrame extends JFrame {
       SwingWorker<BaseUI, Void> worker = new SwingWorker<>() {
         @Override
         protected BaseUI doInBackground() throws Exception {
-          return preloadPanel(name);
+          if (SessionManager.getCurrentUser() == null) {
+            throw new IllegalStateException("Operation aborted: no user is currently logged in.");
+          }
+          try {
+            return preloadPanel(name);
+          } catch (NullPointerException e) {
+            throw new Exception("Required data is missing, which caused a Null Pointer Exception.", e);
+          }
         }
 
         @Override
         protected void done() {
           try {
-            BaseUI panel = get(); // Retrieve the loaded panel
-            if (panel != null) {
-              System.out.println("Panel loaded and added to mainPanel: " + name);
-              mainPanel.revalidate();
-              mainPanel.repaint();
+            BaseUI panel = get(); // May throw ExecutionException if doInBackground() throws an exception
+            SwingUtilities.invokeLater(() -> {
+              if (name.equals(expectedPanelToShow) && panel != null) {
+                switchPanel(name);
+              }
+            });
+          } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();  // Restore interrupted status
+            System.err.println("Thread was interrupted: " + e.getMessage());
+          } catch (ExecutionException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof IllegalStateException) {
+              System.err.println("Error loading panel " + name + ": " + cause.getMessage());
+            } else if (cause.getMessage().contains("Null Pointer")) {
+              System.err.println("Error loading panel " + name + " : Missing data - " + cause.getMessage());
+            } else if (cause.getMessage().contains("IOException")) {
+              System.err.println("Error loading panel " + name + ": Resource load failure - " + cause.getMessage());
+            } else {
+              System.err.println("Error loading panel " + name + ": Unexpected error occurred - " + cause.getMessage());
+              cause.printStackTrace();  // For detailed diagnostics
             }
           } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Unhandled exception in SwingWorker: " + e.getMessage());
           }
         }
       };
-      worker.execute(); // Start the worker thread
+      worker.execute();
     }
   }
 
-  // General method to preload or reload a panel based on the name
   private BaseUI preloadPanel(String name) {
     System.out.println("Preloading or reloading panel: " + name);
     Supplier<BaseUI> supplier = panelSuppliers.get(name);
     if (supplier != null) {
-      // Remove the existing panel if it has already been initialized
       BaseUI existingPanel = initializedPanels.get(name);
       if (existingPanel != null) {
         mainPanel.remove(existingPanel);
         System.out.println("Existing panel removed: " + name);
       }
-
-      // Get a new instance of the panel from the supplier
       BaseUI newPanel = supplier.get();
       mainPanel.add(newPanel, name);
-      initializedPanels.put(name, newPanel); // Update the map with the new panel instance
+      initializedPanels.put(name, newPanel);
       return newPanel;
     } else {
       System.out.println("Error: No supplier found for panel " + name);
@@ -131,81 +151,93 @@ public class MainFrame extends JFrame {
     }
   }
 
-  // Switch to a specific panel by name
-  private void switchPanel(String name) {
-    System.out.println("Request to switch to panel: " + name);
-    if (!initializedPanels.containsKey(name)) {
-      System.out.println("Panel not loaded yet: " + name);
-      showLoadingPanel();
+  private boolean isPanelLoaded(String name) {
+    return initializedPanels.containsKey(name);
+  }
 
+  private void switchPanel(String name) {
+    System.out.println("Switching to panel: " + name);
+    cardLayout.show(mainPanel, name);
+  }
+
+  private void showLoadingPanel() {
+    SwingUtilities.invokeLater(() -> {
+      System.out.println("Showing loading panel.");
+      cardLayout.show(mainPanel, "LoadingPanel");
+    });
+  }
+
+  public void showPanel(String name) {
+    expectedPanelToShow = name;  // Update the expected panel
+
+    if (!isPanelLoaded(name)) {
+      showLoadingPanel(); // Show the loading panel
+      // Asynchronously load the panel
       SwingWorker<Void, Void> worker = new SwingWorker<>() {
         @Override
         protected Void doInBackground() throws Exception {
-          preloadPanel(name); // Load the panel
+          preloadPanel(name); // Load the panel in the background
           return null;
         }
 
         @Override
         protected void done() {
-          cardLayout.show(mainPanel, name); // Switch to the panel after it is loaded
-          System.out.println("Switched to panel: " + name);
+          // Check if the loaded panel is still the one the user wants to see
+          SwingUtilities.invokeLater(() -> {
+            if (name.equals(expectedPanelToShow) && SessionManager.getCurrentUser() != null) {
+              switchPanel(name);  // Show only if it's still the expected panel
+            }
+          });
         }
       };
       worker.execute();
     } else {
-      System.out.println("Switching to panel: " + name);
-      cardLayout.show(mainPanel, name); // Panel already loaded, just switch
+      switchPanel(name); // If the panel is already loaded, just display it
     }
   }
 
-  public void showLoadingPanel() {
-    switchPanel("Loading");
+
+
+  // Load the Profile panel, typically called after successful sign-in or sign-up
+  public void loadProfilePanel() {
+    preloadPanel("Profile");
   }
 
-  // Individual methods for displaying each panel
   public void showSignInPanel() {
-    switchPanel("SignIn");
+    showPanel("SignIn");
   }
 
   public void showSignUpPanel() {
-    switchPanel("SignUp");
+    showPanel("SignUp");
   }
 
   public void showHomePanel() {
-    switchPanel("Home");
+    showPanel("Home");
   }
 
   public void showExplorePanel() {
-    switchPanel("Explore");
+    showPanel("Explore");
   }
 
   public void showUploadPanel() {
-    switchPanel("Upload");
+    showPanel("Upload");
   }
 
   public void showNotificationsPanel() {
-    switchPanel("Notifications");
+    showPanel("Notifications");
   }
 
   public void showProfilePanel() {
-    switchPanel("Profile");
+    showPanel("Profile");
   }
 
   public void showOtherProfilePanel(User user) {
-    // Create a new instance of UserProfileUI each time
-    OtherUserProfileUI otherProfileUI = new OtherUserProfileUI(user); // Assume constructor that accepts a User
-
-    // Unique identifier for each user panel
-    String panelKey = "UserProfile_" + user.getId(); // Assuming each user has a unique ID
-
-    // Add the new UserProfileUI to the mainPanel with a unique key
+    OtherUserProfileUI otherProfileUI = new OtherUserProfileUI(user);
+    String panelKey = "UserProfile_" + user.getId();
     mainPanel.add(otherProfileUI, panelKey);
-
-    // Show the newly added panel
-    switchPanel(panelKey);
+    showPanel(panelKey);
   }
 
-  // Clears all UI panels, typically used during log out
   public void clearUI() {
     for (BaseUI panel : initializedPanels.values()) {
       mainPanel.remove(panel);
@@ -215,6 +247,7 @@ public class MainFrame extends JFrame {
     initializedPanels.clear();
     mainPanel.revalidate();
     mainPanel.repaint();
+    expectedPanelToShow = null; // Reset expected panel
     System.out.println("All UI panels have been cleared.");
   }
 }
