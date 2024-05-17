@@ -35,7 +35,7 @@ public class ExploreUI extends BaseUI {
 
   public void initializeUI() {
     JPanel headerPanel = createHeaderPanel("Explore");
-    JPanel navigationPanel = createNavigationPanel();
+    JPanel navigationPanel = createNavigationPanel(PanelKey.EXPLORE);
 
     contentPanel = new JPanel(new CardLayout()); // Use CardLayout for the content panel
     JPanel mainContentPanel = createMainContentPanel(); // This is the grid view

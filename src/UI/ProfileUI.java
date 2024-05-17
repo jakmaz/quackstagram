@@ -34,7 +34,7 @@ public abstract class ProfileUI extends BaseUI {
   public void initializeUI() {
     JPanel headerPanel = createHeaderPanel();
     contentPanel = new JPanel(new CardLayout()); // Panel to switch between different views
-    JPanel navigationPanel = createNavigationPanel();
+    JPanel navigationPanel = createNavigationPanel(PanelKey.PROFILE);
 
     // Create a JScrollPane that wraps around the contentPanel
     JScrollPane scrollPane = new JScrollPane(contentPanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER,

@@ -44,7 +44,7 @@ public class UploadUI extends BaseUI {
 
   public void initializeUI() {
     JPanel headerPanel = createHeaderPanel("Upload Post");
-    JPanel navigationPanel = createNavigationPanel();
+    JPanel navigationPanel = createNavigationPanel(PanelKey.UPLOAD);
     JPanel contentPanel = createContentPanel();
 
     add(headerPanel, BorderLayout.NORTH);

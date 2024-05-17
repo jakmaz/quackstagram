@@ -32,7 +32,7 @@ public class HomeUI extends BaseUI {
     // Create and add components to the layout
     JPanel headerPanel = createHeaderPanel("Home");
     JScrollPane contentScrollPane = createContentScrollPane();
-    JPanel navigationPanel = createNavigationPanel();
+    JPanel navigationPanel = createNavigationPanel(PanelKey.HOME);
 
     add(headerPanel, BorderLayout.NORTH);
     add(contentScrollPane, BorderLayout.CENTER);

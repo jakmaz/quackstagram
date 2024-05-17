@@ -17,9 +17,9 @@ public class MainFrame extends JFrame {
   private CardLayout cardLayout;
   private JPanel mainPanel;
   private JPanel loadingPanel;
-  private final Map<String, Supplier<BaseUI>> panelSuppliers = new HashMap<>();
-  private final Map<String, BaseUI> initializedPanels = new HashMap<>();
-  private String expectedPanelToShow = null;
+  private final Map<PanelKey, Supplier<BaseUI>> panelSuppliers = new HashMap<>();
+  private final Map<PanelKey, BaseUI> initializedPanels = new HashMap<>();
+  private PanelKey expectedPanelToShow = null;
 
 
   public static MainFrame getInstance() {
@@ -62,30 +62,31 @@ public class MainFrame extends JFrame {
 
   private void initializeLoadingPanel() {
     loadingPanel = new LoadingPanelUI();
-    mainPanel.add(loadingPanel, "LoadingPanel");
+    mainPanel.add(loadingPanel, "LOADING");
   }
 
-  public void initializeSuppliers() {
-    panelSuppliers.put("SignIn", SignInUI::new);
-    panelSuppliers.put("SignUp", SignUpUI::new);
-    panelSuppliers.put("Home", HomeUI::new);
-    panelSuppliers.put("Explore", ExploreUI::new);
-    panelSuppliers.put("Upload", UploadUI::new);
-    panelSuppliers.put("Notifications", NotificationsUI::new);
-    panelSuppliers.put("Profile", OwnProfileUI::new);
+  private void initializeSuppliers() {
+    panelSuppliers.put(PanelKey.SIGN_IN, SignInUI::new);
+    panelSuppliers.put(PanelKey.SIGN_UP, SignUpUI::new);
+    panelSuppliers.put(PanelKey.HOME, HomeUI::new);
+    panelSuppliers.put(PanelKey.EXPLORE, ExploreUI::new);
+    panelSuppliers.put(PanelKey.UPLOAD, UploadUI::new);
+    panelSuppliers.put(PanelKey.NOTIFICATIONS, NotificationsUI::new);
+    panelSuppliers.put(PanelKey.PROFILE, OwnProfileUI::new);
+    panelSuppliers.put(PanelKey.LOADING, LoadingPanelUI::new);
   }
 
   public void loadLoginPanels() {
-    preloadPanel("SignIn");
-    preloadPanel("SignUp");
+    preloadPanel(PanelKey.SIGN_IN);
+    preloadPanel(PanelKey.SIGN_UP);
   }
 
   public void loadUserPanels() {
-    loadPanelsInThreads("Home", "Explore", "Upload", "Notifications");
+    loadPanelsInThreads(PanelKey.HOME, PanelKey.EXPLORE, PanelKey.UPLOAD, PanelKey.NOTIFICATIONS);
   }
 
-  private void loadPanelsInThreads(String... panelNames) {
-    for (String name : panelNames) {
+  private void loadPanelsInThreads(PanelKey... panelKeys) {
+    for (PanelKey key : panelKeys) {
       SwingWorker<BaseUI, Void> worker = new SwingWorker<>() {
         @Override
         protected BaseUI doInBackground() throws Exception {
@@ -93,7 +94,7 @@ public class MainFrame extends JFrame {
             throw new IllegalStateException("Operation aborted: no user is currently logged in.");
           }
           try {
-            return preloadPanel(name);
+            return preloadPanel(key);
           } catch (NullPointerException e) {
             throw new Exception("Required data is missing, which caused a Null Pointer Exception.", e);
           }
@@ -104,8 +105,8 @@ public class MainFrame extends JFrame {
           try {
             BaseUI panel = get(); // May throw ExecutionException if doInBackground() throws an exception
             SwingUtilities.invokeLater(() -> {
-              if (name.equals(expectedPanelToShow) && panel != null) {
-                switchPanel(name);
+              if (key == expectedPanelToShow && panel != null) {
+                switchPanel(key);
               }
             });
           } catch (InterruptedException e) {
@@ -114,13 +115,13 @@ public class MainFrame extends JFrame {
           } catch (ExecutionException e) {
             Throwable cause = e.getCause();
             if (cause instanceof IllegalStateException) {
-              System.err.println("Error loading panel " + name + ": " + cause.getMessage());
+              System.err.println("Error loading panel " + key + ": " + cause.getMessage());
             } else if (cause.getMessage().contains("Null Pointer")) {
-              System.err.println("Error loading panel " + name + " : Missing data - " + cause.getMessage());
+              System.err.println("Error loading panel " + key + " : Missing data - " + cause.getMessage());
             } else if (cause.getMessage().contains("IOException")) {
-              System.err.println("Error loading panel " + name + ": Resource load failure - " + cause.getMessage());
+              System.err.println("Error loading panel " + key + ": Resource load failure - " + cause.getMessage());
             } else {
-              System.err.println("Error loading panel " + name + ": Unexpected error occurred - " + cause.getMessage());
+              System.err.println("Error loading panel " + key + ": Unexpected error occurred - " + cause.getMessage());
               cause.printStackTrace();  // For detailed diagnostics
             }
           } catch (Exception e) {
@@ -132,110 +133,100 @@ public class MainFrame extends JFrame {
     }
   }
 
-  private BaseUI preloadPanel(String name) {
-    System.out.println("Preloading or reloading panel: " + name);
-    Supplier<BaseUI> supplier = panelSuppliers.get(name);
+  private BaseUI preloadPanel(PanelKey key) {
+    System.out.println("Preloading or reloading panel: " + key);
+    Supplier<BaseUI> supplier = panelSuppliers.get(key);
     if (supplier != null) {
-      BaseUI existingPanel = initializedPanels.get(name);
+      BaseUI existingPanel = initializedPanels.get(key);
       if (existingPanel != null) {
         mainPanel.remove(existingPanel);
-        System.out.println("Existing panel removed: " + name);
+        System.out.println("Existing panel removed: " + key);
       }
       BaseUI newPanel = supplier.get();
-      mainPanel.add(newPanel, name);
-      initializedPanels.put(name, newPanel);
+      mainPanel.add(newPanel, key.name());
+      initializedPanels.put(key, newPanel);
       return newPanel;
     } else {
-      System.out.println("Error: No supplier found for panel " + name);
+      System.out.println("Error: No supplier found for panel " + key);
       return null;
     }
   }
 
-  private boolean isPanelLoaded(String name) {
-    return initializedPanels.containsKey(name);
+  private boolean isPanelLoaded(PanelKey key) {
+    return initializedPanels.containsKey(key);
   }
 
-  private void switchPanel(String name) {
-    System.out.println("Switching to panel: " + name);
-    cardLayout.show(mainPanel, name);
+  private void switchPanel(PanelKey panel) {
+    System.out.println("Switching to panel: " + panel);
+    cardLayout.show(mainPanel, panel.name());
   }
 
   private void showLoadingPanel() {
+    System.out.println("Attempting to show loading panel.");
     SwingUtilities.invokeLater(() -> {
-      System.out.println("Showing loading panel.");
-      cardLayout.show(mainPanel, "LoadingPanel");
+      System.out.println("Showing loading panel now.");
+      cardLayout.show(mainPanel, PanelKey.LOADING.name());
     });
   }
 
-  public void showPanel(String name) {
-    expectedPanelToShow = name;  // Update the expected panel
+  public void showPanel(PanelKey key) {
+    expectedPanelToShow = key;  // Update the expected panel
+    System.out.println("Requested to show panel: " + key);
 
-    if (!isPanelLoaded(name)) {
+    if (!isPanelLoaded(key)) {
+      System.out.println("Panel " + key + " not loaded, showing loading panel.");
       showLoadingPanel(); // Show the loading panel
-      // Asynchronously load the panel
       SwingWorker<Void, Void> worker = new SwingWorker<>() {
         @Override
         protected Void doInBackground() throws Exception {
-          preloadPanel(name); // Load the panel in the background
+          System.out.println("Loading panel " + key + " in background.");
+          preloadPanel(key); // Load the panel in the background
           return null;
         }
 
         @Override
         protected void done() {
-          // Check if the loaded panel is still the one the user wants to see
           SwingUtilities.invokeLater(() -> {
-            if (name.equals(expectedPanelToShow) && SessionManager.getCurrentUser() != null) {
-              switchPanel(name);  // Show only if it's still the expected panel
+            System.out.println("Background loading done for " + key);
+            if (key == expectedPanelToShow && SessionManager.getCurrentUser() != null) {
+              System.out.println("Switching to panel " + key);
+              switchPanel(key);  // Show only if it's still the expected panel
             }
           });
         }
       };
       worker.execute();
     } else {
-      switchPanel(name); // If the panel is already loaded, just display it
+      System.out.println("Panel " + key + " already loaded, switching directly.");
+      switchPanel(key); // If the panel is already loaded, just display it
     }
   }
 
 
-
   // Load the Profile panel, typically called after successful sign-in or sign-up
   public void loadProfilePanel() {
-    preloadPanel("Profile");
+    preloadPanel(PanelKey.PROFILE);
   }
 
   public void showSignInPanel() {
-    showPanel("SignIn");
+    showPanel(PanelKey.SIGN_IN);
   }
 
   public void showSignUpPanel() {
-    showPanel("SignUp");
-  }
-
-  public void showHomePanel() {
-    showPanel("Home");
-  }
-
-  public void showExplorePanel() {
-    showPanel("Explore");
-  }
-
-  public void showUploadPanel() {
-    showPanel("Upload");
-  }
-
-  public void showNotificationsPanel() {
-    showPanel("Notifications");
+    showPanel(PanelKey.SIGN_UP);
   }
 
   public void showProfilePanel() {
-    showPanel("Profile");
+    showPanel(PanelKey.PROFILE);
   }
 
   public void showOtherProfilePanel(User user) {
-    OtherUserProfileUI otherProfileUI = new OtherUserProfileUI(user);
-    String panelKey = "UserProfile_" + user.getId();
-    mainPanel.add(otherProfileUI, panelKey);
-    showPanel(panelKey);
+//    String panelKey = "UserProfile_" + user.getId(); // Create a unique key for each user profile
+//    if (!mainPanel.isAncestorOf(panelKey)) { // Check if the panel is not already loaded
+//      OtherUserProfileUI otherProfileUI = new OtherUserProfileUI(user);
+//      mainPanel.add(otherProfileUI, panelKey);
+//    }
+//    showPanel(panelKey); // Use a method that accepts string for dynamic keys
   }
 
   public void clearUI() {

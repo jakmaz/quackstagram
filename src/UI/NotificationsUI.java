@@ -33,7 +33,7 @@ public class NotificationsUI extends BaseUI {
 
   public void initializeUI() {
     JPanel headerPanel = createHeaderPanel("Notifications");
-    JPanel navigationPanel = createNavigationPanel();
+    JPanel navigationPanel = createNavigationPanel(PanelKey.NOTIFICATIONS);
     JScrollPane scrollPane = createScrollPane();
 
     add(headerPanel, BorderLayout.NORTH);

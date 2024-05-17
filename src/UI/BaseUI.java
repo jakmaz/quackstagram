@@ -36,47 +36,42 @@ public abstract class BaseUI extends JPanel {
     return headerPanel;
   }
 
-  public JPanel createNavigationPanel() {
+  public JPanel createNavigationPanel(PanelKey selectedOption) {
     // Navigation Bar
     JPanel navigationPanel = new JPanel();
     navigationPanel.setBackground(new Color(249, 249, 249));
     navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.X_AXIS));
     navigationPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-    navigationPanel.add(createIconButton("img/icons/home.png", "home"));
+    // Adding buttons with selection check
+    navigationPanel.add(createIconButton("img/icons/home.png", PanelKey.HOME, selectedOption == PanelKey.HOME));
     navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/search.png", "explore"));
+    navigationPanel.add(createIconButton("img/icons/search.png", PanelKey.EXPLORE, selectedOption == PanelKey.EXPLORE));
     navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/add.png", "add"));
+    navigationPanel.add(createIconButton("img/icons/add.png", PanelKey.UPLOAD, selectedOption == PanelKey.UPLOAD));
     navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/heart.png", "notification"));
+    navigationPanel.add(createIconButton("img/icons/heart.png", PanelKey.NOTIFICATIONS, selectedOption == PanelKey.NOTIFICATIONS));
     navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/profile.png", "profile"));
+    navigationPanel.add(createIconButton("img/icons/profile.png", PanelKey.PROFILE, selectedOption == PanelKey.PROFILE));
 
     return navigationPanel;
-
   }
 
-  private JButton createIconButton(String iconPath, String buttonType) {
+  private JButton createIconButton(String iconPath, PanelKey buttonType, boolean isSelected) {
     ImageIcon iconOriginal = new ImageIcon(iconPath);
     Image iconScaled = iconOriginal.getImage().getScaledInstance(NAV_ICON_SIZE, NAV_ICON_SIZE, Image.SCALE_SMOOTH);
     JButton button = new JButton(new ImageIcon(iconScaled));
     button.setBorder(BorderFactory.createEmptyBorder());
     button.setContentAreaFilled(false);
 
-    // Define actions based on button type
-    if ("home".equals(buttonType)) {
-      button.addActionListener(e -> MainFrame.getInstance().showHomePanel());
-    } else if ("profile".equals(buttonType)) {
-      button.addActionListener(e -> MainFrame.getInstance().showProfilePanel());
-    } else if ("notification".equals(buttonType)) {
-      button.addActionListener(e -> MainFrame.getInstance().showNotificationsPanel());
-    } else if ("explore".equals(buttonType)) {
-      button.addActionListener(e -> MainFrame.getInstance().showExplorePanel());
-    } else if ("add".equals(buttonType)) {
-      button.addActionListener(e -> MainFrame.getInstance().showUploadPanel());
+    // Optionally highlight the selected button
+    if (isSelected) {
+      button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
     }
-    return button;
 
+    // Attach action listener to switch panels based on PanelKey
+    button.addActionListener(e -> MainFrame.getInstance().showPanel(buttonType));
+
+    return button;
   }
 }

@@ -20,7 +20,7 @@ public class LoadingPanelUI extends BaseUI {
     public void initializeUI() {
         JPanel headerPanel = createHeaderPanel("Loading...");
         JPanel loadingPanel = createLoadingPanel();
-        JPanel navigationPanel = createNavigationPanel();
+        JPanel navigationPanel = createNavigationPanel(null);
 
         add(headerPanel, BorderLayout.NORTH);
         add(loadingPanel, BorderLayout.CENTER);

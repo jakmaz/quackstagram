@@ -3,7 +3,6 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.Collections;
 
 public class Main {

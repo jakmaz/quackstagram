@@ -1,0 +1,5 @@
+package UI;
+
+public enum PanelKey {
+    SIGN_IN, SIGN_UP, HOME, EXPLORE, UPLOAD, NOTIFICATIONS, PROFILE, LOADING
+}
