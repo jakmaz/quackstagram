@@ -20,15 +20,11 @@ public abstract class BaseUI extends JPanel {
     JPanel headerPanel = new JPanel(new BorderLayout());
     headerPanel.setBackground(new Color(51, 51, 51));
 
-    // Load and scale the image icon
-    ImageIcon chickenIcon = new ImageIcon(new ImageIcon("img/icons/chicken.png").getImage().getScaledInstance(20, 20, Image.SCALE_AREA_AVERAGING));
-
-    // Create the label with text and an icon positioned to the right
-    JLabel titleLabel = new JLabel(title, chickenIcon, SwingConstants.CENTER);
+    JLabel titleLabel = new JLabel(title, loadScaledIcon("img/icons/chicken.png", 20, 20), SwingConstants.CENTER);
     titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
     titleLabel.setForeground(Color.WHITE);
-    titleLabel.setHorizontalTextPosition(SwingConstants.LEFT); // Position text to the left of the icon
-    titleLabel.setIconTextGap(10); // Set gap between text and icon
+    titleLabel.setHorizontalTextPosition(SwingConstants.LEFT);
+    titleLabel.setIconTextGap(10);
 
     headerPanel.add(titleLabel, BorderLayout.CENTER);
     headerPanel.setPreferredSize(new Dimension(WIDTH, 40));
@@ -37,41 +33,31 @@ public abstract class BaseUI extends JPanel {
   }
 
   public JPanel createNavigationPanel(PanelKey selectedOption) {
-    // Navigation Bar
     JPanel navigationPanel = new JPanel();
     navigationPanel.setBackground(new Color(249, 249, 249));
     navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.X_AXIS));
     navigationPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-    // Adding buttons with selection check
-    navigationPanel.add(createIconButton("img/icons/home.png", PanelKey.HOME, selectedOption == PanelKey.HOME));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/search.png", PanelKey.EXPLORE, selectedOption == PanelKey.EXPLORE));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/add.png", PanelKey.UPLOAD, selectedOption == PanelKey.UPLOAD));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/heart.png", PanelKey.NOTIFICATIONS, selectedOption == PanelKey.NOTIFICATIONS));
-    navigationPanel.add(Box.createHorizontalGlue());
-    navigationPanel.add(createIconButton("img/icons/profile.png", PanelKey.PROFILE, selectedOption == PanelKey.PROFILE));
+    for (PanelKey key : PanelKey.values()) {
+      navigationPanel.add(createIconButton("img/icons/" + key.name().toLowerCase() + ".png", key, selectedOption == key));
+      navigationPanel.add(Box.createHorizontalGlue());
+    }
 
     return navigationPanel;
   }
 
   private JButton createIconButton(String iconPath, PanelKey buttonType, boolean isSelected) {
-    ImageIcon iconOriginal = new ImageIcon(iconPath);
-    Image iconScaled = iconOriginal.getImage().getScaledInstance(NAV_ICON_SIZE, NAV_ICON_SIZE, Image.SCALE_SMOOTH);
-    JButton button = new JButton(new ImageIcon(iconScaled));
+    JButton button = new JButton(loadScaledIcon(iconPath, NAV_ICON_SIZE, NAV_ICON_SIZE));
     button.setBorder(BorderFactory.createEmptyBorder());
     button.setContentAreaFilled(false);
-
-    // Optionally highlight the selected button
-    if (isSelected) {
-      button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
-    }
-
-    // Attach action listener to switch panels based on PanelKey
+    button.setBorder(isSelected ? BorderFactory.createLineBorder(Color.GRAY, 2) : null);
     button.addActionListener(e -> MainFrame.getInstance().showPanel(buttonType));
-
     return button;
+  }
+
+  private static ImageIcon loadScaledIcon(String path, int width, int height) {
+    ImageIcon originalIcon = new ImageIcon(path);
+    Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+    return new ImageIcon(scaledImage);
   }
 }
