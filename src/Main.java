@@ -8,7 +8,6 @@ import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
-        UIManager.put("Button.background", Color.decode("#e3e3e3"));
         UIManager.put("Component.focusWidth", 0);
         FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", "#808080"));
         FlatMacLightLaf.setup();

@@ -73,8 +73,13 @@ public class PostPanel extends JPanel {
     JButton ownerBtn = new JButton(post.getUser().getUsername(), scaledRoundedAvatar);
     ownerBtn.setBorderPainted(false);
     ownerBtn.setOpaque(true);
-    ownerBtn.addActionListener(e -> MainFrame.getInstance().showOtherProfilePanel(post.getUser()));
-
+    ownerBtn.addActionListener(e -> {
+      if (post.getUser().equals(SessionManager.getCurrentUser())) {
+        MainFrame.getInstance().showProfilePanel();
+      } else {
+        MainFrame.getInstance().showOtherProfilePanel(post.getUser());
+      }
+    });
     LocalDateTime postTimestamp = post.getTimestamp().toLocalDateTime();
     String timeSincePosting = TimeElapsedCalculator.getElapsedTime(postTimestamp);
 
