@@ -18,13 +18,13 @@ public class DataPopulator {
   }
 
   private static void addUsers() {
-    UserDAO.registerUser("admin", "admin", "Main chief developer", "img/storage/profile/admin.png");
-    UserDAO.registerUser("mordula", "admin", "Eva Mordface, Inhabitant of Mordor", "img/storage/profile/mordula.png");
-    UserDAO.registerUser("swiniar", "admin", "Jack Swinehead, Mechanic engineer", "img/storage/profile/swiniar.png");
+    UserDAO.registerUser("admin", "admin", "Main chief developer", "img/storage/profile/admin.jpg");
+    UserDAO.registerUser("mordula", "admin", "Eva Mordface, Inhabitant of Mordor", "img/storage/profile/mordula.jpg");
+    UserDAO.registerUser("swiniar", "admin", "Jack Swinehead, Mechanic engineer", "img/storage/profile/swiniar.jpg");
     UserDAO.registerUser("pluta", "admin", "Vojtech Pluton, Soft ferromagnetics in rotating fields",
-        "img/storage/profile/pluta.png");
-    UserDAO.registerUser("gala", "admin", "Alex Galla-Yaskier, Gala, gala - E!", "img/storage/profile/gala.png");
-    UserDAO.registerUser("baska", "admin", "Barb McWitch, Desing(e)", "img/storage/profile/baska.png");
+        "img/storage/profile/pluta.jpg");
+    UserDAO.registerUser("gala", "admin", "Alex Galla-Yaskier, Gala, gala - E!", "img/storage/profile/gala.jpg");
+    UserDAO.registerUser("baska", "admin", "Barb McWitch, Desing(e)", "img/storage/profile/baska.jpg");
   }
 
   private static void addPosts() {
