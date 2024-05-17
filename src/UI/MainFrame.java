@@ -19,6 +19,7 @@ public class MainFrame extends JFrame {
   private JPanel loadingPanel;
   private final Map<PanelKey, Supplier<BaseUI>> panelSuppliers = new HashMap<>();
   private final Map<PanelKey, BaseUI> initializedPanels = new HashMap<>();
+  private final Map<String, JPanel> dynamicUserPanels = new HashMap<>();
   private PanelKey expectedPanelToShow = null;
 
 
@@ -221,12 +222,13 @@ public class MainFrame extends JFrame {
   }
 
   public void showOtherProfilePanel(User user) {
-//    String panelKey = "UserProfile_" + user.getId(); // Create a unique key for each user profile
-//    if (!mainPanel.isAncestorOf(panelKey)) { // Check if the panel is not already loaded
-//      OtherUserProfileUI otherProfileUI = new OtherUserProfileUI(user);
-//      mainPanel.add(otherProfileUI, panelKey);
-//    }
-//    showPanel(panelKey); // Use a method that accepts string for dynamic keys
+    String panelKey = "UserProfile_" + user.getId(); // Create a unique key for each user profile
+    if (!dynamicUserPanels.containsKey(panelKey)) { // Check if the panel is not already loaded
+      OtherUserProfileUI otherProfileUI = new OtherUserProfileUI(user);
+      mainPanel.add(otherProfileUI, panelKey);
+      dynamicUserPanels.put(panelKey, otherProfileUI); // Store it in the dynamic panels map
+    }
+    cardLayout.show(mainPanel, panelKey); // Use CardLayout to show the panel
   }
 
   public void clearUI() {
