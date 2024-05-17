@@ -6,7 +6,7 @@ import javax.swing.*;
 public abstract class BaseUI extends JPanel {
   public static final int WIDTH = 300;
   public static final int HEIGHT = 500;
-  private static final int NAV_ICON_SIZE = 20;
+  private static final int NAV_ICON_SIZE = 25;
   protected String osName = System.getProperty("os.name").toLowerCase();
 
   public BaseUI() {
