@@ -19,7 +19,7 @@ public class OwnProfileUI extends ProfileUI {
   @Override
   JPanel createHeaderActionButtons() {
     // Create a panel to hold buttons
-    JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+    JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 5, 0));
     buttonPanel.setBackground(new Color(249, 249, 249));
 
     // Create and configure the Edit Profile button
