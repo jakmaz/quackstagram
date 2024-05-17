@@ -112,6 +112,7 @@ public class SignUpUI extends BaseUI {
     // Create and configure the Sign-In button
     JButton btnRegister = new JButton("Register");
     btnRegister.addActionListener(this::onRegisterClicked);
+    btnRegister.setBackground(new Color(240, 240, 240));
     btnRegister.setFocusPainted(false);
     btnRegister.setBorderPainted(false);
     btnRegister.setFont(new Font("Arial", Font.BOLD, 14));
@@ -119,6 +120,7 @@ public class SignUpUI extends BaseUI {
     // Create and configure the Register button
     JButton btnSignUp = new JButton("Already have an account? Sign In");
     btnSignUp.addActionListener(this::onSignInClicked);
+    btnSignUp.setBackground(new Color(240, 240, 240));
     btnSignUp.setFocusPainted(false);
     btnSignUp.setBorderPainted(false);
 
