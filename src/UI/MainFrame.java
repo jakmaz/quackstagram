@@ -16,6 +16,8 @@ public class MainFrame extends JFrame {
   private JPanel loadingPanel;
   private final Map<String, Supplier<BaseUI>> panelSuppliers = new HashMap<>();
   private final Map<String, BaseUI> initializedPanels = new HashMap<>();
+  private String expectedPanelToShow = null;
+
 
   public static MainFrame getInstance() {
     if (instance == null) {
@@ -141,20 +143,26 @@ public class MainFrame extends JFrame {
   }
 
   public void showPanel(String name) {
+    expectedPanelToShow = name;  // Set the currently expected panel
+
     if (!isPanelLoaded(name)) {
       showLoadingPanel(); // Show the loading panel
-      // Asynchronously load the panel
+      // Load the panel asynchronously
       SwingWorker<Void, Void> worker = new SwingWorker<>() {
         @Override
         protected Void doInBackground() throws Exception {
-          preloadPanel(name); // Load the panel in the background
+          preloadPanel(name); // Load panel in background
           return null;
         }
 
         @Override
         protected void done() {
-          // When loading is complete, switch to the target panel
-          SwingUtilities.invokeLater(() -> switchPanel(name));
+          // Once loading is complete, check if this panel is still expected
+          SwingUtilities.invokeLater(() -> {
+            if (name.equals(expectedPanelToShow)) {
+              switchPanel(name);
+            }
+          });
         }
       };
       worker.execute();
@@ -162,9 +170,6 @@ public class MainFrame extends JFrame {
       switchPanel(name); // If the panel is already loaded, simply display it
     }
   }
-
-
-
 
   // Load the Profile panel, typically called after successful sign-in or sign-up
   public void loadProfilePanel() {
@@ -215,6 +220,7 @@ public class MainFrame extends JFrame {
     initializedPanels.clear();
     mainPanel.revalidate();
     mainPanel.repaint();
+    expectedPanelToShow = null; // Reset expected panel
     System.out.println("All UI panels have been cleared.");
   }
 }
