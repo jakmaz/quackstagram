@@ -162,7 +162,7 @@ public class PostPanel extends JPanel {
     JTextField commentField = new JTextField(15); // Adjustable size
     commentField.setPreferredSize(new Dimension(commentField.getPreferredSize().width, 20));
 
-    ImageIcon scaledIcon = new ImageIcon(icon.getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+    ImageIcon scaledIcon = new ImageIcon(icon.getScaledInstance(20, 20, Image.SCALE_SMOOTH));
     JButton submitButton = new JButton(scaledIcon);
     submitButton.setBorderPainted(false);
     submitButton.setContentAreaFilled(false);
