@@ -67,19 +67,8 @@ public class PostPanel extends JPanel {
   private JPanel createTopPanel() {
     JPanel topPanel = new JPanel(new BorderLayout());
 
-    ImageIcon avatarIcon = new ImageIcon(post.getUser().getProfilePicturePath());
-    Image roundedAvatarIcon = makeRoundedImage(avatarIcon.getImage());
-    ImageIcon scaledRoundedAvatar = new ImageIcon(roundedAvatarIcon.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-    JButton ownerBtn = new JButton(post.getUser().getUsername(), scaledRoundedAvatar);
-    ownerBtn.setBorderPainted(false);
-    ownerBtn.setOpaque(true);
-    ownerBtn.addActionListener(e -> {
-      if (post.getUser().equals(SessionManager.getCurrentUser())) {
-        MainFrame.getInstance().showProfilePanel();
-      } else {
-        MainFrame.getInstance().showOtherProfilePanel(post.getUser());
-      }
-    });
+
+    JButton ownerBtn = getOwnerBtn();
     LocalDateTime postTimestamp = post.getTimestamp().toLocalDateTime();
     String timeSincePosting = TimeElapsedCalculator.getElapsedTime(postTimestamp);
 
@@ -87,6 +76,30 @@ public class PostPanel extends JPanel {
     topPanel.add(ownerBtn, BorderLayout.WEST);
     topPanel.add(timeLabel, BorderLayout.EAST);
     return topPanel;
+  }
+
+  private JButton getOwnerBtn() {
+    ImageIcon avatarIcon = new ImageIcon(post.getUser().getProfilePicturePath());
+    Image roundedAvatarIcon = makeRoundedImage(avatarIcon.getImage());
+    ImageIcon scaledRoundedAvatar = new ImageIcon(roundedAvatarIcon.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+
+    JButton ownerBtn = new JButton(post.getUser().getUsername(), scaledRoundedAvatar);
+    ownerBtn.setBorderPainted(false);
+    ownerBtn.setOpaque(false);
+    ownerBtn.setContentAreaFilled(false);
+    ownerBtn.setFocusPainted(false);
+
+    // Adding padding around the image inside the button
+    ownerBtn.setMargin(new Insets(10, 10, 10, 10)); // Adds 10 pixels of padding on all sides
+
+    ownerBtn.addActionListener(e -> {
+      if (post.getUser().equals(SessionManager.getCurrentUser())) {
+        MainFrame.getInstance().showProfilePanel();
+      } else {
+        MainFrame.getInstance().showOtherProfilePanel(post.getUser());
+      }
+    });
+    return ownerBtn;
   }
 
   private JPanel createImagePanel() {
