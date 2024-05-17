@@ -1,12 +1,15 @@
 package UI;
 
+import Logic.SessionManager;
 import Logic.User;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
 
 public class MainFrame extends JFrame {
@@ -86,20 +89,42 @@ public class MainFrame extends JFrame {
       SwingWorker<BaseUI, Void> worker = new SwingWorker<>() {
         @Override
         protected BaseUI doInBackground() throws Exception {
-          return preloadPanel(name);
+          if (SessionManager.getCurrentUser() == null) {
+            throw new IllegalStateException("Operation aborted: no user is currently logged in.");
+          }
+          try {
+            return preloadPanel(name);
+          } catch (NullPointerException e) {
+            throw new Exception("Required data is missing, which caused a Null Pointer Exception.", e);
+          }
         }
 
         @Override
         protected void done() {
           try {
-            BaseUI panel = get();
-            if (panel != null) {
-              System.out.println("Panel loaded and added to mainPanel: " + name);
-              mainPanel.revalidate();
-              mainPanel.repaint();
+            BaseUI panel = get(); // May throw ExecutionException if doInBackground() throws an exception
+            SwingUtilities.invokeLater(() -> {
+              if (name.equals(expectedPanelToShow) && panel != null) {
+                switchPanel(name);
+              }
+            });
+          } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();  // Restore interrupted status
+            System.err.println("Thread was interrupted: " + e.getMessage());
+          } catch (ExecutionException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof IllegalStateException) {
+              System.err.println("Error loading panel " + name + ": " + cause.getMessage());
+            } else if (cause.getMessage().contains("Null Pointer")) {
+              System.err.println("Error loading panel " + name + " : Missing data - " + cause.getMessage());
+            } else if (cause.getMessage().contains("IOException")) {
+              System.err.println("Error loading panel " + name + ": Resource load failure - " + cause.getMessage());
+            } else {
+              System.err.println("Error loading panel " + name + ": Unexpected error occurred - " + cause.getMessage());
+              cause.printStackTrace();  // For detailed diagnostics
             }
           } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Unhandled exception in SwingWorker: " + e.getMessage());
           }
         }
       };
@@ -143,33 +168,35 @@ public class MainFrame extends JFrame {
   }
 
   public void showPanel(String name) {
-    expectedPanelToShow = name;  // Set the currently expected panel
+    expectedPanelToShow = name;  // Update the expected panel
 
     if (!isPanelLoaded(name)) {
       showLoadingPanel(); // Show the loading panel
-      // Load the panel asynchronously
+      // Asynchronously load the panel
       SwingWorker<Void, Void> worker = new SwingWorker<>() {
         @Override
         protected Void doInBackground() throws Exception {
-          preloadPanel(name); // Load panel in background
+          preloadPanel(name); // Load the panel in the background
           return null;
         }
 
         @Override
         protected void done() {
-          // Once loading is complete, check if this panel is still expected
+          // Check if the loaded panel is still the one the user wants to see
           SwingUtilities.invokeLater(() -> {
-            if (name.equals(expectedPanelToShow)) {
-              switchPanel(name);
+            if (name.equals(expectedPanelToShow) && SessionManager.getCurrentUser() != null) {
+              switchPanel(name);  // Show only if it's still the expected panel
             }
           });
         }
       };
       worker.execute();
     } else {
-      switchPanel(name); // If the panel is already loaded, simply display it
+      switchPanel(name); // If the panel is already loaded, just display it
     }
   }
+
+
 
   // Load the Profile panel, typically called after successful sign-in or sign-up
   public void loadProfilePanel() {
