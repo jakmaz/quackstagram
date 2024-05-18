@@ -19,26 +19,26 @@ Quackstagram is a dynamic social media platform designed for sharing visual cont
   - Jakub Mazur - I6349651
   - Tomasz Mizera - I6357148
 - **Colaboration**:
-  - Both members collaborated equally to the develompent of the project in all fields.
+  - Both members collaborated equally to the development of the project in all fields.
 
 ## Designing a Relational Database Schema
 
 ### Entity Analysis
 
-This section provides an abstracted overview of the core entities identified within the Quackstagram application framework. Each entity is crucial for the relational dynamics of the platform, supporting a wide range of features from user interactions to content management and notifications.
+This section provides an abstracted overview of the core entities identified within the Quackstagram application. Each entity is crucial for the relational dynamics of the platform, supporting a wide range of features from user interactions to content management and notifications.
 
 #### Entities and Their Attributes
 
 1. **User**
 
-   - **Description:** Represents individuals registered on the platform, encapsulating all necessary personal information.
+   - **Description:** Represents individuals registered on the platform
    - **Attributes:**
      - **Authentication Details:** Ensures secure access to the user's account.
      - **Profile Information:** Includes biographical details and visual identifiers.
 
 2. **Post**
 
-   - **Description:** Constitutes the primary content created by users, showcasing media and textual descriptions.
+   - **Description:** Pprimary content created by users, showcasing media and textual descriptions.
    - **Attributes:**
      - **Ownership Link:** Connects the post to the user who created it.
      - **Content Details:** Encompasses the media path and accompanying caption.
@@ -46,7 +46,7 @@ This section provides an abstracted overview of the core entities identified wit
 
 3. **Comment**
 
-   - **Description:** Allows users to engage in discussions by commenting on posts, fostering community interaction.
+   - **Description:** Allows users to engage in discussions by commenting on posts.
    - **Attributes:**
      - **Post Link:** Associates the comment with a specific post.
      - **User Link:** Indicates the user who made the comment.
@@ -55,7 +55,7 @@ This section provides an abstracted overview of the core entities identified wit
 
 4. **Like**
 
-   - **Description:** Represents a user's approval of a post, an integral part of social feedback mechanisms.
+   - **Description:** Represents a user's approval of a post.
    - **Attributes:**
      - **Post Link:** Associates the like with a specific post.
      - **User Link:** Identifies the user who liked the post.
@@ -63,7 +63,7 @@ This section provides an abstracted overview of the core entities identified wit
 
 5. **Follower**
 
-   - **Description:** Tracks relationships between users, specifically who follows whom, vital for network growth and content dissemination.
+   - **Description:** Tracks relationships between users, specifically who follows whom.
    - **Attributes:**
      - **Follower Link:** Identifies the user who is following.
      - **Following Link:** Identifies the user being followed.
@@ -78,11 +78,9 @@ This section provides an abstracted overview of the core entities identified wit
      - **Message Content:** Describes the reason for the notification.
      - **Notification Timestamp:** Timestamps when the notification was generated.
 
-This abstracted analysis underscores the functional roles these entities play within the Quackstagram ecosystem, emphasizing their interrelationships and the attributes that facilitate the platform's operational requirements. This perspective helps in understanding how data is structured to support user interactions and content dynamics effectively.
-
 ### Relationship Mapping
 
-This section explores the relational dynamics between the core entities within the Quackstagram platform. The relationships are fundamental to structuring the database and defining how entities interact with one another, which is crucial for queries, data integrity, and maintaining logical consistency throughout the application.
+This section describes the relational dynamics between the core entities within the Quackstagram. The relationships are fundamental to structuring the database and defining how entities interact with one another, which is crucial for queries, data integrity, and maintaining logical consistency throughout the application.
 
 #### Entity Relationships
 
@@ -103,7 +101,7 @@ This section explores the relational dynamics between the core entities within t
 
 4. **Post to Like**
 
-   - **Type:** Many-to-Many (realized via a junction table with unique constraints)
+   - **Type:** Many-to-Many (implemented using a bridge table)
    - **Description:** Users can like many posts, and each post can be liked by multiple users. This many-to-many relationship is implemented through a Likes table that records each like uniquely to a post by a user, capturing user preferences and engagement.
 
 5. **User to Follower**
@@ -115,15 +113,75 @@ This section explores the relational dynamics between the core entities within t
    - **Type:** One-to-Many
    - **Description:** A single user can receive multiple notifications, but each notification is targeted at a single user. This relationship ensures that users are informed about relevant activities impacting their profile or content.
 
-These relationships are meticulously designed to support the functional requirements of the Quackstagram platform, ensuring that users can interact, connect, and engage with content and each other in a meaningful way. The mapping highlights not only the relational model but also the platform's capacity to scale and manage complex interactions and data flows between users and their content.
-
 ### Entity Relationship Diagram (ERD)
 
-The Entity-Relationship Diagram (ERD) presented below visually illustrates the relationships between the core entities within the Quackstagram database. This diagram provides a clear and organized view of the database structure, highlighting how entities such as Users, Posts, Comments, and others are interconnected. It serves as a vital tool for understanding the database's architecture, aiding in both development and discussion of the system's design.
+The Entity-Relationship Diagram (ERD) presented below visually illustrates the relationships between the core entities within the Quackstagram database.
 
 ### Normalization
 
-- Documentation of functional dependencies and normalization steps up to 3NF or BCNF.
+This section documents functional dependencies and normalization steps for 4 tables: **Users**, **Posts**, **Comments** and **Likes**. Each table is being normalized up to 3NF.
+
+#### Users Table
+
+- **Attributes**: `id`, `username`, `password`, `bio`, `image_path`
+- **Functional Dependencies**:
+  - `id -> username`
+  - `id -> password`
+  - `id -> bio`
+  - `id -> image_path`
+  - `username -> id`
+  - `username -> password`
+  - `username -> bio`
+  - `username -> image_path`
+- **Keys**:
+  - `id` - Primary Key
+  - `username` - Candidate Key (because username is set to be unique and not null)
+- **Normalization**
+  1. **First Normal Form (1NF)**: The table is already in 1NF as all attributes are single valued and there are no rows or columns ordering.
+  2. **Second Normal Form (2NF)**: The table is already in 2NF because it has a single primary key (`id`), and all non-prime attributes are fully dependent on the primary key.
+  3. **Third Normal Form (3NF)**: The table is already in 3NF because in every functional dependency **X → Y**, **X** is a **superkey**
+
+#### Posts Table
+
+- **Attributes**: `id`, `user_id`, `caption`, `image_path`, `timestamp`
+- **Functional Dependencies**:
+  - `id -> user_id`
+  - `id -> caption`
+  - `id -> image_path`
+  - `id -> timestamp`
+- **Keys**:
+  - `id` - Primary Key
+- **Normalization**
+  1. **First Normal Form (1NF)**: The table is already in 1NF as all attributes are single valued and there are no rows or columns ordering.
+  2. **Second Normal Form (2NF)**: The table is already in 2NF because it has a single primary key (`id`), and all non-prime attributes are fully dependent on the primary key.
+  3. **Third Normal Form (3NF)**: The table is already in 3NF because in every functional dependency **X → Y**, **X** is a **superkey**
+
+#### Comments Table
+
+- **Attributes**: `id`, `post_id`, `user_id`, `text`, `timestamp`
+- **Functional Dependencies**:
+  - `id -> post_id`
+  - `id -> user_id`
+  - `id -> text`
+  - `id -> timestamp`
+- **Keys**:
+  - `id` - Primary Key
+- **Normalization**
+  1. **First Normal Form (1NF)**: The table is already in 1NF as all attributes are single valued and there are no rows or columns ordering.
+  2. **Second Normal Form (2NF)**: The table is already in 2NF because it has a single primary key (`id`), and all non-prime attributes are fully dependent on the primary key.
+  3. **Third Normal Form (3NF)**: The table is already in 3NF because in every functional dependency **X → Y**, **X** is a **superkey**
+
+#### Likes Table
+
+- **Attributes**: `post_id`, `user_id`, `timestamp`
+- **Functional Dependencies**:
+  - `post_id, user_id -> timestamp`
+- **Keys**:
+  - `post_id, user_id` - Composite Primary Key
+- **Normalization**
+  1. **First Normal Form (1NF)**: The table is already in 1NF as all attributes are single valued and there are no rows or columns ordering.
+  2. **Second Normal Form (2NF)**: The table is already in 2NF, because the only non-key attribute timestamp is fully dependent on the entire composite primary key (post_id, user_id).
+  3. **Third Normal Form (3NF)**: The table is already in 3NF because in every functional dependency **X → Y**, **X** is a **superkey**
 
 ## Implementing a MySQL-Compatible Relational Database Schema
 
@@ -134,7 +192,7 @@ This section details the SQL statements used to create the database schema for t
 #### Users Table
 
 ```sql
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
@@ -146,7 +204,7 @@ CREATE TABLE IF NOT EXISTS users (
 #### Posts Table
 
 ```sql
-CREATE TABLE IF NOT EXISTS posts (
+CREATE TABLE posts (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   caption VARCHAR(255),
@@ -159,7 +217,7 @@ CREATE TABLE IF NOT EXISTS posts (
 #### Comments Table
 
 ```sql
-CREATE TABLE IF NOT EXISTS comments (
+CREATE TABLE comments (
   id INT AUTO_INCREMENT PRIMARY KEY,
   post_id INT NOT NULL,
   user_id INT NOT NULL,
@@ -173,7 +231,7 @@ CREATE TABLE IF NOT EXISTS comments (
 #### Likes Table
 
 ```sql
-CREATE TABLE IF NOT EXISTS likes (
+CREATE TABLE likes (
   post_id INT,
   user_id INT,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -186,7 +244,7 @@ CREATE TABLE IF NOT EXISTS likes (
 #### Followers Table
 
 ```sql
-CREATE TABLE IF NOT EXISTS followers (
+CREATE TABLE followers (
   follower_id INT,
   following_id INT,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -199,7 +257,7 @@ CREATE TABLE IF NOT EXISTS followers (
 #### Notifications Table
 
 ```sql
-CREATE TABLE IF NOT EXISTS notifications (
+CREATE TABLE notifications (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   post_id INT,
@@ -216,10 +274,10 @@ This section details the SQL statements used to create views in the Quackstagram
 
 #### User Activity View
 
-This view aggregates the total number of posts, comments, and likes for each user, providing a quick snapshot of user engagement on the platform.
+This view shows the total number of posts, comments, and likes for each user, providing a quick snapshot of user engagement on the platform.
 
 ```sql
-CREATE VIEW IF NOT EXISTS UserActivity AS
+CREATE VIEW UserActivity AS (
 SELECT
     u.id AS user_id,
     u.username,
@@ -230,15 +288,41 @@ FROM users u
 LEFT JOIN posts p ON u.id = p.user_id
 LEFT JOIN comments c ON u.id = c.user_id
 LEFT JOIN likes l ON u.id = l.user_id
-GROUP BY u.id, u.username;
+GROUP BY u.id, u.username
+ORDER BY u.id);
 ```
 
-#### Popular Posts View
+#### Results
 
-This view identifies the most liked posts, displaying the post details along with the count of likes, aiding in content popularity analysis.
+The query creates a view named `UserActivity` which includes:
+
+- `user_id`: The unique identifier of the user.
+- `username`: The username of the user.
+- `total_posts`: The total number of posts created by the user.
+- `total_comments`: The total number of comments made by the user.
+- `total_likes`: The total number of likes given by the user.
+
+#### Example result
+
+| user_id | username | total_posts | total_comments | total_likes |
+| ------- | -------- | ----------- | -------------- | ----------- |
+| 1       | admin    | 5           | 2              | 1           |
+| 2       | mordula  | 4           | 12             | 30          |
+| 3       | swiniar  | 5           | 3              | 25          |
+| 4       | pluta    | 2           | 12             | 5           |
+| 5       | gala     | 1           | 15             | 13          |
+| 6       | baska    | 7           | 20             | 7           |
+
+Sure, here's the updated report without the rank number:
+
+### Popular Posts Report
+
+This report identifies the top 10 most liked posts, displaying the post details along with the count of likes.
+
+#### SQL Query
 
 ```sql
-CREATE VIEW IF NOT EXISTS PopularPosts AS
+CREATE VIEW PopularPosts AS (
 SELECT
     p.id AS post_id,
     p.user_id,
@@ -247,38 +331,66 @@ SELECT
 FROM posts p
 JOIN likes l ON p.id = l.post_id
 GROUP BY p.id
-ORDER BY like_count DESC;
+ORDER BY like_count DESC
+LIMIT 10);
 ```
+
+#### Results
+
+The query creates a view named `PopularPosts` which includes:
+
+- `post_id`: The unique identifier of the post.
+- `user_id`: The identifier of the user who created the post.
+- `caption`: The text content of the post.
+- `like_count`: The total number of likes the post has received.
+
+The posts are ordered by the number of likes in descending order, and only the top 10 posts are included.
+
+#### Example result
+
+| Post ID | User ID | Caption                                                             | Like Count |
+| ------- | ------- | ------------------------------------------------------------------- | ---------- |
+| 2       | 1       | Pushing new features at 2 AM. Who needs sleep?                      | 6          |
+| 1       | 1       | Debugging the night away. #CodeLife                                 | 5          |
+| 3       | 1       | When you finally fix that bug that's been bugging you. #Victory     | 5          |
+| 4       | 1       | Hack the planet! Or at least this small part of it. 🌐              | 5          |
+| 5       | 1       | The code's compiling... time for a break!                           | 5          |
+| 6       | 2       | Exploring the quantum weirdness of everyday physics.                | 4          |
+| 7       | 2       | Helllooooooo! Diving deep into Einstein's spacetime.                | 4          |
+| 8       | 2       | Creating the new gravitational field. Or just messing with magnets. | 4          |
+| 9       | 2       | Distorting reality, one physics equation at a time.                 | 3          |
+| 10      | 2       | If only my potions were as stable as my theories!                   | 3          |
 
 #### Recent User Interactions View
 
 This view provides information on recent interactions (likes or comments) by users on different posts, useful for tracking activity and engagement trends.
 
 ```sql
-CREATE VIEW IF NOT EXISTS RecentInteractions AS
+CREATE VIEW MonthlyPostsAmount AS (
 SELECT
-    u.username,
-    p.id AS post_id,
-    p.caption,
-    'Like' AS interaction_type,
-    l.timestamp AS interaction_time
-FROM likes l
-JOIN posts p ON l.post_id = p.id
-JOIN users u ON l.user_id = u.id
-UNION ALL
-SELECT
-    u.username,
-    p.id,
-    p.caption,
-    'Comment' AS interaction_type,
-    c.timestamp
-FROM comments c
-JOIN posts p ON c.post_id = p.id
-JOIN users u ON c.user_id = u.id
-ORDER BY interaction_time DESC;
+    DATE_FORMAT(p.created_at, '%Y-%m') AS month,
+    COUNT(p.id) AS post_count
+FROM posts p
+GROUP BY DATE_FORMAT(p.created_at, '%Y-%m')
+ORDER BY DATE_FORMAT(p.created_at, '%Y-%m'));
 ```
 
-Each of these views serves a specific purpose, from providing an overview of individual user activity to highlighting the most engaged-with content on the platform. They are designed to support the platform's reporting and analytical capabilities, making it easier to derive insights from the data without the need to repeatedly query the base tables.
+#### Results
+
+The query creates a view named `MonthlyPostsAmount` which includes:
+
+- `month`: The year and month in the format YYYY-MM.
+- `post_count`: The total number of posts created in that month.
+
+The posts are ordered by the date, the oldest first
+
+#### Example result
+
+| month   | post_count |
+| ------- | ---------- |
+| 2023-01 | 16         |
+| 2023-02 | 23         |
+| 2023-03 | 38         |
 
 ### Triggers.sql
 
