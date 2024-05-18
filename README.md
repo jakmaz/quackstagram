@@ -315,7 +315,7 @@ The query creates a view named `UserActivity` which includes:
 
 Sure, here's the updated report without the rank number:
 
-### Popular Posts Report
+### Popular Posts Report View
 
 This report identifies the top 10 most liked posts, displaying the post details along with the count of likes.
 
@@ -361,7 +361,7 @@ The posts are ordered by the number of likes in descending order, and only the t
 | 9       | 2       | Distorting reality, one physics equation at a time.                 | 3          |
 | 10      | 2       | If only my potions were as stable as my theories!                   | 3          |
 
-#### Recent User Interactions View
+#### Monthly Amount of Posts View
 
 This view provides information on recent interactions (likes or comments) by users on different posts, useful for tracking activity and engagement trends.
 
