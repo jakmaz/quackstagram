@@ -276,6 +276,8 @@ This section details the SQL statements used to create views in the Quackstagram
 
 This view shows the total number of posts, comments, and likes for each user, providing a quick snapshot of user engagement on the platform.
 
+##### SQL Query
+
 ```sql
 CREATE VIEW UserActivity AS (
 SELECT
@@ -292,7 +294,7 @@ GROUP BY u.id, u.username
 ORDER BY u.id);
 ```
 
-#### Results
+##### Results
 
 The query creates a view named `UserActivity` which includes:
 
@@ -302,7 +304,7 @@ The query creates a view named `UserActivity` which includes:
 - `total_comments`: The total number of comments made by the user.
 - `total_likes`: The total number of likes given by the user.
 
-#### Example result
+##### Example result
 
 | user_id | username | total_posts | total_comments | total_likes |
 | ------- | -------- | ----------- | -------------- | ----------- |
@@ -315,11 +317,11 @@ The query creates a view named `UserActivity` which includes:
 
 Sure, here's the updated report without the rank number:
 
-### Popular Posts Report View
+#### Popular Posts Report View
 
 This report identifies the top 10 most liked posts, displaying the post details along with the count of likes.
 
-#### SQL Query
+##### SQL Query
 
 ```sql
 CREATE VIEW PopularPosts AS (
@@ -335,7 +337,7 @@ ORDER BY like_count DESC
 LIMIT 10);
 ```
 
-#### Results
+##### Results
 
 The query creates a view named `PopularPosts` which includes:
 
@@ -346,7 +348,7 @@ The query creates a view named `PopularPosts` which includes:
 
 The posts are ordered by the number of likes in descending order, and only the top 10 posts are included.
 
-#### Example result
+##### Example result
 
 | Post ID | User ID | Caption                                                             | Like Count |
 | ------- | ------- | ------------------------------------------------------------------- | ---------- |
@@ -375,7 +377,7 @@ GROUP BY DATE_FORMAT(p.created_at, '%Y-%m')
 ORDER BY DATE_FORMAT(p.created_at, '%Y-%m'));
 ```
 
-#### Results
+##### Results
 
 The query creates a view named `MonthlyPostsAmount` which includes:
 
@@ -384,7 +386,7 @@ The query creates a view named `MonthlyPostsAmount` which includes:
 
 The posts are ordered by the date, the oldest first
 
-#### Example result
+##### Example result
 
 | month   | post_count |
 | ------- | ---------- |
