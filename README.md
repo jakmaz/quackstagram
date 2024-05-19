@@ -444,11 +444,17 @@ Each trigger uses an `AFTER INSERT` event on the respective tables (`followers`,
 
 ## Integrating and Functionally Developing the Application
 
-### Tasks Completed
+### Database Connection
 
-- **Database Connection**: Description of the JDBC setup.
-- **Feature Implementation**: How features were implemented using the database.
-- **Error Handling and Security**: Discuss the strategies used for handling errors and securing the database interactions.
+Description of the JDBC setup.
+
+### Feature Implementation
+
+How features were implemented using the database.
+
+#### Error Handling and Security
+
+Discuss the strategies used for handling errors and securing the database interactions.
 
 ## Maximizing Profits Through SQL Queries
 
