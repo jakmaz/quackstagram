@@ -396,51 +396,85 @@ The posts are ordered by the date, the oldest first
 
 ### Triggers.sql
 
-This section outlines the SQL triggers implemented in the Quackstagram database. These triggers automatically generate notifications when users follow each other, like posts, or comment on posts, enhancing user engagement and interaction.
+This section outlines the SQL triggers, procedures, and functions implemented in the Quackstagram database. These components work together to automatically generate notifications when users follow each other, like posts, or comment on posts, thereby enhancing user engagement and interaction.
 
-#### Followers Trigger
+#### Stored Procedure
 
-This trigger creates a notification whenever a user gains a new follower.
+The following procedure creates a new notification:
 
 ```sql
-CREATE TRIGGER IF NOT EXISTS trg_after_follow
+CREATE PROCEDURE CreateNotification(
+    IN user_id INT,
+    IN post_id INT,
+    IN message VARCHAR(255),
+    IN notif_timestamp TIMESTAMP)
+BEGIN
+    INSERT INTO notifications (user_id, post_id, message, timestamp)
+    VALUES (user_id, post_id, message, notif_timestamp);
+END
+```
+
+#### Function
+
+This function retrieves a username based on a given user ID. It is frequently used because users are identified by their IDs in the database but the application needs to display their actual usernames to provide a more user-friendly experience.
+
+```sql
+CREATE FUNCTION GetUsername(user_id INT) RETURNS VARCHAR(255)
+BEGIN
+    DECLARE username VARCHAR(255);
+    SELECT username INTO username FROM users WHERE id = user_id;
+    RETURN username;
+END
+```
+
+#### Triggers
+
+Below we introduce three triggers designed to create notifications in response to specific events, such as gaining a new follower, receiving a new like, or getting a new comment on a post. These triggers uses the previously defined stored procedure and function to improve the notification process.
+
+##### Followers Trigger
+
+This trigger creates a notification whenever a user gains a new follower, using the `CreateNotification` procedure.
+
+```sql
+CREATE TRIGGER follow_notification_trigger
 AFTER INSERT ON followers
 FOR EACH ROW
 BEGIN
-    INSERT INTO notifications (user_id, message, timestamp)
-    VALUES (NEW.following_id, CONCAT('You have a new follower: ', (SELECT username FROM users WHERE id = NEW.follower_id)), NEW.timestamp);
-END;
+    DECLARE follower_username VARCHAR(255);
+    SET follower_username = GetUsername(NEW.follower_id);
+    CALL CreateNotification(NEW.following_id, NULL, CONCAT('You have a new follower: ', follower_username), NEW.timestamp);
+END
 ```
 
-#### Likes Trigger
+##### Likes Trigger
 
-This trigger creates a notification when a post is liked, informing the post owner about who liked the post.
+This trigger creates a notification when a post is liked, informing the post owner about who liked the post. It calls the `CreateNotification` procedure and uses the `GetUsername` function.
 
 ```sql
-CREATE TRIGGER IF NOT EXISTS trg_after_like
+CREATE TRIGGER like_notification_trigger
 AFTER INSERT ON likes
 FOR EACH ROW
 BEGIN
-    INSERT INTO notifications (user_id, post_id, message, timestamp)
-    VALUES ((SELECT user_id FROM posts WHERE id = NEW.post_id), NEW.post_id, CONCAT('Your post was liked by ', (SELECT username FROM users WHERE id = NEW.user_id)), NEW.timestamp);
-END;
+    DECLARE username VARCHAR(255);
+    SET username = GetUsername(NEW.user_id);
+    CALL CreateNotification((SELECT user_id FROM posts WHERE id = NEW.post_id), NEW.post_id, CONCAT('Your post was liked by ', username), NEW.timestamp);
+END
 ```
 
-#### Comments Trigger
+##### Comments Trigger
 
-This trigger sends a notification to the post owner when a new comment is made on their post, including who commented and what was said.
+This trigger sends a notification to the post owner when a new comment is made on their post, including who commented and what was said. It calls the `CreateNotification` procedure and uses the `GetUsername` function.
 
 ```sql
-CREATE TRIGGER IF NOT EXISTS trg_after_comment
+CREATE TRIGGER comment_notification_trigger
 AFTER INSERT ON comments
 FOR EACH ROW
 BEGIN
-    INSERT INTO notifications (user_id, post_id, message, timestamp)
-    VALUES ((SELECT user_id FROM posts WHERE id = NEW.post_id), NEW.post_id, CONCAT('Your post was commented on ', (SELECT username FROM users WHERE id = NEW.user_id), ': ', NEW.text), NEW.timestamp);
-END;
+    DECLARE username VARCHAR(255);
+    SET username = GetUsername(NEW.user_id);
+    CALL CreateNotification((SELECT user_id FROM posts WHERE id = NEW.post_id), NEW.post_id, CONCAT('Your post was commented on by ', username, ': ', NEW.text), NEW.timestamp);
+END
 ```
-
-Each trigger uses an `AFTER INSERT` event on the respective tables (`followers`, `likes`, `comments`), ensuring that notifications are generated immediately after the actions occur. These triggers are fundamental in keeping the users engaged by promptly updating them about interactions related to their content on the Quackstagram platform.
 
 ## Integrating and Functionally Developing the Application
 
