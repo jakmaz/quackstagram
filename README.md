@@ -499,79 +499,156 @@ List each SQL query along with a brief description of its purpose and output.
 1. **List all users who have more than X followers where X can be any integer value.**
 
    ```sql
-   SELECT ...
+    SELECT users.id, users.username, COUNT(followers.follower_id) number_of_followers
+    FROM users LEFT JOIN followers ON(users.id = followers.following_id)
+    GROUP BY users.id
+    HAVING number_of_followers > X;
    ```
 
 2. **Show the total number of posts made by each user.**
 
    ```sql
-   SELECT ...
+    SELECT users.id as user_ID, username, COUNT(posts.id) number_of_posts
+    FROM users LEFT JOIN posts ON (users.id = posts.user_id)
+    GROUP BY users.id;
    ```
 
 3. **Find all comments made on a particular user’s post.**
 
    ```sql
-   SELECT ...
+    SELECT comments.id comment_id, comments.text comment, posts.id post_id
+    FROM comments JOIN posts ON(posts.id = comments.post_id)
+    WHERE posts.id = X;
    ```
 
 4. **Display the top X most liked posts.**
 
    ```sql
-   SELECT ...
+    SELECT posts.id as post_id, posts.caption as post_content, COUNT(likes.post_id) as likes
+    FROM posts LEFT JOIN likes ON(posts.id = likes.post_id)
+    GROUP BY posts.id
+    ORDER BY likes DESC
+    LIMIT X;
    ```
 
 5. **Count the number of posts each user has liked.**
 
    ```sql
-   SELECT ...
+    SELECT users.id as user_id, users.username as username, COUNT(likes.user_id) as number_of_liked_posts
+    FROM users LEFT JOIN likes ON (users.id = likes.user_id)
+    GROUP BY users.id;
    ```
 
 6. **List all users who haven’t made a post yet.**
 
    ```sql
-   SELECT ...
+    SELECT users.id as user_ID, users.username as username, COUNT(posts.user_id) as number_of_posts
+    FROM users LEFT JOIN posts ON (users.id = posts.user_id)
+    GROUP BY users.id
+    HAVING number_of_posts = 0;
    ```
 
 7. **List users who follow each other.**
 
    ```sql
-   SELECT ...
+    SELECT follower_id as user1_id, following_id as user2_id
+    FROM followers fol 
+    WHERE follower_id < following_id AND
+        follower_id IN (
+            SELECT following_id
+            FROM followers
+            WHERE follower_id = fol.following_id
+        );
    ```
 
 8. **Show the user with the highest number of posts.**
 
    ```sql
-   SELECT ...
+    SELECT users.id as user_ID, users.username, COUNT(posts.id) as number_of_posts
+    FROM users LEFT JOIN posts ON(users.id = posts.user_id)
+    GROUP BY users.id
+    ORDER BY number_of_posts DESC
+    LIMIT 1;
    ```
 
 9. **List the top X users with the most followers.**
 
    ```sql
-   SELECT ...
+    SELECT users.id as userID, users.username, COUNT(followers.follower_id) as number_of_followers
+    FROM users LEFT JOIN followers ON (users.id = followers.following_id)
+    GROUP BY users.id
+    ORDER BY number_of_followers DESC
+    LIMIT X;
    ```
 
 10. **Find posts that have been liked by all users.**
-
+    # TODO: dodac adminowi 2 posty ktore sam sobie lajkuje
     ```sql
-    SELECT ...
+    SELECT posts.id as post_id, posts.caption as post_content, COUNT(likes.user_id) as number_of_likes
+    FROM posts LEFT JOIN likes ON (posts.id = likes.post_id)
+    GROUP BY posts.id
+    HAVING number_of_likes = (
+        SELECT COUNT(*)
+        FROM users
+    );
     ```
 
 11. **Display the most active user (based on posts, comments, and likes).**
 
     ```sql
-    SELECT ...
+    SELECT
+        users.id AS userID,
+        users.username,
+        COUNT(DISTINCT posts.id) AS total_posts,
+        COUNT(DISTINCT comments.id) AS total_comments,
+        COUNT(DISTINCT likes.post_id) AS total_likes,
+        (COUNT(DISTINCT posts.id) + COUNT(DISTINCT comments.id) + COUNT(DISTINCT likes.post_id)) AS activity_score
+    FROM
+        users
+    LEFT JOIN
+        posts ON users.id = posts.user_id
+    LEFT JOIN
+        comments ON users.id = comments.user_id
+    LEFT JOIN
+        likes ON users.id = likes.user_id
+    GROUP BY users.id, users.username
+    ORDER BY activity_score DESC
+    LIMIT 1;
     ```
 
 12. **Find the average number of likes per post for each user.**
 
     ```sql
-    SELECT ...
+    SELECT
+        users.id AS userID,
+        users.username,
+        COALESCE(AVG(likes_count.likes_per_post), 0) AS avg_likes_per_post
+    FROM users
+    LEFT JOIN (
+        SELECT
+            posts.user_id,
+            posts.id AS post_id,
+            COUNT(likes.post_id) AS likes_per_post
+        FROM posts
+        LEFT JOIN
+        likes ON posts.id = likes.post_id
+        GROUP BY posts.id
+        ) AS likes_count
+    ON users.id = likes_count.user_id
+    GROUP BY users.id;
     ```
 
 13. **Show posts that have more comments than likes.**
 
     ```sql
-    SELECT ...
+    SELECT posts.id as postID, posts.caption as post,
+       COUNT(DISTINCT likes.user_id) as number_of_likes,
+       COUNT(DISTINCT comments.user_id) as number_of_comments
+    FROM posts
+    LEFT JOIN likes ON(posts.id = likes.post_id)
+    LEFT JOIN comments ON(posts.id = comments.post_id)
+    GROUP BY posts.id
+    HAVING number_of_comments > number_of_likes;
     ```
 
 14. **List the users who have liked every post of a specific user.**
