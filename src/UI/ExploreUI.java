@@ -9,14 +9,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import Database.DAO.PostDAO;
+import Database.DAO.UserDAO;
 import Logic.Post;
+import Logic.SessionManager;
+import Logic.User;
 
 public class ExploreUI extends BaseUI {
 
@@ -50,6 +49,26 @@ public class ExploreUI extends BaseUI {
     JPanel mainContentPanel = new JPanel(new BorderLayout());
     JTextField searchField = new JTextField(" Search Users");
     mainContentPanel.add(searchField, BorderLayout.NORTH);
+
+    searchField.addActionListener(e -> {
+      String enteredUsername = searchField.getText().trim();
+
+      try {
+        User foundUser = UserDAO.findUserByUsername(enteredUsername);
+        if (foundUser != null) {
+          if (!foundUser.equals(SessionManager.getCurrentUser())) {
+            MainFrame.getInstance().showOtherProfilePanel(foundUser);
+          }
+        } else {
+          JOptionPane.showMessageDialog(null, "User not found.", "Search Failed",
+                  JOptionPane.ERROR_MESSAGE);
+        }
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "An error occurred while attempting to search. Please try again.",
+                "Search Error", JOptionPane.ERROR_MESSAGE);
+      }
+    });
 
     JPanel imageGridPanel = new JPanel(new GridLayout(0, 3, 2, 2));
     List<Post> posts = PostDAO.getAllPosts();

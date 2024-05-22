@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.Base64;
 
 import Database.Connection.DatabaseConnection;
+import Logic.User;
 import Logic.UserDetails;
 
 /**
@@ -140,6 +141,27 @@ public class UserDAO {
             rs.getInt("id"),
             rs.getString("username"),
             rs.getString("bio"));
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  /**
+   * Finds a user in the database by their username.
+   *
+   * @param enteredUsername the username of the user to find
+   * @return a User object representing the found user, or null if no user was found
+   */
+  public static User findUserByUsername(String enteredUsername) {
+    String sql = "SELECT id FROM users WHERE username = ?";
+    try (Connection conn = getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setString(1, enteredUsername);
+      ResultSet rs = ps.executeQuery();
+      if (rs.next()) {
+        return new User(rs.getInt("id"));
       }
     } catch (SQLException e) {
       e.printStackTrace();
