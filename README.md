@@ -575,6 +575,8 @@ List each SQL query along with a brief description of its purpose and output.
     HAVING number_of_followers > X;
    ```
 
+   **Output:** A list of users with their IDs, usernames, and the count of their followers, where the follower count is greater than X.
+
 2. **Show the total number of posts made by each user.**
 
    ```sql
@@ -583,6 +585,8 @@ List each SQL query along with a brief description of its purpose and output.
     GROUP BY users.id;
    ```
 
+   **Output:** A list of users with their IDs, usernames, and the count of posts they have made.
+
 3. **Find all comments made on a particular user’s post.**
 
    ```sql
@@ -590,6 +594,8 @@ List each SQL query along with a brief description of its purpose and output.
     FROM comments JOIN posts ON(posts.id = comments.post_id)
     WHERE posts.id = X;
    ```
+
+   **Output:** A list of comments with their IDs, text content, and the associated post ID.
 
 4. **Display the top X most liked posts.**
 
@@ -601,6 +607,8 @@ List each SQL query along with a brief description of its purpose and output.
     LIMIT X;
    ```
 
+   **Output:** A list of post IDs, captions, and the count of likes, sorted by the number of likes in descending order, limited to X posts.
+
 5. **Count the number of posts each user has liked.**
 
    ```sql
@@ -608,6 +616,8 @@ List each SQL query along with a brief description of its purpose and output.
     FROM users LEFT JOIN likes ON (users.id = likes.user_id)
     GROUP BY users.id;
    ```
+
+   **Output:** A list of users with their IDs, usernames, and the count of posts they have liked.
 
 6. **List all users who haven’t made a post yet.**
 
@@ -617,6 +627,8 @@ List each SQL query along with a brief description of its purpose and output.
     GROUP BY users.id
     HAVING number_of_posts = 0;
    ```
+
+   **Output:** A list of users with their IDs, usernames, and a post count of zero.
 
 7. **List users who follow each other.**
 
@@ -631,6 +643,8 @@ List each SQL query along with a brief description of its purpose and output.
         );
    ```
 
+   **Output:** A list of user pairs (IDs) where each user follows the other.
+
 8. **Show the user with the highest number of posts.**
 
    ```sql
@@ -640,6 +654,8 @@ List each SQL query along with a brief description of its purpose and output.
     ORDER BY number_of_posts DESC
     LIMIT 1;
    ```
+
+   **Output:** The ID, username, and post count of the user with the most posts.
 
 9. **List the top X users with the most followers.**
 
@@ -651,7 +667,10 @@ List each SQL query along with a brief description of its purpose and output.
     LIMIT X;
    ```
 
+   **Output:** A list of user IDs, usernames, and follower counts, sorted by the number of followers in descending order, limited to X users.
+
 10. **Find posts that have been liked by all users.**
+
     ```sql
     SELECT posts.id as post_id, posts.caption as post_content, COUNT(likes.user_id) as number_of_likes
     FROM posts LEFT JOIN likes ON (posts.id = likes.post_id)
@@ -661,6 +680,8 @@ List each SQL query along with a brief description of its purpose and output.
         FROM users
     );
     ```
+
+    **Output:** A list of post IDs, captions, and like counts for posts liked by all users.
 
 11. **Display the most active user (based on posts, comments, and likes).**
 
@@ -685,6 +706,8 @@ List each SQL query along with a brief description of its purpose and output.
     LIMIT 1;
     ```
 
+    **Output:** The ID, username, counts of posts, comments, likes, and an activity score for the most active user.
+
 12. **Find the average number of likes per post for each user.**
 
     ```sql
@@ -707,6 +730,8 @@ List each SQL query along with a brief description of its purpose and output.
     GROUP BY users.id;
     ```
 
+    **Output:** A list of users with their IDs, usernames, and the average number of likes per post.
+
 13. **Show posts that have more comments than likes.**
 
     ```sql
@@ -720,6 +745,8 @@ List each SQL query along with a brief description of its purpose and output.
     HAVING number_of_comments > number_of_likes;
     ```
 
+    **Output:** A list of post IDs, captions, and counts of likes and comments where the number of comments exceeds likes.
+
 14. **List the users who have liked every post of a specific user.**
 
     ```sql
@@ -729,9 +756,11 @@ List each SQL query along with a brief description of its purpose and output.
     WHERE posts.user_id = X
     GROUP BY likes.user_id
     HAVING COUNT(likes.post_id) = (
-        SELECT COUNT(*) FROM posts WHERE user_id = 1
+        SELECT COUNT(*) FROM posts WHERE user_id = X
     );
     ```
+
+    **Output:** A list of user IDs and the count of posts liked for a specific user where the count matches the total posts made by that user.
 
 15. **Display the most popular post of each user (based on likes).**
 
@@ -752,6 +781,8 @@ List each SQL query along with a brief description of its purpose and output.
     );
     ```
 
+    **Output:** A list of user IDs, post IDs, and like counts for the most liked post of each user.
+
 16. **Find the user(s) with the highest ratio of followers to following.**
 
     ```sql
@@ -770,6 +801,8 @@ List each SQL query along with a brief description of its purpose and output.
     GROUP BY p.user_id, p.id, p.caption;
     ```
 
+    **Output:** A list of user IDs and the ratio of followers to following, sorted in descending order to show the highest ratio.
+
 17. **Show the month with the highest number of posts made.**
 
     ```sql
@@ -779,6 +812,8 @@ List each SQL query along with a brief description of its purpose and output.
     ORDER BY frequency DESC
     LIMIT 1;
     ```
+
+    **Output:** The month and the count of posts made in that month, ordered by frequency and limited to the highest.
 
 18. **Identify users who have not interacted with a specific user’s posts.**
 
@@ -805,18 +840,23 @@ List each SQL query along with a brief description of its purpose and output.
     );
     ```
 
+    **Output:** A list of user IDs who have not interacted with the specified user's posts.
+
 19. **Display the user with the greatest increase in followers in the last X days.**
 
     ```sql
     SELECT following_id AS user_id, COUNT(*) AS followers_count
     FROM followers
-    WHERE timestamp >= NOW() - INTERVAL 1 DAY
+    WHERE timestamp >= NOW() - INTERVAL X DAY
     GROUP BY following_id
     ORDER BY  followers_count DESC
     LIMIT 1;
     ```
 
+    **Output:** The user ID and count of new followers gained in the specified time period.
+
 20. **Find users who are followed by more than X% of the platform users.**
+
     ```sql
     SELECT
         u.username,
@@ -835,3 +875,5 @@ List each SQL query along with a brief description of its purpose and output.
     ON u.id = uf.user_id
     WHERE (uf.follower_count * 100.0 / (SELECT COUNT(*) FROM users)) > X;
     ```
+
+    **Output:** A list of user IDs, usernames, bios, image paths, and follower counts for users with a follower percentage greater than X.
