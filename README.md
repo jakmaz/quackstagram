@@ -775,7 +775,11 @@ List each SQL query along with a brief description of its purpose and output.
 17. **Show the month with the highest number of posts made.**
 
     ```sql
-    SELECT ...
+    SELECT MONTH(posts.timestamp) AS month, COUNT(*) AS frequency
+    FROM posts
+    GROUP BY MONTH(posts.timestamp)
+    ORDER BY frequency DESC
+    LIMIT 1;
     ```
 
 18. **Identify users who have not interacted with a specific user’s posts.**
