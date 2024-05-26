@@ -165,7 +165,9 @@ This section describes the relational dynamics between the core entities within 
 
 ### Entity Relationship Diagram (ERD)
 
-The Entity-Relationship Diagram (ERD) presented below visually illustrates the relationships between the core entities within the Quackstagram database.
+The Entity-Relationship Diagram (ERD) presented below visually illustrates the relationships between the core entities within the Quackstagram database. It was created using dbdiagram.io software.
+
+![erd.png](https://github.com/jakmaz/quackstagram/blob/main/img/diagram/erd.png?raw=true)
 
 ### Normalization
 
