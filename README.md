@@ -2,6 +2,7 @@
 
 ## Table of Contents
 
+- [Project Overview](#project-overview)
 - [Designing a Relational Database Schema](#designing-a-relational-database-schema)
 - [Implementing a MySQL-Compatible Relational Database Schema](#implementing-a-mysql-compatible-relational-database-schema)
 - [Integrating and Functionally Developing the Application](#integrating-and-functionally-developing-the-application)
@@ -9,17 +10,23 @@
 - [Conclusion](#conclusion)
 - [Appendices](#appendices)
 
-### Project Overview
-
-Quackstagram is a dynamic social media platform designed for sharing visual content and engaging with others through posts, likes, comments, and follows. The project's main objective is to enhance the platform by transitioning from a basic system using text files to a robust, scalable relational database. This upgrade aims to improve performance, enable detailed analytics for strategic decision-making, and monetize the platform through targeted advertising. By integrating advanced database features, Quackstagram seeks to enrich user interaction and establish itself as a leading social network in the digital era.
-
 ### Team Members
 
 - **Students**:
-  - Jakub Mazur - I6349651
-  - Tomasz Mizera - I6357148
+    - Jakub Mazur - I6349651
+    - Tomasz Mizera - I6357148
 - **Colaboration**:
-  - Both members collaborated equally to the development of the project in all fields.
+    - Both members collaborated equally to the development of the project in all fields.
+
+## Project Overview
+
+### Introduction
+Quackstagram is a dynamic social media platform designed for sharing visual content and engaging with others through posts, likes, comments, and follows. The project's main objective is to enhance the platform by transitioning from a basic system using text files to a robust, scalable relational database. This upgrade aims to improve performance, enable detailed analytics for strategic decision-making, and monetize the platform through targeted advertising. By integrating advanced database features, Quackstagram seeks to enrich user interaction and establish itself as a leading social network in the digital era.
+
+### Screenshots
+
+![Authetication](https://github.com/jakmaz/quackstagram/blob/main/img/screenshots/authentication.png?raw=true)
+![enter image description here](https://github.com/jakmaz/quackstagram/blob/main/img/screenshots/pages.png?raw=true)
 
 ## Designing a Relational Database Schema
 
@@ -31,52 +38,52 @@ This section provides an abstracted overview of the core entities identified wit
 
 1. **User**
 
-   - **Description:** Represents individuals registered on the platform
-   - **Attributes:**
-     - **Authentication Details:** Ensures secure access to the user's account.
-     - **Profile Information:** Includes biographical details and visual identifiers.
+    - **Description:** Represents individuals registered on the platform
+    - **Attributes:**
+        - **Authentication Details:** Ensures secure access to the user's account.
+        - **Profile Information:** Includes biographical details and visual identifiers.
 
 2. **Post**
 
-   - **Description:** Pprimary content created by users, showcasing media and textual descriptions.
-   - **Attributes:**
-     - **Ownership Link:** Connects the post to the user who created it.
-     - **Content Details:** Encompasses the media path and accompanying caption.
-     - **Creation Timestamp:** Records the time at which the post was made.
+    - **Description:** Pprimary content created by users, showcasing media and textual descriptions.
+    - **Attributes:**
+        - **Ownership Link:** Connects the post to the user who created it.
+        - **Content Details:** Encompasses the media path and accompanying caption.
+        - **Creation Timestamp:** Records the time at which the post was made.
 
 3. **Comment**
 
-   - **Description:** Allows users to engage in discussions by commenting on posts.
-   - **Attributes:**
-     - **Post Link:** Associates the comment with a specific post.
-     - **User Link:** Indicates the user who made the comment.
-     - **Text Content:** Contains the actual comment text.
-     - **Comment Timestamp:** Marks the moment the comment was posted.
+    - **Description:** Allows users to engage in discussions by commenting on posts.
+    - **Attributes:**
+        - **Post Link:** Associates the comment with a specific post.
+        - **User Link:** Indicates the user who made the comment.
+        - **Text Content:** Contains the actual comment text.
+        - **Comment Timestamp:** Marks the moment the comment was posted.
 
 4. **Like**
 
-   - **Description:** Represents a user's approval of a post.
-   - **Attributes:**
-     - **Post Link:** Associates the like with a specific post.
-     - **User Link:** Identifies the user who liked the post.
-     - **Like Timestamp:** Records when the like was registered.
+    - **Description:** Represents a user's approval of a post.
+    - **Attributes:**
+        - **Post Link:** Associates the like with a specific post.
+        - **User Link:** Identifies the user who liked the post.
+        - **Like Timestamp:** Records when the like was registered.
 
 5. **Follower**
 
-   - **Description:** Tracks relationships between users, specifically who follows whom.
-   - **Attributes:**
-     - **Follower Link:** Identifies the user who is following.
-     - **Following Link:** Identifies the user being followed.
-     - **Follow Timestamp:** Records the initiation of the following relationship.
+    - **Description:** Tracks relationships between users, specifically who follows whom.
+    - **Attributes:**
+        - **Follower Link:** Identifies the user who is following.
+        - **Following Link:** Identifies the user being followed.
+        - **Follow Timestamp:** Records the initiation of the following relationship.
 
 6. **Notification**
-   - **Description:** Serves to inform users about relevant activities within their network, such as new followers, likes, or comments.
-   - **Attributes:**
-     - **Identifier:** Uniquely identifies each notification.
-     - **Recipient Link:** Connects the notification to the user it targets.
-     - **Relevant Post Link:** Optionally links to related content.
-     - **Message Content:** Describes the reason for the notification.
-     - **Notification Timestamp:** Timestamps when the notification was generated.
+    - **Description:** Serves to inform users about relevant activities within their network, such as new followers, likes, or comments.
+    - **Attributes:**
+        - **Identifier:** Uniquely identifies each notification.
+        - **Recipient Link:** Connects the notification to the user it targets.
+        - **Relevant Post Link:** Optionally links to related content.
+        - **Message Content:** Describes the reason for the notification.
+        - **Notification Timestamp:** Timestamps when the notification was generated.
 
 ### Relationship Mapping
 
@@ -86,32 +93,32 @@ This section describes the relational dynamics between the core entities within 
 
 1. **User to Post**
 
-   - **Type:** One-to-Many
-   - **Description:** A single user can create multiple posts, but each post is created by only one user. This relationship facilitates user content generation and management.
+    - **Type:** One-to-Many
+    - **Description:** A single user can create multiple posts, but each post is created by only one user. This relationship facilitates user content generation and management.
 
 2. **Post to Comment**
 
-   - **Type:** One-to-Many
-   - **Description:** Each post can have multiple comments, but each comment is associated with only one post. This structure supports community engagement and interaction on individual pieces of content.
+    - **Type:** One-to-Many
+    - **Description:** Each post can have multiple comments, but each comment is associated with only one post. This structure supports community engagement and interaction on individual pieces of content.
 
 3. **User to Comment**
 
-   - **Type:** One-to-Many
-   - **Description:** A user can make several comments on various posts, but each comment is made by a single user, linking users to their interactive contributions across the platform.
+    - **Type:** One-to-Many
+    - **Description:** A user can make several comments on various posts, but each comment is made by a single user, linking users to their interactive contributions across the platform.
 
 4. **Post to Like**
 
-   - **Type:** Many-to-Many (implemented using a bridge table)
-   - **Description:** Users can like many posts, and each post can be liked by multiple users. This many-to-many relationship is implemented through a Likes table that records each like uniquely to a post by a user, capturing user preferences and engagement.
+    - **Type:** Many-to-Many (implemented using a bridge table)
+    - **Description:** Users can like many posts, and each post can be liked by multiple users. This many-to-many relationship is implemented through a Likes table that records each like uniquely to a post by a user, capturing user preferences and engagement.
 
 5. **User to Follower**
 
-   - **Type:** Many-to-Many (implemented using a bridge table)
-   - **Description:** Users can follow multiple other users, and each user can be followed by multiple other users. This relationship is crucial for forming the social network and allows for the dissemination of content and updates within interconnected user circles.
+    - **Type:** Many-to-Many (implemented using a bridge table)
+    - **Description:** Users can follow multiple other users, and each user can be followed by multiple other users. This relationship is crucial for forming the social network and allows for the dissemination of content and updates within interconnected user circles.
 
 6. **User to Notification**
-   - **Type:** One-to-Many
-   - **Description:** A single user can receive multiple notifications, but each notification is targeted at a single user. This relationship ensures that users are informed about relevant activities impacting their profile or content.
+    - **Type:** One-to-Many
+    - **Description:** A single user can receive multiple notifications, but each notification is targeted at a single user. This relationship ensures that users are informed about relevant activities impacting their profile or content.
 
 ### Entity Relationship Diagram (ERD)
 
@@ -125,63 +132,63 @@ This section documents functional dependencies and normalization steps for 4 tab
 
 - **Attributes**: `id`, `username`, `password`, `bio`, `image_path`
 - **Functional Dependencies**:
-  - `id -> username`
-  - `id -> password`
-  - `id -> bio`
-  - `id -> image_path`
-  - `username -> id`
-  - `username -> password`
-  - `username -> bio`
-  - `username -> image_path`
+    - `id -> username`
+    - `id -> password`
+    - `id -> bio`
+    - `id -> image_path`
+    - `username -> id`
+    - `username -> password`
+    - `username -> bio`
+    - `username -> image_path`
 - **Keys**:
-  - `id` - Primary Key
-  - `username` - Candidate Key (because username is set to be unique and not null)
+    - `id` - Primary Key
+    - `username` - Candidate Key (because username is set to be unique and not null)
 - **Normalization**
-  1. **First Normal Form (1NF)**: The table is already in 1NF as all attributes are single valued and there are no rows or columns ordering.
-  2. **Second Normal Form (2NF)**: The table is already in 2NF because it has a single primary key (`id`), and all non-prime attributes are fully dependent on the primary key.
-  3. **Third Normal Form (3NF)**: The table is already in 3NF because in every functional dependency **X → Y**, **X** is a **superkey**
+    1. **First Normal Form (1NF)**: The table is already in 1NF as all attributes are single valued and there are no rows or columns ordering.
+    2. **Second Normal Form (2NF)**: The table is already in 2NF because it has a single primary key (`id`), and all non-prime attributes are fully dependent on the primary key.
+    3. **Third Normal Form (3NF)**: The table is already in 3NF because in every functional dependency **X → Y**, **X** is a **superkey**
 
 #### Posts Table
 
 - **Attributes**: `id`, `user_id`, `caption`, `image_path`, `timestamp`
 - **Functional Dependencies**:
-  - `id -> user_id`
-  - `id -> caption`
-  - `id -> image_path`
-  - `id -> timestamp`
+    - `id -> user_id`
+    - `id -> caption`
+    - `id -> image_path`
+    - `id -> timestamp`
 - **Keys**:
-  - `id` - Primary Key
+    - `id` - Primary Key
 - **Normalization**
-  1. **First Normal Form (1NF)**: The table is already in 1NF as all attributes are single valued and there are no rows or columns ordering.
-  2. **Second Normal Form (2NF)**: The table is already in 2NF because it has a single primary key (`id`), and all non-prime attributes are fully dependent on the primary key.
-  3. **Third Normal Form (3NF)**: The table is already in 3NF because in every functional dependency **X → Y**, **X** is a **superkey**
+    1. **First Normal Form (1NF)**: The table is already in 1NF as all attributes are single valued and there are no rows or columns ordering.
+    2. **Second Normal Form (2NF)**: The table is already in 2NF because it has a single primary key (`id`), and all non-prime attributes are fully dependent on the primary key.
+    3. **Third Normal Form (3NF)**: The table is already in 3NF because in every functional dependency **X → Y**, **X** is a **superkey**
 
 #### Comments Table
 
 - **Attributes**: `id`, `post_id`, `user_id`, `text`, `timestamp`
 - **Functional Dependencies**:
-  - `id -> post_id`
-  - `id -> user_id`
-  - `id -> text`
-  - `id -> timestamp`
+    - `id -> post_id`
+    - `id -> user_id`
+    - `id -> text`
+    - `id -> timestamp`
 - **Keys**:
-  - `id` - Primary Key
+    - `id` - Primary Key
 - **Normalization**
-  1. **First Normal Form (1NF)**: The table is already in 1NF as all attributes are single valued and there are no rows or columns ordering.
-  2. **Second Normal Form (2NF)**: The table is already in 2NF because it has a single primary key (`id`), and all non-prime attributes are fully dependent on the primary key.
-  3. **Third Normal Form (3NF)**: The table is already in 3NF because in every functional dependency **X → Y**, **X** is a **superkey**
+    1. **First Normal Form (1NF)**: The table is already in 1NF as all attributes are single valued and there are no rows or columns ordering.
+    2. **Second Normal Form (2NF)**: The table is already in 2NF because it has a single primary key (`id`), and all non-prime attributes are fully dependent on the primary key.
+    3. **Third Normal Form (3NF)**: The table is already in 3NF because in every functional dependency **X → Y**, **X** is a **superkey**
 
 #### Likes Table
 
 - **Attributes**: `post_id`, `user_id`, `timestamp`
 - **Functional Dependencies**:
-  - `post_id, user_id -> timestamp`
+    - `post_id, user_id -> timestamp`
 - **Keys**:
-  - `post_id, user_id` - Composite Primary Key
+    - `post_id, user_id` - Composite Primary Key
 - **Normalization**
-  1. **First Normal Form (1NF)**: The table is already in 1NF as all attributes are single valued and there are no rows or columns ordering.
-  2. **Second Normal Form (2NF)**: The table is already in 2NF, because the only non-key attribute timestamp is fully dependent on the entire composite primary key (post_id, user_id).
-  3. **Third Normal Form (3NF)**: The table is already in 3NF because in every functional dependency **X → Y**, **X** is a **superkey**
+    1. **First Normal Form (1NF)**: The table is already in 1NF as all attributes are single valued and there are no rows or columns ordering.
+    2. **Second Normal Form (2NF)**: The table is already in 2NF, because the only non-key attribute timestamp is fully dependent on the entire composite primary key (post_id, user_id).
+    3. **Third Normal Form (3NF)**: The table is already in 3NF because in every functional dependency **X → Y**, **X** is a **superkey**
 
 ## Implementing a MySQL-Compatible Relational Database Schema
 
