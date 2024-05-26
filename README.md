@@ -7,8 +7,6 @@
 - [Implementing a MySQL-Compatible Relational Database Schema](#implementing-a-mysql-compatible-relational-database-schema)
 - [Integrating and Functionally Developing the Application](#integrating-and-functionally-developing-the-application)
 - [Maximizing Profits Through SQL Queries](#maximizing-profits-through-sql-queries)
-- [Conclusion](#conclusion)
-- [Appendices](#appendices)
 
 ### Team Members
 
@@ -837,11 +835,3 @@ List each SQL query along with a brief description of its purpose and output.
     ON u.id = uf.user_id
     WHERE (uf.follower_count * 100.0 / (SELECT COUNT(*) FROM users)) > X;
     ```
-
-## Conclusion
-
-- Summarize the project outcomes and any lessons learned.
-
-## Appendices
-
-- Include any additional diagrams, code snippets, or important notices here.
