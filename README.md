@@ -401,6 +401,26 @@ The posts are ordered by the date, the oldest first
 | 2023-02 | 23         |
 | 2023-03 | 38         |
 
+The average retrieval time for the `useractivity` view query performed on 10,000 users is as follows:
+
+### Indexes
+
+#### SQL Queries
+```sql
+CREATE INDEX posts_user_id_index ON posts(user_id);
+CREATE INDEX comments_user_id_index ON comments(user_id);
+CREATE INDEX ilikes_user_id_index ON likes(user_id);
+```
+
+#### Performance Testing and Results
+
+The test were carried out on the UserActivity View by running the select all query 10 times on 10.000 users and provided given results:
+
+- **Without Indexes**: The average time was approximately 147.9 milliseconds.
+- **With Indexes**: The average time was approximately 112.4 milliseconds.
+
+The application of indexes has led to a significant improvement in query performance, reducing the average retrieval time by about 35.5 milliseconds, which corresponds to a reduction of approximately 24%.
+
 ### Triggers.sql
 
 This section outlines the SQL triggers, procedures, and functions implemented in the Quackstagram database. These components work together to automatically generate notifications when users follow each other, like posts, or comment on posts, thereby enhancing user engagement and interaction.
