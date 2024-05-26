@@ -13,8 +13,8 @@
 ### Team Members
 
 - **Students**:
-    - Jakub Mazur - I6349651
-    - Tomasz Mizera - I6357148
+    - Jakub Mazur - i6349651
+    - Tomasz Mizera - i6357148
 - **Colaboration**:
     - Both members collaborated equally to the development of the project in all fields.
 
@@ -422,11 +422,11 @@ This view provides information on recent interactions (likes or comments) by use
 ```sql
 CREATE VIEW MonthlyPostsAmount AS (
 SELECT
-    DATE_FORMAT(p.created_at, '%Y-%m') AS month,
+    DATE_FORMAT(p.timestamp, '%Y-%m') AS month,
     COUNT(p.id) AS post_count
 FROM posts p
-GROUP BY DATE_FORMAT(p.created_at, '%Y-%m')
-ORDER BY DATE_FORMAT(p.created_at, '%Y-%m'));
+GROUP BY DATE_FORMAT(p.timestamp, '%Y-%m')
+ORDER BY DATE_FORMAT(p.timestamp, '%Y-%m'));
 ```
 
 ##### Results
@@ -654,7 +654,6 @@ List each SQL query along with a brief description of its purpose and output.
    ```
 
 10. **Find posts that have been liked by all users.**
-    # TODO: dodac adminowi 2 posty ktore sam sobie lajkuje
     ```sql
     SELECT posts.id as post_id, posts.caption as post_content, COUNT(likes.user_id) as number_of_likes
     FROM posts LEFT JOIN likes ON (posts.id = likes.post_id)
@@ -726,19 +725,51 @@ List each SQL query along with a brief description of its purpose and output.
 14. **List the users who have liked every post of a specific user.**
 
     ```sql
-    SELECT ...
+    SELECT likes.user_id, COUNT(likes.post_id) as number_of_liked_posts_of_specific_user
+    FROM likes
+    JOIN posts ON (likes.post_id = posts.id)
+    WHERE posts.user_id = X
+    GROUP BY likes.user_id
+    HAVING COUNT(likes.post_id) = (
+        SELECT COUNT(*) FROM posts WHERE user_id = 1
+    );
     ```
 
 15. **Display the most popular post of each user (based on likes).**
 
     ```sql
-    SELECT ...
+    SELECT p.user_id as userID, p.id as postID, COUNT(l.user_id) as likes
+    FROM posts p
+    JOIN likes l ON p.id = l.post_id
+    GROUP BY p.user_id, p.id
+    HAVING COUNT(l.user_id) = (
+        SELECT MAX(likes_count)
+        FROM (
+            SELECT COUNT(l2.user_id) as likes_count
+            FROM posts p2
+            JOIN likes l2 ON p2.id = l2.post_id
+            WHERE p2.user_id = p.user_id
+            GROUP BY p2.id
+        ) as user_likes
+    );
     ```
 
 16. **Find the user(s) with the highest ratio of followers to following.**
 
     ```sql
-    SELECT ...
+    SELECT p.user_id, p.id AS post_id, p.caption, COUNT(l.post_id) AS likes_count
+    FROM posts p
+    LEFT JOIN likes l ON p.id = l.post_id
+    WHERE p.id = (
+        SELECT p2.id
+        FROM posts p2
+        LEFT JOIN likes l2 ON p2.id = l2.post_id
+        WHERE p2.user_id = p.user_id
+        GROUP BY p2.id
+        ORDER BY COUNT(l2.post_id) DESC, p2.id
+        LIMIT 1
+        )
+    GROUP BY p.user_id, p.id, p.caption;
     ```
 
 17. **Show the month with the highest number of posts made.**
@@ -750,18 +781,57 @@ List each SQL query along with a brief description of its purpose and output.
 18. **Identify users who have not interacted with a specific user’s posts.**
 
     ```sql
-    SELECT ...
+    SELECT id
+    FROM users
+    WHERE id NOT IN (
+        SELECT user_id
+        FROM comments
+        WHERE post_id IN (
+            SELECT id
+            FROM posts
+            WHERE user_id = X
+        )
+    )
+    AND id NOT IN (
+        SELECT user_id
+        FROM likes
+        WHERE post_id IN (
+            SELECT id
+            FROM posts
+            WHERE user_id = X
+        )
+    );
     ```
 
 19. **Display the user with the greatest increase in followers in the last X days.**
 
     ```sql
-    SELECT ...
+    SELECT following_id AS user_id, COUNT(*) AS followers_count
+    FROM followers
+    WHERE timestamp >= NOW() - INTERVAL 1 DAY
+    GROUP BY following_id
+    ORDER BY  followers_count DESC
+    LIMIT 1;
     ```
 
 20. **Find users who are followed by more than X% of the platform users.**
     ```sql
-    SELECT ...
+    SELECT
+        u.username,
+        u.id,
+        u.bio,
+        u.image_path,
+        uf.follower_count
+    FROM
+        users u
+    JOIN (SELECT
+            following_id AS user_id,
+            COUNT(follower_id) AS follower_count
+          FROM followers
+          GROUP BY following_id
+         ) uf
+    ON u.id = uf.user_id
+    WHERE (uf.follower_count * 100.0 / (SELECT COUNT(*) FROM users)) > X;
     ```
 
 ## Conclusion
