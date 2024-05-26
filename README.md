@@ -23,10 +23,53 @@
 ### Introduction
 Quackstagram is a dynamic social media platform designed for sharing visual content and engaging with others through posts, likes, comments, and follows. The project's main objective is to enhance the platform by transitioning from a basic system using text files to a robust, scalable relational database. This upgrade aims to improve performance, enable detailed analytics for strategic decision-making, and monetize the platform through targeted advertising. By integrating advanced database features, Quackstagram seeks to enrich user interaction and establish itself as a leading social network in the digital era.
 
-### Screenshots
+![mockup_white.png](https://github.com/jakmaz/quackstagram/blob/main/img/screenshots/mockup_white.png?raw=true)
 
-![Authetication](https://github.com/jakmaz/quackstagram/blob/main/img/screenshots/authentication.png?raw=true)
-![enter image description here](https://github.com/jakmaz/quackstagram/blob/main/img/screenshots/pages.png?raw=true)
+### How to run
+
+#### Step 0: Requirements
+Before setting up the Quackstagram project, ensure the following software is installed on your machine:
+- **MySQL**: A relational database management system needed to manage all the data-related operations.
+- **Java Development Kit (JDK)**: Required to compile and run Java applications.
+- **Git**: Necessary for cloning the project repository from GitHub.
+
+
+#### Step 1: Clone the Repository
+
+Clone the Quackstagram repository from GitHub to your local machine and navigate to the `src` directory:
+
+```bash
+git clone https://github.com/jakmaz/quackstagram.git
+cd quackstagram/src
+```
+
+#### Step 2: Create the Database and User
+
+Use the MySQL command line tool to execute the following commands to set up the database and user:
+
+```sql
+CREATE DATABASE quackstagram;
+CREATE USER 'BCS1510'@'localhost' IDENTIFIED BY 'BCS1510';
+GRANT ALL PRIVILEGES ON quackstagram.* TO 'BCS1510'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+#### Step 3: Run Database Setup
+
+Compile and run `DatabaseSetup.java` from the `Database` package to set up your database tables and initialize them with data:
+
+```bash
+javac Database/DatabaseSetup.java
+java Database.DatabaseSetup
+```
+#### Step 4: Compile and Run the Main Application
+
+From the `src` directory, compile and run `Main.java` to start the Quackstagram application:
+
+```bash
+javac Main.java
+java Main
+```
 
 ## Designing a Relational Database Schema
 
