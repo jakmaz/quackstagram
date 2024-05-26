@@ -550,15 +550,11 @@ END
 
 ### Database Connection
 
-Description of the JDBC setup.
-
-### Feature Implementation
-
-How features were implemented using the database.
+Quackstagram uses MySQL Connector/J for its database interactions, which is a JDBC driver enabling the application to perform operations like querying and updating data directly in the MySQL database.
 
 #### Error Handling and Security
 
-Discuss the strategies used for handling errors and securing the database interactions.
+The app employs custom exceptions to manage and respond to errors effectively. This approach helps in providing clear feedback to users when database operations fail, enhancing the user experience by ensuring the application remains robust and reliable under various operational scenarios.
 
 ## Maximizing Profits Through SQL Queries
 
